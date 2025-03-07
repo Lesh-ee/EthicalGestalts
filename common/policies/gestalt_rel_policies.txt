@@ -1,0 +1,642 @@
+##########################################################################
+# Empire Policies
+#
+# #####
+#
+# AI:
+# Base AI-weight is 100, if unchanged
+# AI will grab whatever policy-option has the highest weight
+#
+# #####
+#
+##########################################################################
+
+gestalt_hostility_policy = {
+
+	potential = {
+		always = no
+		# OR = {
+		# 	is_country_type = default
+		# 	is_country_type = fallen_empire
+		# 	is_country_type = awakened_fallen_empire
+		# }
+		# NOR = {
+		# 	has_valid_civic = civic_fanatic_purifiers
+		# 	has_valid_civic = civic_hive_devouring_swarm
+		# }
+		# OR = {
+		# 	any_relation = { is_gestalt = yes }
+		# 	is_gestalt = yes
+		# }
+		# OR = {
+		# 	has_policy_flag = ai_full_rights
+		# 	AND = {
+		# 		is_gestalt = yes
+		# 		is_spiritualist = no
+		# 	}
+		# }
+		# has_policy_flag = liberation_wars
+	}
+
+	allow = {
+		NOT = {
+			any_relation = {
+				is_at_war_with = prev
+				is_gestalt = yes
+			}		
+		}
+	}
+
+	option = {
+		name = "hostile_all_gestalts"
+		
+		policy_flags = {
+			hostile_all_gestalts
+		}
+		
+		valid = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				NOR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			OR = {
+				is_gestalt = no
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		
+		AI_weight = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_ethic = ethic_xenophobe
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_fanatic_egalitarian
+				is_gestalt = no
+			}
+			modifier = {
+				factor = 0
+				is_gestalt = yes
+				is_xenophobe = no
+			}
+			modifier = {
+				factor = 0
+				is_xenophobe = no
+				NOT = { has_ethic = ethic_fanatic_egalitarian }
+			}
+		}
+	}
+
+	option = {
+		name = "gestalt_punishment"
+		
+		policy_flags = {
+			gestalt_punishment
+		}
+
+		valid = {
+			NOR = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			OR = {
+				NOT = { has_ethic = ethic_fanatic_xenophile }
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+		
+		AI_weight = {
+			factor = 2
+		}
+	}
+
+	option = {
+		name = "gestalt_coexistence"
+		
+		policy_flags = {
+			gestalt_coexistence
+		}
+		
+		valid = {
+			OR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+				NOR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		}
+		
+		AI_weight = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_ethic = ethic_xenophile
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_xenophile
+			}
+			modifier = {
+				factor = 2.5
+				has_ethic = ethic_pacifist
+			}
+			modifier = {
+				factor = 4
+				has_ethic = ethic_fanatic_pacifist
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_egalitarian
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			modifier = {
+				factor = 0.5
+				has_ethic = ethic_authoritarian
+			}
+			modifier = {
+				factor = 0.25
+				has_ethic = ethic_fanatic_authoritarian
+			}
+			modifier = {
+				factor = 0
+				is_xenophobe = yes
+				is_pacifist = no
+			}
+		}
+	}
+
+	option = {
+		name = "gestalt_liberation"
+		
+		policy_flags = {
+			gestalt_liberation
+		}
+
+		potential = {
+			OR = {
+				has_tradition = tr_genetics_creation
+				has_tradition = tr_cybernetics_transubstantiation_synthesis
+			}
+			is_gestalt = no
+		}
+		
+		valid = {
+			NOR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		
+		AI_weight = {
+			factor = 1
+			modifier = {
+				factor = 3
+				has_ethic = ethic_egalitarian
+			}
+			modifier = {
+				factor = 4
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			modifier = {
+				factor = 1.5
+				is_militarist = yes
+			}
+			modifier = {
+				factor = 0
+				has_ethic = ethic_pacifist
+			}
+			modifier = {
+				factor = 0
+				is_xenophobe = yes
+			}
+		}
+	}
+
+}
+
+hive_hostility_policy = {
+
+	potential = {
+		always = no
+		# OR = {
+		# 	is_country_type = default
+		# 	is_country_type = fallen_empire
+		# 	is_country_type = awakened_fallen_empire
+		# }
+		# NOR = {
+		# 	has_valid_civic = civic_fanatic_purifiers
+		# 	has_valid_civic = civic_hive_devouring_swarm
+		# }
+		# OR = {
+		# 	any_relation = { is_hive_empire = yes }
+		# 	is_hive_empire = yes
+		# }
+		# NOR = {
+		# 	has_policy_flag = ai_full_rights
+		# 	AND = {
+		# 		is_gestalt = yes
+		# 		is_spiritualist = no
+		# 	}
+		# }
+		# has_policy_flag = liberation_wars
+	}
+
+	allow = {
+		NOT = {
+			any_relation = {
+				is_at_war_with = prev
+				is_hive_empire = yes
+			}		
+		}
+	}
+
+	option = {
+		name = "hostile_all_gestalts"
+		
+		policy_flags = {
+			hostile_all_gestalts
+		}
+		
+		valid = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				NOR = {
+					has_ethic = ethic_pacifist
+					has_ethic = ethic_fanatic_pacifist
+					has_ethic = ethic_xenophile
+					has_ethic = ethic_fanatic_xenophile
+				}
+			}
+			OR = {
+				is_gestalt = no
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		
+		AI_weight = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_ethic = ethic_xenophobe
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_fanatic_egalitarian
+				is_gestalt = no
+			}
+			modifier = {
+				factor = 0
+				is_gestalt = yes
+				is_xenophobe = no
+			}
+			modifier = {
+				factor = 0
+				is_xenophobe = no
+				NOT = { has_ethic = ethic_fanatic_egalitarian }
+			}
+		}
+	}
+
+	option = {
+		name = "hive_punishment"
+		
+		policy_flags = {
+			gestalt_punishment
+		}
+
+		valid = {
+			NOR = {
+				has_ethic = ethic_egalitarian
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			OR = {
+				NOT = { has_ethic = ethic_fanatic_xenophile }
+				has_ethic = ethic_militarist
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+		
+		AI_weight = {
+			factor = 2
+		}
+	}
+
+	option = {
+		name = "hive_coexistence"
+		
+		policy_flags = {
+			gestalt_coexistence
+		}
+		
+		valid = {
+			OR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+				NOR = {
+					has_ethic = ethic_authoritarian
+					has_ethic = ethic_fanatic_authoritarian
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		}
+		
+		AI_weight = {
+			factor = 1
+			modifier = {
+				factor = 2
+				has_ethic = ethic_xenophile
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_xenophile
+			}
+			modifier = {
+				factor = 2.5
+				has_ethic = ethic_pacifist
+			}
+			modifier = {
+				factor = 4
+				has_ethic = ethic_fanatic_pacifist
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_egalitarian
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			modifier = {
+				factor = 0.5
+				has_ethic = ethic_authoritarian
+			}
+			modifier = {
+				factor = 0.25
+				has_ethic = ethic_fanatic_authoritarian
+			}
+			modifier = {
+				factor = 0
+				is_xenophobe = yes
+				is_pacifist = no
+			}
+		}
+	}
+
+	option = {
+		name = "gestalt_liberation"
+		
+		policy_flags = {
+			gestalt_liberation
+		}
+
+		potential = {
+			has_technology = tech_gene_tailoring
+			is_gestalt = no
+		}
+		
+		valid = {
+			NOR = {
+				has_ethic = ethic_authoritarian
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+		
+		AI_weight = {
+			factor = 1
+			modifier = {
+				factor = 3
+				has_ethic = ethic_egalitarian
+			}
+			modifier = {
+				factor = 4
+				has_ethic = ethic_fanatic_egalitarian
+			}
+			modifier = {
+				factor = 1.5
+				is_militarist = yes
+			}
+			modifier = {
+				factor = 0
+				has_ethic = ethic_pacifist
+			}
+			modifier = {
+				factor = 0
+				is_xenophobe = yes
+			}
+		}
+	}
+
+}
+
+enemy_gestalt_policy = {
+
+	potential = {
+		OR = {
+			is_country_type = default
+			is_country_type = fallen_empire
+			is_country_type = awakened_fallen_empire
+		}
+		NOR = {
+			has_valid_civic = civic_fanatic_purifiers
+			has_valid_civic = civic_machine_terminator
+			has_valid_civic = civic_hive_devouring_swarm
+			has_policy_flag = purge_allowed	
+		}
+		OR = {
+			any_relation = { is_gestalt = yes }
+			is_gestalt = yes
+		}
+	}
+
+	allow = {
+		NOT = {
+			any_relation = {
+				is_at_war_with = prev
+				is_gestalt = yes
+			}		
+		}
+	}
+	
+	# option = {
+	# 	name = "enemy_gestalt_elimination_allowed"
+		
+	# 	policy_flags = {
+	# 		"enemy_gestalt_elimination_allowed"
+	# 	}
+		
+	# 	valid = {
+	# 		NOR = {
+	# 			has_ethic = ethic_fanatic_pacifist
+	# 			has_ethic = ethic_fanatic_xenophile
+	# 		}
+	# 	}
+		
+	# 	AI_weight = {
+	# 		factor = 1
+	# 		modifier = {
+	# 			factor = 3
+	# 			OR = {
+	# 				has_ethic = ethic_fanatic_militarist
+	# 				has_ethic = ethic_fanatic_xenophobe
+	# 				AND = {
+	# 					has_ethic = ethic_fanatic_authoritarian	
+	# 					has_ethic = ethic_militarist
+	# 				}
+	# 			}
+	# 			NOR = {
+	# 				is_pacifist = yes
+	# 				is_xenophile = yes
+	# 			}
+	# 		}
+	# 	}
+	# }
+	option = {
+		name = "enemy_gestalt_elimination_incidental_only"
+		
+		policy_flags = {
+			enemy_gestalt_elimination_incidental_only
+		}
+		
+		valid = {
+			always = yes
+		}
+		
+		AI_weight = {
+			factor = 2
+		}
+	}
+	option = {
+		name = "enemy_gestalt_elimination_forbidden"
+		
+		policy_flags = {
+			enemy_gestalt_elimination_forbidden
+		}
+
+		potential = {
+			has_policy_flag = ai_full_rights
+		}
+		
+		valid = {
+			is_xenophobe = no
+			allows_purge = no
+		}
+		
+		AI_weight = {
+			factor = 1
+			modifier = {
+				factor = 3
+				AND = {
+					OR = {
+						is_xenophile = yes
+						is_pacifist = yes
+					}
+					has_valid_civic = civic_environmentalist
+				}
+			}
+		}
+	}
+	option = {
+		name = "enemy_hive_elimination_forbidden"
+		
+		policy_flags = {
+			enemy_gestalt_elimination_forbidden
+		}
+		
+		potential = {
+			NOT = {
+				has_policy_flag = ai_full_rights
+			}
+		}
+
+		valid = {
+			is_xenophobe = no
+			allows_purge = no
+		}
+		
+		AI_weight = {
+			factor = 1
+			modifier = {
+				factor = 3
+				AND = {
+					OR = {
+						is_xenophile = yes
+						is_pacifist = yes
+					}
+					has_valid_civic = civic_environmentalist
+				}
+			}
+		}
+	}
+}
+
+infiltration_policy = {
+
+	potential = {
+		has_valid_civic = civic_hive_assimilator
+	}
+
+	option = {
+		name = "infiltration_allowed"
+		
+		policy_flags = {
+			infiltration_allowed
+		}
+		
+		valid = {
+			always = yes
+		}
+		
+		AI_weight = {
+			factor = 2
+			modifier = {
+				factor = 0
+				is_pacifist = yes
+			}
+			modifier = {
+				factor = 0
+				has_valid_civic = civic_hive_guest
+			}
+		}
+	}
+	option = {
+		name = "infiltration_forbidden"
+		
+		policy_flags = {
+			infiltration_forbidden
+		}
+
+		potential = {
+			always = yes
+		}
+		
+		AI_weight = {
+			factor = 1
+		}
+	}
+}

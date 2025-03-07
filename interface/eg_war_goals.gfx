@@ -1,0 +1,65 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_wg_force_ideology_by_gestalt"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_force_ideology.dds"
+	}
+
+	spriteType = {
+		name = "GFX_wg_reprogramming_authoritarian"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_force_ideology.dds"
+	}
+
+	spriteType = {
+		name = "GFX_wg_reprogramming_egalitarian"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_force_ideology.dds"
+	}
+
+	spriteType = {
+		name = "GFX_wg_reprogramming_xenophobe"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_force_ideology.dds"
+	}
+
+	spriteType = {
+		name = "GFX_wg_reprogramming_xenophile"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_force_ideology.dds"
+	}
+
+	spriteType = {
+		name = "GFX_wg_reprogramming_militarist"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_force_ideology.dds"
+	}
+
+	spriteType = {
+		name = "GFX_wg_reprogramming_pacifist"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_force_ideology.dds"
+	}
+
+	spriteType = {
+		name = "GFX_wg_reprogramming_materialist"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_force_ideology.dds"
+	}
+
+	spriteType = {
+		name = "GFX_wg_kill_ai"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_war.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_wg_expel_hive"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_migration_pact.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_wg_expel_hive_imperium"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_migration_pact.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_wg_end_threat_kill_ai"
+		texturefile = "gfx/interface/icons/diplomacy/diplomacy_war.dds"
+		noOfFrames = 2
+	}
+}

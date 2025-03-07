@@ -1,0 +1,1318 @@
+gestalt_ethic_attraction_from_factions = {
+	base = 1.5
+	modifier = {
+		set = 2
+		has_ethic = ethic_fanatic_xenophile
+	}
+	modifier = {
+		set = 1.75
+		has_ethic = ethic_xenophile
+	}
+	modifier = {
+		set = 1.25
+		has_ethic = ethic_xenophobe
+	}
+	modifier = {
+		set = 1
+		has_ethic = ethic_fanatic_xenophobe
+	}
+}
+
+ego_assimilation_ethics_effect = {
+	base = 3
+	modifier = {
+		set = 1.33
+		has_ethic = ethic_fanatic_authoritarian
+	}
+	modifier = {
+		set = 2
+		has_ethic = ethic_authoritarian
+	}
+	modifier = {
+		set = 4.5
+		has_ethic = ethic_egalitarian
+	}
+	modifier = {
+		set = 6.75
+		has_ethic = ethic_fanatic_egalitarian
+	}
+}
+
+
+hive_authoritarian_attraction = {
+	base = 1
+	modifier = {
+		mult = 0.75
+		is_authoritarian = yes
+	}
+	modifier = {
+		mult = value:gestalt_ethic_attraction_from_factions
+		is_authoritarian = no
+		OR = {
+			any_relation = {
+				any_owned_planet = {
+					has_branch_office = prevprev
+				}
+				OR = {
+					is_authoritarian = yes
+					AND = {
+						has_faction = totalitarian
+						NOT = { has_modifier = suppressed_authoritarian }
+					}
+				}
+			}
+			count_owned_pop = {
+				count > 25
+				limit = { has_ethic = ethic_authoritarian }
+			}
+		}
+	}
+	modifier = {
+		mult = value:ego_assimilation_ethics_effect
+		any_owned_species = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+				country = prev
+			}
+		}
+		any_owned_pop = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+			}
+			has_ethic = ethic_authoritarian
+		}
+	}
+	modifier = {
+		exists = overlord
+		has_loyalty > 0
+		mult = value:ethics_from_overlord|ETHIC|authoritarian|
+	}
+	modifier = {
+		factor = 1.25
+		OR = {
+			has_valid_civic = civic_hive_one_mind
+			has_valid_civic = civic_hive_subsumed_will
+			has_valid_civic = civic_hive_strength_of_legions
+		}
+	}
+	modifier = {
+		factor = 0.75
+		OR = {
+			has_valid_civic = civic_hive_natural_neural_network
+			has_valid_civic = civic_hive_divided_attention
+			has_valid_civic = civic_hive_pooled_knowledge
+		}
+	}
+	mult = value:authoritarian_ethics_from_relations
+	modifier = {
+		factor = 1.5
+		has_federation = yes
+		federation = {
+			has_federation_type = hegemony_federation
+		}
+	}
+	modifier = {
+		factor = 1.25
+		any_enslaved_species = {
+			is_robotic = no
+		}
+	}
+}
+
+hive_egalitarian_attraction = {
+	base = 1
+	modifier = {
+		mult = 0.75
+		is_egalitarian = yes
+	}
+	modifier = {
+		mult = value:gestalt_ethic_attraction_from_factions
+		is_egalitarian = no
+		OR = {
+			has_faction = progressive
+			any_relation = {
+				any_owned_planet = {
+					has_branch_office = prevprev
+				}
+				OR = {
+					is_egalitarian = yes
+					AND = {
+						has_faction = progressive
+						NOT = { has_modifier = suppressed_egalitarian }
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		mult = value:ego_assimilation_ethics_effect
+		any_owned_species = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+				country = prev
+			}
+		}
+		any_owned_pop = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+			}
+			has_ethic = ethic_egalitarian
+		}
+	}
+	modifier = {
+		exists = overlord
+		has_loyalty > 0
+		mult = value:ethics_from_overlord|ETHIC|egalitarian|
+	}
+	modifier = {
+		factor = 1.25
+		OR = {
+			has_valid_civic = civic_hive_natural_neural_network
+			has_valid_civic = civic_hive_divided_attention
+			has_valid_civic = civic_hive_pooled_knowledge
+		}
+	}
+	modifier = {
+		factor = 0.75
+		OR = {
+			has_valid_civic = civic_hive_one_mind
+			has_valid_civic = civic_hive_subsumed_will
+			has_valid_civic = civic_hive_strength_of_legions
+		}
+	}
+	mult = value:egalitarian_ethics_from_relations
+	modifier = {
+		exists = overlord
+		has_loyalty < 0
+		mult = 1.5
+	}
+	modifier = {
+		factor = 0.75
+		any_enslaved_species = {
+			is_robotic = no
+		}
+	}
+}
+
+hive_xenophobe_attraction = {
+	base = 1
+	modifier = {
+		mult = 0.75
+		is_xenophobe = yes
+	}
+	modifier = {
+		mult = value:gestalt_ethic_attraction_from_factions
+		is_xenophobe = no
+		OR = {
+			has_faction = isolationist
+			any_relation = {
+				any_owned_planet = {
+					has_branch_office = prevprev
+				}
+				OR = {
+					is_xenophobe = yes
+					AND = {
+						OR = {
+							has_faction = supremacist
+							has_faction = isolationist
+						}
+						NOT = { has_modifier = suppressed_xenophobe }
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		mult = value:ego_assimilation_ethics_effect
+		any_owned_species = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+				country = prev
+			}
+		}
+		any_owned_pop = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+			}
+			has_ethic = ethic_xenophobe
+		}
+	}
+	modifier = {
+		exists = overlord
+		has_loyalty > 0
+		mult = value:ethics_from_overlord|ETHIC|xenophobe|
+	}
+	modifier = {
+		factor = 1.5
+		has_valid_civic = civic_hive_devouring_swarm
+	}
+	mult = value:xenophobe_ethics_from_relations
+	modifier = {
+		factor = 0.5
+		allows_alien_leaders = yes
+	}
+	modifier = {
+		factor = 3.0
+		any_war = {
+			any_defender = {
+				is_same_value = prevprev
+			}
+			any_attacker = {
+				NOR = {
+					is_same_species = prev
+					species = { has_species_flag = creator_species@prev }
+				}
+			}
+		}
+	}
+	modifier = {
+		factor = 2.0
+		species = { is_robotic = no }
+		any_relation = {
+			NOR = {
+				is_same_species = prev
+				species = { has_species_flag = creator_species@prev }
+			}
+			any_enslaved_species = {
+				is_same_species = prevprev
+			}
+		}
+	}
+	modifier = {
+		factor = 3.0
+		any_relation = {
+			has_opinion_modifier = {
+				who = prev
+				modifier = opinion_genocidal
+			}
+		}
+	}
+	modifier = {
+		factor = 4.0
+		any_relation = {
+			has_opinion_modifier = {
+				who = prev
+				is_reverse = yes
+				modifier = opinion_genocidal_our_species
+			}
+		}
+	}
+	modifier = {
+		factor = 2.0
+		any_enslaved_species = {
+			is_robotic = no
+		}
+	}
+	modifier = {
+		factor = 0.5
+		any_owned_species = {
+			is_sapient = yes
+			is_robotic = no
+			NOR = {
+				has_species_flag = creator_species@prev
+				has_citizenship_type = {
+					type = citizenship_slavery
+					country = prev
+				}
+				has_citizenship_type = {
+					type = citizenship_purge
+					country = prev
+				}
+			}
+		}
+	}
+	modifier = {
+		mult = 1.5
+		any_owned_species = {
+			NOR = {
+				has_citizenship_type = {
+					type = citizenship_full
+					country = prev
+				}
+				has_citizenship_type = {
+					type = citizenship_full_machine
+					country = prev
+				}
+				has_species_flag = creator_species@prev
+			}
+			has_trait = "trait_repugnant"
+		}
+	}
+	modifier = {
+		factor = 1.5
+		NOR = {
+			has_trait = trait_noxious
+			any_owned_species = {
+				has_species_flag = creator_species@prev
+				has_trait = trait_noxious
+			}
+		}
+		any_owned_species = {
+			NOR = {
+				has_citizenship_type = {
+					type = citizenship_full
+					country = prev
+				}
+				has_citizenship_type = {
+					type = citizenship_full_machine
+					country = prev
+				}
+			}
+			has_trait = trait_noxious
+		}
+	}
+}
+
+hive_xenophile_attraction = {
+	base = 1
+	modifier = {
+		mult = 0.75
+		is_xenophile = yes
+	}
+	modifier = {
+		mult = value:gestalt_ethic_attraction_from_factions
+		is_xenophile = no
+		OR = {
+			has_faction = xenoist
+			any_relation = {
+				any_owned_planet = {
+					has_branch_office = prevprev
+				}
+				OR = {
+					is_xenophile = yes
+					AND = {
+						has_faction = xenoist
+						NOT = { has_modifier = suppressed_xenophile }
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		mult = value:ego_assimilation_ethics_effect
+		any_owned_species = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+				country = prev
+			}
+		}
+		any_owned_pop = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+			}
+			has_ethic = ethic_xenophile
+		}
+	}
+	modifier = {
+		exists = overlord
+		has_loyalty > 0
+		mult = value:ethics_from_overlord|ETHIC|xenophile|
+	}
+	modifier = {
+		factor = 0
+		has_valid_civic = civic_hive_devouring_swarm
+	}
+	mult = value:xenophile_ethics_from_relations
+	modifier = {
+		factor = 2
+		allows_alien_leaders = yes
+	}
+	modifier = {
+		factor = 0.25
+		any_relation = {
+			has_opinion_modifier = {
+				who = root
+				modifier = opinion_genocidal_our_species
+			}
+		}
+	}
+	modifier = {
+		factor = 0.35
+		any_relation = {
+			has_opinion_modifier = {
+				who = root
+				modifier = opinion_genocidal
+			}
+		}
+	}
+	modifier = {
+		factor = 2.0
+		species = { is_robotic = no }
+		any_relation = {
+			NOR = {
+				is_same_species = prev
+				species = { has_species_flag = creator_species@prev }
+			}
+			any_enslaved_species = {
+				is_same_species = prevprev
+			}
+		}
+	}
+	modifier = {
+		factor = 0.5
+		any_owned_species = {
+			is_sapient = yes
+			is_robotic = no
+			NOR = {
+				has_species_flag = creator_species@prev
+				has_citizenship_type = {
+					type = citizenship_slavery
+					country = prev
+				}
+				has_citizenship_type = {
+					type = citizenship_purge
+					country = prev
+				}
+				has_trait = trait_syncretic_proles
+			}
+		}
+	}
+	modifier = {
+		mult = 1.5
+		any_owned_species = {
+			NOR = {
+				is_same_species = prev
+				has_species_flag = creator_species@prev
+			}
+			has_trait = "trait_charismatic"
+		}
+	}
+	modifier = {
+		factor = 0.5
+		has_trait = trait_necrophage
+	}
+}
+
+hive_militarist_attraction = {
+	base = 1
+	modifier = {
+		mult = 0.75
+		is_militarist = yes
+	}
+	modifier = {
+		mult = value:gestalt_ethic_attraction_from_factions
+		is_militarist = no
+		OR = {
+			has_faction = imperialist
+			any_relation = {
+				any_owned_planet = {
+					has_branch_office = prevprev
+				}
+				OR = {
+					is_militarist = yes
+					AND = {
+						has_faction = imperialist
+						NOT = { has_modifier = suppressed_militarist }
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		mult = value:ego_assimilation_ethics_effect
+		any_owned_species = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+				country = prev
+			}
+		}
+		any_owned_pop = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+			}
+			has_ethic = ethic_militarist
+		}
+	}
+	modifier = {
+		exists = overlord
+		has_loyalty > 0
+		mult = value:ethics_from_overlord|ETHIC|militarist|
+	}
+	modifier = {
+		factor = 1.5
+		has_federation = yes
+		federation = {
+			has_federation_type = military_federation
+		}
+	}
+	modifier = {
+		factor = 0.75
+		is_country_type = default
+		years_of_peace = {
+			value > 20
+			delay = 50
+		}
+	}
+	modifier = {
+		factor = 0.75
+		is_country_type = default
+		years_of_peace = {
+			value > 40
+			delay = 50
+		}
+	}
+	modifier = {
+		factor = 0.75
+		is_country_type = default
+		years_of_peace = {
+			value > 60
+			delay = 50
+		}
+	}
+	modifier = {
+		factor = 0.75
+		is_country_type = default
+		years_of_peace = {
+			value > 80
+			delay = 50
+		}
+	}
+	modifier = {
+		factor = 0.75
+		is_country_type = default
+		years_of_peace = {
+			value > 100
+			delay = 50
+		}
+	}
+
+	modifier = {
+		factor = 2.0
+		is_at_war = yes
+	}
+	modifier = {
+		factor = 1.5
+		is_at_war = yes
+		any_war = {
+			any_war_participant = {
+				is_rival = root
+				prev = { NOT = { is_war_participant = { side = root } } }
+			}
+		}
+	}
+	modifier = {
+		factor = 2.0
+		recently_lost_war = yes
+	}
+	modifier = {
+		factor = 1.5
+		any_neighbor_country = {
+			OR = {
+				is_hostile_to = root
+				is_domineering_to = root
+				is_rival = root
+			}
+		}
+	}
+	modifier = {
+		factor = 1.25
+		any_rival_country = {
+			is_neighbor_of = root
+			relative_power = {
+				who = root
+				category = fleet
+				value >= superior
+			}
+		}
+	}
+	modifier = {
+		factor = 2 #If the empire is losing planets, militarism should increase
+		any_relation = {
+			any_owned_planet = {
+				is_original_owner = root
+			}
+		}
+	}
+	modifier = {
+		factor = 0.75
+		has_policy_flag = no_wars
+	}
+	modifier = {
+		factor = 1.1
+		any_owned_species = {
+			has_trait = "trait_strong"
+			OR = {
+				has_citizenship_type = {
+					type = citizenship_full
+					country = prev
+				}
+				has_citizenship_type = {
+					type = citizenship_full_machine
+					country = prev
+				}
+			}
+		}
+		NOR = {
+			any_owned_species = {
+				has_trait = "trait_very_strong"
+				OR = {
+					has_citizenship_type = {
+						type = citizenship_full
+						country = prev
+					}
+					has_citizenship_type = {
+						type = citizenship_full_machine
+						country = prev
+					}
+				}
+			}
+			any_owned_species = {
+				has_trait = "trait_weak"
+				OR = {
+					has_citizenship_type = {
+						type = citizenship_full
+						country = prev
+					}
+					has_citizenship_type = {
+						type = citizenship_full_machine
+						country = prev
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		factor = 1.2
+		any_owned_species = {
+			has_trait = "trait_very_strong"
+			OR = {
+				has_citizenship_type = {
+					type = citizenship_full
+					country = prev
+				}
+				has_citizenship_type = {
+					type = citizenship_full_machine
+					country = prev
+				}
+			}
+		}
+		NOT = {
+			any_owned_species = {
+				has_trait = "trait_weak"
+				OR = {
+					has_citizenship_type = {
+						type = citizenship_full
+						country = prev
+					}
+					has_citizenship_type = {
+						type = citizenship_full_machine
+						country = prev
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		factor = 0.75
+		any_owned_species = {
+			has_trait = "trait_weak"
+			OR = {
+				has_citizenship_type = {
+					type = citizenship_full
+					country = prev
+				}
+				has_citizenship_type = {
+					type = citizenship_full_machine
+					country = prev
+				}
+			}
+		}
+		NOR = {
+			any_owned_species = {
+				has_trait = "trait_strong"
+				OR = {
+					has_citizenship_type = {
+						type = citizenship_full
+						country = prev
+					}
+					has_citizenship_type = {
+						type = citizenship_full_machine
+						country = prev
+					}
+				}
+			}
+			any_owned_species = {
+				has_trait = "trait_very_strong"
+				OR = {
+					has_citizenship_type = {
+						type = citizenship_full
+						country = prev
+					}
+					has_citizenship_type = {
+						type = citizenship_full_machine
+						country = prev
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		factor = 2.0
+		any_owned_planet = { is_occupied_flag = yes }
+	}
+}
+
+hive_pacifist_attraction = {
+	base = 1
+	modifier = {
+		mult = 0.75
+		is_pacifist = yes
+	}
+	modifier = {
+		mult = value:gestalt_ethic_attraction_from_factions
+		is_pacifist = no
+		OR = {
+			has_faction = prosperity
+			any_relation = {
+				any_owned_planet = {
+					has_branch_office = prevprev
+				}
+				OR = {
+					is_pacifist = yes
+					AND = {
+						has_faction = prosperity
+						NOT = { has_modifier = suppressed_pacifist }
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		mult = value:ego_assimilation_ethics_effect
+		any_owned_species = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+				country = prev
+			}
+		}
+		any_owned_pop = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+			}
+			has_ethic = ethic_pacifist
+		}
+	}
+	modifier = {
+		factor = 0
+		has_valid_civic = civic_hive_devouring_swarm
+	}
+	modifier = {
+		exists = overlord
+		has_loyalty > 0
+		mult = value:ethics_from_overlord|ETHIC|pacifist|
+	}
+	modifier = {
+		factor = 1.33
+		is_country_type = default
+		years_of_peace = {
+			value > 20
+			delay = 50
+		}
+	}
+	modifier = {
+		factor = 1.33
+		is_country_type = default
+		years_of_peace = {
+			value > 40
+			delay = 50
+		}
+	}
+	modifier = {
+		factor = 1.33
+		is_country_type = default
+		years_of_peace = {
+			value > 60
+			delay = 50
+		}
+	}
+	modifier = {
+		factor = 1.33
+		is_country_type = default
+		years_of_peace = {
+			value > 80
+			delay = 50
+		}
+	}
+	modifier = {
+		factor = 1.33
+		is_country_type = default
+		years_of_peace = {
+			value > 100
+			delay = 50
+		}
+	}
+	modifier = {
+		factor = 0.75
+		has_policy_flag = unrestricted_wars
+	}
+	mult = value:pacifist_ethics_from_pacts
+
+	modifier = {
+		factor = 1.1
+		any_owned_species = {
+			has_trait = "trait_weak"
+			OR = {
+				has_citizenship_type = {
+					type = citizenship_full
+					country = prev
+				}
+				has_citizenship_type = {
+					type = citizenship_full_machine
+					country = prev
+				}
+			}
+		}
+		NOR = {
+			any_owned_species = {
+				has_trait = "trait_strong"
+				OR = {
+					has_citizenship_type = {
+						type = citizenship_full
+						country = prev
+					}
+					has_citizenship_type = {
+						type = citizenship_full_machine
+						country = prev
+					}
+				}
+			}
+			any_owned_species = {
+				has_trait = "trait_very_strong"
+				OR = {
+					has_citizenship_type = {
+						type = citizenship_full
+						country = prev
+					}
+					has_citizenship_type = {
+						type = citizenship_full_machine
+						country = prev
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		factor = 0.5
+		any_neighbor_country = {
+			from = { is_neighbor_of = prev }
+			OR = {
+				is_hostile_to = from.owner
+				is_domineering_to = from.owner
+				is_rival = from.owner
+			}
+		}
+	}
+}
+
+hive_spiritualist_attraction = {
+	base = 1
+	modifier = {
+		mult = 0.75
+		is_spiritualist = yes
+	}
+	modifier = {
+		mult = value:gestalt_ethic_attraction_from_factions
+		is_spiritualist = no
+		OR = {
+			has_faction = traditionalist
+			any_relation = {
+				any_owned_planet = {
+					has_branch_office = prevprev
+				}
+				OR = {
+					is_spiritualist = yes
+					AND = {
+						has_faction = traditionalist
+						NOT = { has_modifier = suppressed_spiritualist }
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		mult = value:ego_assimilation_ethics_effect
+		any_owned_species = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+				country = prev
+			}
+		}
+		any_owned_pop = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+			}
+			has_ethic = ethic_spiritualist
+		}
+	}
+	modifier = {
+		factor = 1.5
+		has_federation = yes
+		federation = {
+			has_federation_type = spiritualist_federation
+		}
+	}
+	modifier = {
+		factor = 1.2
+		has_federation = yes
+		federation = {
+			has_federation_type = spiritualist_federation
+			has_federation_perk = spiritualist_envoys_1
+		}
+	}
+	modifier = {
+		factor = 1.1
+		is_country_type = default
+		has_technology = "tech_psionic_theory"
+	}
+	modifier = {
+		factor = 1.5
+		is_country_type = default
+		has_ascension_perk = ap_mind_over_matter
+	}
+	modifier = {
+		factor = 1.1
+		any_owned_species = {
+			has_trait = trait_latent_psionic
+			has_citizenship_type = {
+				type = citizenship_full
+				country = prev
+			}
+		}
+	}
+	modifier = {
+		factor = 1.8
+		is_country_type = default
+		has_tradition = tr_psionics_psionic_assimilation
+	}
+	modifier = {
+		factor = 0.75
+		is_country_type = default
+		has_policy_flag = ai_full_rights
+	}
+	modifier = {
+		exists = overlord
+		has_loyalty > 0
+		mult = value:ethics_from_overlord|ETHIC|xenophile|
+	}
+	mult = value:spiritualist_ethics_from_relations
+	modifier = {
+		factor = 0
+		is_machine_empire = yes
+	}
+}
+
+hive_materialist_attraction = {
+	base = 1
+	modifier = {
+		mult = 0.75
+		is_materialist = yes
+	}
+	modifier = {
+		mult = value:gestalt_ethic_attraction_from_factions
+		is_materialist = no
+		OR = {
+			has_faction = technologist
+			any_relation = {
+				any_owned_planet = {
+					has_branch_office = prevprev
+				}
+				OR = {
+					is_materialist = yes
+					AND = {
+						has_faction = technologist
+						NOT = { has_modifier = suppressed_materialist }
+					}
+				}
+			}
+		}
+	}
+	modifier = {
+		mult = value:ego_assimilation_ethics_effect
+		any_owned_species = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+				country = prev
+			}
+		}
+		any_owned_pop = {
+			has_citizenship_type = {
+				type = citizenship_assimilation
+			}
+			has_ethic = ethic_materialist
+		}
+	}
+	modifier = {
+		factor = 1.5
+		has_federation = yes
+		federation = {
+			has_federation_type = research_federation
+		}
+	}
+	modifier = {
+		factor = 1.25
+		is_country_type = default
+		has_policy_flag = ai_full_rights
+	}
+	modifier = {
+		exists = overlord
+		has_loyalty > 0
+		mult = value:ethics_from_overlord|ETHIC|materialist|
+	}
+	mult = value:materialist_ethics_from_relations
+	modifier = {
+		factor = 2.5
+		is_machine_empire = yes
+	}
+	modifier = {
+		factor = 1.5
+		has_tradition = tr_cybernetics_adopt
+	}
+	modifier = {
+		factor = 1.25
+		any_owned_species = {
+			OR = {
+				has_trait = trait_natural_physicists
+				has_trait = trait_natural_sociologists
+				has_trait = trait_natural_engineers
+			}
+			OR = {
+				has_citizenship_type = {
+					type = citizenship_full
+					country = prev
+				}
+				has_citizenship_type = {
+					type = citizenship_full_machine
+					country = prev
+				}
+			}
+		}
+	}
+}
+
+lowest_governing_ethic_attraction = {
+	base = 9999999
+	modifier = {
+		max = hive_authoritarian_attraction
+		is_authoritarian = yes
+	}
+	modifier = {
+		max = hive_egalitarian_attraction
+		is_egalitarian = yes
+	}
+	modifier = {
+		max = hive_xenophobe_attraction
+		is_xenophobe = yes
+	}
+	modifier = {
+		max = hive_xenophile_attraction
+		is_xenophile = yes
+	}
+	modifier = {
+		max = hive_militarist_attraction
+		is_militarist = yes
+	}
+	modifier = {
+		max = hive_pacifist_attraction
+		is_pacifist = yes
+	}
+	modifier = {
+		max = hive_spiritualist_attraction
+		is_spiritualist = yes
+	}
+	modifier = {
+		max = hive_materialist_attraction
+		is_materialist = yes
+	}
+}
+
+ai_ethic_shift_weight = {
+	base = 0
+	modifier = {
+		is_variable_set = hive_$ethic$_attraction
+		add = hive_$ethic$_attraction
+	}
+	modifier = {
+		is_variable_set = lowest_governing_ethic_attraction
+		subtract = lowest_governing_ethic_attraction
+	}
+	modifier = {
+		NOT = { has_valid_civic = civic_hive_unprincipled }
+		subtract = 0.3
+	}
+	min = 0
+}
+
+sycophantry_target_weight = {
+	base = 1
+	modifier = {
+		relative_power = {
+			who = $target$
+			category = all
+			value = pathetic
+		}
+		mult = 3
+	}
+	modifier = {
+		relative_power = {
+			who = $target$
+			category = all
+			value = inferior
+		}
+		mult = 2
+	}
+	modifier = {
+		relative_power = {
+			who = $target$
+			category = all
+			value = superior
+		}
+		mult = 0.5
+	}
+	modifier = {
+		relative_power = {
+			who = $target$
+			category = all
+			value = overwhelming
+		}
+		mult = 0
+	}
+	modifier = {
+		mult = 1.5
+		is_neighbor_of = $target$
+	}
+}
+
+unprincipled_sycophantry_factor = {
+	base = 1
+	modifier = {
+		$target$ = {
+			has_ethic = ethic_$ethic$
+			mult = 1.25
+		}
+	}
+	modifier = {
+		$target$ = {
+			has_ethic = ethic_fanatic_$ethic$
+			mult = 1.5
+		}
+	}
+	modifier = {
+		$target$ = {
+			has_ethic = ethic_$opposite$
+			divide = 1.25
+		}
+	}
+	modifier = {
+		$target$ = {
+			has_ethic = ethic_fanatic_$opposite$
+			divide = 1.5
+		}
+	}
+	modifier = {
+		has_intel = {
+			who = $target$
+			intel = relative_power
+		}
+		pow = value:sycophantry_target_weight|target|$target$|
+	}
+}
+
+negative_value = {
+	base = -1
+	mult = $VALUE$
+}
+
+eg_singlemend_industrial_district_foundry_jobs = {
+	base = 1
+	modifier = {
+		add = 1
+		has_foundry_designation = yes
+	}
+	modifier = {
+		subtract = 1
+		has_factory_designation = yes
+	}
+	min = 0
+	max = 2
+}
+eg_singlemend_industrial_district_factory_jobs = {
+	base = 1
+	modifier = {
+		subtract = 1
+		has_foundry_designation = yes
+	}
+	modifier = {
+		add = 1
+		has_factory_designation = yes
+	}
+	min = 0
+	max = 2
+}
+
+eg_singlemend_habitat_industrial_district_foundry_jobs = {
+	base = 1
+	modifier = {
+		add = 1
+		has_foundry_designation = yes
+	}
+	modifier = {
+		subtract = 1
+		has_factory_designation = yes
+	}
+	min = 0
+	max = 2
+	modifier = {
+		add = 1
+		has_factory_designation = no
+		owner = {
+			is_void_dweller_empire = yes
+		}
+	}
+}
+eg_singlemend_habitat_industrial_district_factory_jobs = {
+	base = 1
+	modifier = {
+		subtract = 1
+		has_foundry_designation = yes
+	}
+	modifier = {
+		add = 1
+		has_factory_designation = yes
+	}
+	min = 0
+	max = 2
+	modifier = {
+		add = 1
+		has_factory_designation = yes
+		owner = {
+			is_void_dweller_empire = yes
+		}
+	}
+}
+
+eg_singlemend_ringworld_industrial_district_foundry_jobs = {
+	base = 5
+	modifier = {
+		add = 5
+		has_foundry_designation = yes
+	}
+	modifier = {
+		subtract = 5
+		has_factory_designation = yes
+	}
+	min = 0
+	max = 10
+}
+eg_singlemend_ringworld_industrial_district_factory_jobs = {
+	base = 5
+	modifier = {
+		subtract = 5
+		has_foundry_designation = yes
+	}
+	modifier = {
+		add = 5
+		has_factory_designation = yes
+	}
+	min = 0
+	max = 10
+}

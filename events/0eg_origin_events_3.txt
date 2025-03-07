@@ -1,0 +1,26 @@
+################################
+#
+# Origin Events
+#
+###############################
+namespace = origin
+
+country_event = {
+	id = origin.3270
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {
+		from = { is_progenitor_hive_empire = yes }
+		has_trait = trait_hive_mind
+	}
+
+	immediate = {
+		set_origin = origin_progenitor_hive
+		capital_scope = {
+			add_deposit = d_progenitor
+		}
+		force_add_civic = civic_galactic_sovereign
+		force_remove_civic = civic_galactic_sovereign # triggers recalculation of required positions
+	}
+}

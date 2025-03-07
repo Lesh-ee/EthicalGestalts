@@ -1,0 +1,155 @@
+district_arcology_administrative = {
+	base_buildtime = 600
+	is_capped_by_modifier = no
+
+	show_on_uncolonized = {
+		uses_district_set = city_world
+		from = {
+			OR = {
+				AND = {
+					is_regular_empire = yes
+					OR = {
+						is_spiritualist = no
+						has_make_spiritualist_perk = no
+					}
+				}
+				AND = {
+					is_machine_empire = yes
+					is_servitor_empire = no # undercoat: moved to scripted trigger
+				}
+			}
+		}
+	}
+
+	potential = {
+		uses_district_set = city_world
+		exists = owner
+		owner = {
+			OR = {
+				AND = {
+					is_regular_empire = yes
+					is_spiritualist = no
+					has_make_spiritualist_perk = no
+				}
+				AND = {
+					is_machine_empire = yes
+					is_spiritualist = no # ethical gestalts
+					is_servitor_empire = no # undercoat: moved to scripted trigger
+				}
+			}
+		}
+	}
+
+	conversion_ratio = 1
+	convert_to = {
+		district_nexus
+		district_hive
+		district_arcology_religious
+	}
+
+	resources = {
+		category = planet_districts
+		cost = {
+			minerals = 1000
+			rare_crystals = 50
+		}
+		upkeep = {
+			energy = 5
+			rare_crystals = 1
+		}
+	}
+
+	triggered_planet_modifier = {
+		modifier = { planet_housing_add = 1 }
+		mult = value:administrative_arcology_housing_stu
+	}
+
+	# Undercoat: moved to inline script
+	inline_script = {
+		script = stu/jobs_add
+		job_type = bureaucrats
+		mult_line = "mult = value:administrative_arcology_jobs_stu"
+	}
+}
+
+district_arcology_religious = {
+	base_buildtime = 600
+	is_capped_by_modifier = no
+
+	show_on_uncolonized = {
+		uses_district_set = city_world
+		from = {
+			OR = {
+				AND = {
+					is_regular_empire = yes
+					OR = {
+						is_spiritualist = yes
+						has_make_spiritualist_perk = yes
+					}
+				}
+				AND = {
+					is_machine_empire = yes
+					is_spiritualist = yes
+					is_servitor_empire = no
+				}
+			}
+		}
+	}
+
+	potential = {
+		uses_district_set = city_world
+		exists = owner
+		owner = {
+			OR = {
+				AND = {
+					is_regular_empire = yes
+					OR = {
+						is_spiritualist = yes
+						has_make_spiritualist_perk = yes
+					}
+				}
+				AND = {
+					is_machine_empire = yes
+					is_spiritualist = yes
+					is_servitor_empire = no
+				}
+			}
+		}
+	}
+
+	conversion_ratio = 1
+	convert_to = {
+		district_nexus
+		district_hive
+		district_arcology_administrative
+	}
+
+	resources = {
+		category = planet_districts
+		cost = {
+			minerals = 1000
+			rare_crystals = 50
+		}
+		upkeep = {
+			energy = 5
+			rare_crystals = 1
+		}
+	}
+
+	triggered_planet_modifier = {
+		modifier = { planet_housing_add = 1 }
+		mult = value:religious_arcology_housing_stu
+	}
+
+	inline_script = { # undercoat: moved to inline script
+		script = stu/jobs_add
+		job_type = administrators
+		mult_line = "mult = value:religious_arcology_jobs_stu"
+		priests_trigger = "
+			owner = { is_death_cult_empire = no }
+		"
+		death_priests_trigger = "
+			owner = { is_death_cult_empire = yes }
+		"
+	}
+}

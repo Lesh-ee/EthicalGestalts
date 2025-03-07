@@ -1,0 +1,153 @@
+# called during empire initialization when starting a new game
+# scope: country
+empire_init_add_technologies = {
+	events = {
+		gestalt_ethics.90 # give singlemind_governance to gestalts with certain civics
+	}
+}
+
+# Called during empire initialization when starting a new game if has_secondary_species game rule is true.
+# Called before empire_init_create_capital_pops.
+# scope: planet
+# from: founder species
+# fromfrom: secondary species (if exists)
+empire_init_capital_planet = {
+	events = {
+		gestalt_ethics.125	#change blockers for hive assimilators
+	}
+}
+
+# Triggers when the game starts
+on_game_start = {
+	events = {
+		gestalt_ethics.10	# set mod flag
+	}
+}
+
+on_game_start_country = {
+	events = {
+		gestalt_ethics.11	# set secretly-evil AIs
+		gestalt_ethics.12 # Give leaders the Gestalt Consciousness ethic
+		gestalt_ethics.102 # singlemind enclave counts
+		gestalt_ethics.110 # AI singlemind management
+	}
+}
+
+# this = country
+on_yearly_pulse_country = {
+	events = {
+		gestalt_ethics.21	# allows or disallows ethic shift edicts
+		gestalt_ethics.30	# hive assimilation
+		gestalt_ethics.40	# infiltration assimilation
+	}
+}
+
+# this = country
+on_monthly_pulse_country = {
+	events = {
+		gestalt_ethics.50	# drones executed
+		gestalt_ethics.110	# ai singlemind management
+	}
+}
+
+on_destroy_planet_with_PLANET_KILLER_SPORES = {
+	events = {
+		gestalt_ethics.60
+		gestalt_ethics.61
+	}
+}
+
+#Fired whenever a new owner is set for a planet,
+#be it after a war or through a trade
+#From = Country scope (new owner)
+#This = Planet scope
+on_planet_transfer = {
+	events = {
+		gestalt_ethics.100
+		gestalt_ethics.101
+	}
+}
+# A planet has been colonized.
+# Scope = Planet
+on_colonized = {
+	events = {
+		gestalt_ethics.103
+	}
+}
+# A colony has been destroyed. Called just before owner and controller is cleared
+# Scope = Planet
+on_colony_destroyed = {
+	events = {
+		gestalt_ethics.100
+	}
+}
+
+
+
+#A district construction has been completed.
+# This = Planet
+on_district_complete = {
+	events = {
+		gestalt_ethics.112
+	}
+}
+# A district construction has demolished.
+# This = Planet
+on_district_demolished = {
+	events = {
+		gestalt_ethics.112
+	}
+}
+
+# Chance of pre-FTL civilizations to shift their ethics
+on_pre_ftl_pop_ethic_shift = {
+	random_events = {
+		10 = eg_observation.3138	# Societal Shift towards Authoritarian
+		10 = eg_observation.3140	# Societal Shift towards Egalitarian
+		10 = eg_observation.3142	# Societal Shift towards Xenophobe
+		10 = eg_observation.3144	# Societal Shift towards Xenophile
+		10 = eg_observation.3146	# Societal Shift towards Militarist
+		10 = eg_observation.3148	# Societal Shift towards Pacifist
+		10 = eg_observation.3150	# Societal Shift towards Spiritualist
+		10 = eg_observation.3152	# Societal Shift towards Materialist
+	}
+}
+
+# fires when a country releases a sector as a vassal
+# This = released vassal
+# From = overlord
+on_released_as_vassal = {
+	events = {
+		gestalt_ethics.210
+	}
+}
+
+# A country is created via create_country or create_rebels
+# This = created country
+# From = root of context where create_country/create_rebels happens
+on_country_created = {
+	events = {
+		
+	}
+}
+
+
+# # This = Country, first member added
+# on_galactic_community_formed = {
+# 	events = {
+# 		gestalt_ethics.120
+# 	}
+# }
+
+# # This = Country
+# on_add_community_member = {
+# 	events = {
+# 		gestalt_ethics.120
+# 	}
+# }
+
+# on_remove_community_member = {
+# 	events = {
+# 		gestalt_ethics.120
+# 	}
+# }

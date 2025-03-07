@@ -1,0 +1,137 @@
+#my_casus_belli = {
+#	potential = { ... }		# trigger to make some CBs invalid for certain types of countries; this = attacker (CB owner); default: { always = yes }
+#	is_valid = { ... }		# trigger, evaluated daily to check if CB should be created or destroyed automatically, does not affect CBs granted via script;
+#								# this = attacker (CB owner), from = defender (target country); default: { always = yes }
+#	destroy_if = { ... }	# trigger, evaluated daily to destroy CBs that have been granted via script ahead of expiration date;
+#								# this = attacker (CB owner), from = defender (target country); default: { always = no }
+#	show_notification = no/yes	# optional (default = yes), flag to control whether this CB will generate a notification (to avoid duplicate 
+# 								# notification when a claim CB is generated)
+#}
+
+
+cb_reprogramming = {
+	show_in_diplomacy = yes
+	show_notification = no
+	potential = {
+		is_country_type = default
+		from = { is_machine_empire = yes }
+		has_technology = reprogram_machine_tech
+		NOT = { is_in_federation_with = from }
+	}
+	is_valid = {
+		NOT = { has_policy_flag = ai_outlawed }
+		from = { is_country_type = default }
+		OR = {
+			AND = {
+				is_xenophile = yes
+				from = { is_xenophile = no }
+			}
+			AND = {
+				is_xenophobe = yes
+				from = { is_xenophobe = no }
+			}
+			AND = {
+				is_authoritarian = yes
+				from = { is_authoritarian = no }
+			}
+			AND = {
+				is_egalitarian = yes
+				from = { is_egalitarian = no }
+			}
+			AND = {
+				is_spiritualist = yes
+				from = { is_spiritualist = no }
+			}
+			AND = {
+				is_materialist = yes
+				from = { is_materialist = no }
+			}
+			AND = {
+				is_militarist = yes
+				from = { is_militarist = no }
+			}
+			AND = {
+				is_pacifist = yes
+				from = { is_pacifist = no }
+			}
+		}
+		NOT = { is_overlord_to = FROM }
+		OR = {
+			is_subject = no
+			overlord = { NOT = { is_same_value = from } }
+		}		
+	}
+}
+
+cb_kill_ai = {
+	show_in_diplomacy = yes
+	show_notification = no
+	potential = {
+		always = no
+		# is_country_type = default
+		# from = {
+		# 	OR = {
+		# 		has_country_flag = synthetic_empire
+		# 		is_machine_empire = yes
+		# 	}
+		# }
+		# NOT = { is_in_federation_with = from }
+	}
+	is_valid = {
+		has_total_war_cb = yes
+		NOT = { is_overlord_to = FROM }
+		OR = {
+			is_subject = no
+			overlord = { NOT = { is_same_value = from } }
+		}
+		has_policy_flag = ai_outlawed
+	}
+}
+
+cb_end_threat_kill_ai = {
+	show_in_diplomacy = no
+	show_notification = no
+	potential = {
+		always = no
+		# is_country_type = default
+		# NOT = { is_in_federation_with = from }
+	}
+	is_valid = {
+		has_total_war_cb = no
+		from = {
+			is_country_type = default
+			any_war = {
+				using_war_goal = { type = wg_kill_ai owner = attacker }
+			}
+		}
+		NOT = { is_overlord_to = FROM }
+		OR = {
+			is_subject = no
+			overlord = { NOT = { is_same_value = from } }
+		}
+	}
+}
+
+cb_expel_hive = {
+	show_in_diplomacy = yes
+	show_notification = yes
+	potential = {
+		is_playable = yes
+		from = { is_hive_empire = yes }
+	}
+	is_valid = { 
+		NOT = { has_migration_access = from }
+		NOT = { is_in_federation_with = from }
+		NOT = { from = { is_overlord_to = root } }
+		NOT = { root = { is_overlord_to = from } }
+		if = {
+			limit = {
+				exists = from.overlord
+			}
+			NOT = { from.overlord = { is_same_value = root.overlord } }
+		}
+		any_owned_planet = {
+			has_branch_office = from
+		}
+	}	
+}

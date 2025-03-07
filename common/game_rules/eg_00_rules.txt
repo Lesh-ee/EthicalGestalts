@@ -1,0 +1,808 @@
+#Tooltips will be generated from these rules when they fail. Use of custom_tooltip is recommended
+#There are still multiple hard-coded rules that apply in addition to these.
+#If rules here evaluate to true, there might still be other rules that make the action unavailable.
+#If a rule here evaluates to false the action will become unavailable
+
+# Root = claimer
+# This = system
+can_add_claim = {
+	hidden_trigger = {
+		if = {
+			limit = {
+				root = { is_playable = no } # undercoat: moved to scripted trigger
+			}
+			always = yes
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_POLICY
+		OR = {
+			root = { has_policy_flag = unrestricted_wars }
+			eg_policy_claim_restrictions = yes # Ethical Gestalts - replaces is_gestalt = yes
+			AND = {
+				exists = owner
+				owner = {
+					any_war = {
+						any_attacker = { is_same_value = prevprev }
+						any_defender = { is_same_value = root }
+					}
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_NOT_VALID_EMPIRE
+		NAND = {
+			exists = owner
+			owner = {
+				is_empire = no # undercoat: moved to scripted trigger
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_DEVOURING_SWARM
+		NAND = {
+			root = { has_valid_civic = civic_hive_devouring_swarm }
+			root = { is_lithoid_empire = no }
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_DEVOURING_SWARM_LITHOID
+		NAND = {
+			root = { has_valid_civic = civic_hive_devouring_swarm }
+			root = { is_lithoid_empire = yes }
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_ASSIMILATOR
+		NOR = {
+			root = { is_machine_assimilator = yes }
+			eg_hive_assimilator_claim_restrictions = yes # Ethical Gestalts
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_PURIFIERS
+		NAND = {
+			exists = owner
+			root = { has_valid_civic = civic_fanatic_purifiers }
+			NOT = {	owner = { is_same_species = root } }
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_EXTERMINATOR
+		NAND = {
+			exists = owner
+			root = { has_valid_civic = civic_machine_terminator }
+			owner = {
+				NOR = {
+					is_same_species = root
+					has_country_flag = synthetic_empire
+					is_machine_empire = yes
+					is_individual_machine = yes
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = CANNOT_ADD_CLAIM_THEY_THREAT
+		NAND = {
+			exists = owner
+			owner = {
+				OR = {
+					is_homicidal = yes # undercoat: moved to scripted trigger
+					is_machine_assimilator = yes # undercoat: moved to scripted trigger
+					has_valid_civic = civic_hive_assimilator # Ethical Gestalts
+				}
+			}
+			root = {
+				NOR = {
+					is_homicidal = yes # undercoat: moved to scripted trigger
+					is_machine_assimilator = yes # undercoat: moved to scripted trigger
+					has_valid_civic = civic_hive_assimilator # Ethical Gestalts
+				}
+			}
+		}
+	}
+}
+
+#Root = species
+#This = country
+can_release_vassal_from_species = {
+	root = {
+		is_sapient = yes
+		NOR = {
+			AND = {
+				has_trait = trait_machine_unit
+				prev.this = { is_individual_machine = no }
+			}
+			AND = {
+				has_trait = trait_hive_mind
+				NOT = { prev.this = { is_progenitor_hive_empire = yes } } # undercoat: moved to scripted trigger
+			}
+			# Ethical Gestalts - let hives release non-hive vassals
+			has_trait = trait_mechanical
+			can_think = no
+			has_trait = trait_clone_soldier_infertile
+			has_trait = trait_clone_soldier_infertile_full_potential
+		}
+	}
+}
+
+# Root = Pop
+# From = Country
+# This = Pop
+# NOTE: species_has_happiness is also checked for this
+pop_has_random_ethics = {
+	# Ethical Gestalts - Bio-trophies have ethics and can join mostly-powerless factions
+	always = yes
+}
+
+# Checks if a pop can procreate
+# This = Species
+# Root = Planet
+can_species_procreate = {
+	is_sapient = yes
+	NOR = {
+		has_trait = trait_machine_unit
+		has_trait = trait_mechanical
+		has_trait = trait_limited_cybernetic
+	}
+	eg_drone_pop_growth_restrictions = yes # ethical gestalts
+	NAND = {
+		root = { has_modifier = slave_colony }
+		NOT = { has_citizenship_type = { type = citizenship_slavery country = root.owner } }
+	}
+	if = {
+		limit = {
+			has_trait = trait_necrophage
+		}
+		NOT = {
+			root = {
+				any_owned_species = {
+					has_population_control = { country = root.owner type = no }
+					species_can_be_necrophaged = yes
+				}
+			}
+		}
+	}
+	NOT = { has_species_flag = nivlac_no_procreation }
+	if = {
+		limit = {
+			has_cybernetic_creed_trait = yes
+		}
+		NOT = {
+			root = {
+				any_owned_species = {
+					has_population_control = { country = root.owner type = no }
+					is_robotic_species = no
+					has_cybernetic_creed_trait = no
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_cybernetic_creed_trait = no
+		}
+		root = {
+			any_owned_species = {
+				has_population_control = { country = root.owner type = no }
+				is_robotic_species = no
+				has_cybernetic_creed_trait = no
+			}
+		}
+	}
+}
+
+# Can the pop be purged/disassembled individually by its owner
+# scope: pop
+can_purge_pop_manually = {
+	custom_tooltip = {
+		fail_text = "ALREADY_BEING_PURGED"
+		NOT = { has_citizenship_type = { type = citizenship_purge country = owner } }
+	}
+	custom_tooltip = {
+		fail_text = "ACTION_CANNOT_PURGE_CITIZEN"
+		exists = owner
+		OR = {
+			is_robot_pop = yes
+			is_sapient = no
+			eg_permit_drone_purge = yes # ethical gestalts - replaces is_hive_empire = yes
+			has_citizenship_type = { type = citizenship_slavery country = owner }
+			has_citizenship_type = { type = citizenship_full_machine country = owner }
+		}
+	}
+	custom_tooltip = {
+		fail_text = "ACTION_CANNOT_PURGE_POLICY"
+		exists = owner
+		OR = {
+			is_robot_pop = yes
+			AND = {
+				is_sapient = no
+				owner = { NOT = { has_policy_flag = pre_sapients_protect } }
+			}
+			eg_permit_drone_purge = yes # ethical gestalts - replaces is_hive_empire = yes
+			owner = { has_policy_flag = purge_allowed }
+		}
+	}
+	custom_tooltip = {
+		fail_text = "ACTION_DISASSEMBLE_SYNTHETICS"
+		exists = owner
+		OR = {
+			is_robot_pop = no
+			owner = { is_hive_empire = yes }
+			NAND = {
+				has_trait = trait_mechanical
+				owner = { has_policy_flag = ai_full_rights }
+			}
+		}
+	}
+}
+
+# This = pop
+can_resettle_pop = {
+	# Self-modified Pops won't leave
+	custom_tooltip = {
+		fail_text = "self_modified_refuse"
+		NOT = { has_trait = trait_self_modified }
+	}
+	# Pathogenic Pops Can't Resettle
+	custom_tooltip = {
+		fail_text = "pathogenic_genes_warning"
+		NOT = { has_trait = trait_pathogenic_genes }
+	}
+	custom_tooltip = {
+		fail_text = "origin_egalitarian_refuse"
+		NAND = {
+			pop_has_ethic = ethic_egalitarian
+			is_enslaved = no
+			planet = { has_modifier = paragon_origin_reformists }
+		}
+	}
+	eg_ai_resettlement_restriction = yes # ethical gestalts - keep AI from accidentally moving pops to planets where they'll immediately decline
+	custom_tooltip = {
+		fail_text = "no_resettling_apps"
+		if = {
+			limit = {
+				has_virtual_species_trait = yes
+			}
+			exists = owner
+			owner = {
+				is_fallen_empire = no
+				NOT = {
+					has_active_tradition = tr_virtuality_adopt
+				}
+			}
+		}
+	}
+	if = { #Done as an IF/ELSE so the tooltip isn't hideous and unreadable
+		limit = { is_shackled_robot = yes }
+		always = yes
+	}
+	else_if = {
+		limit = {
+			planet = {
+				is_doomsday_planet = yes
+			}
+		}
+		always = yes
+	}
+	else_if = {
+		limit = {
+			planet = {
+				has_modifier = planet_culture_shock
+			}
+		}
+		OR = {
+			is_same_species = planet.owner
+			planet = {
+				NOT = { has_modifier = planet_culture_shock }
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			planet = {
+				is_capital = yes
+				num_pops < 2
+			}
+			NOT = {
+				owner = {
+					any_owned_planet = {
+						is_capital = no
+						is_cosmogenesis_world = no # undercoat: moved to scripted trigger
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = "no_abandon_capital_for_unviable_planet"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			planet = {
+				is_cosmogenesis_world = yes # undercoat: moved to scripted trigger
+				owner = {
+					has_ascension_perk = ap_cosmogenesis
+				}
+				num_pops < 2
+			}
+		}
+		custom_tooltip = {
+			fail_text = "no_unfueled_lathe"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			planet = {
+				has_deposit = d_genesis_preserve
+				count_owned_pop = {
+					limit = { is_sapient = yes }
+					count < 2
+				}
+			}
+			owner = {
+				is_guided_sapience_empire = yes
+			}
+		}
+		custom_tooltip = {
+			fail_text = "no_abandon_genesis_preserve"
+			always = no
+		}
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_ascension_perk = ap_cosmogenesis
+			}
+		}
+		always = yes
+	}
+	else_if = {
+		limit = {
+			owner = {
+				is_gestalt = yes
+			}
+			eg_gestalt_resettlement_restriction = yes # ethical gestalts - gestalts need to allow resettlement to resettle non-drone pops
+		}
+		always = yes
+	}
+	else = {
+		custom_tooltip = {
+			fail_text = RESETTLEMENT_POLICY_FAIL
+			owner = {
+				has_policy_flag = resettlement_allowed
+			}
+		}
+	}
+}
+
+# This = planet
+can_pops_grow_on_planet = {
+	NOR = {
+		has_modifier = planet_population_control
+		# Ethical Gestalts - hives need to allow population controls to prevent the growth of non-drone pops
+		AND = {
+			has_modifier = planet_population_control_gestalt
+			eg_gestalt_pop_control_growth_restrictions = yes # ethical gestalts - must allow population controls to stop non-drone pop growth
+		}
+		is_cosmogenesis_world = yes # undercoat: moved to scripted trigger
+		is_nanotech_world = yes # undercoat: moved to scripted trigger
+		AND = { # conquered by crisis
+			exists = controller
+			controller = {
+				OR = {
+					is_country_type = ai_empire
+					is_country_type = swarm
+				}
+			}
+		}
+	}
+}
+
+# This = planet
+# Root = country
+can_force_grow_on_planet = {
+	custom_tooltip = {
+		fail_text = FORCE_GROWTH_NEEDS_POP_CONTROLS
+		exists = owner
+		OR = {
+			owner = { NOT = { has_policy_flag = population_controls_not_allowed } }
+			eg_allow_force_grow_drones = yes # ethical gestalts
+		}
+		is_cosmogenesis_world = no # undercoat: moved to scripted trigger
+	}
+}
+
+## If this returns true, the species will be set to decline even if it is not being purged
+# This = species
+# From = planet
+## Note: success text tooltips are shown in alert_pops_declining alert.
+should_force_decline_species = {
+	OR = {
+		# Infertile Clone Army pops should decline if in Country that can't have Vats, or there is a Vat shortage.
+		custom_tooltip = {
+			success_text = CLONE_ARMY_FORCE_DECLINE
+			exists = this
+			OR = {
+				has_trait = trait_clone_soldier_infertile
+				has_trait = trait_clone_soldier_infertile_full_potential
+			}
+			from = {
+				OR = {
+					# Check if country is unable to build Vats for this species.
+					AND = {
+						exists = owner
+						owner = {
+							OR = {
+								is_clone_army_empire = no					# Can't have Vats. # undercoat: moved to scripted trigger
+								has_country_flag = clone_army_fertility_unlocked			# Can't have Vats anymore.
+								NOT = { owner_main_species = { is_same_species = root } }	# Our Vats can't build this species.
+							}
+						}
+					}
+					# Vats check out, but are there more pops than Vats support?
+					check_variable = { which = clone_pops_missing value < 0 }
+				}
+			}
+		}
+		# This slowly kills off the Syntheic Fertility Species
+		custom_tooltip = {
+			success_text = PATHOGENIC_GENES_FORCE_DECLINE
+			exists = this
+			has_trait = trait_pathogenic_genes
+		}
+
+		eg_force_decline_lonely_hive_pops = yes # ethical gestalts - kill hive pops not connected to hives
+
+	}
+}
+
+# This = country
+can_build_branch_offices = {
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_NOT_MEGACORP
+		OR = {
+			is_megacorp = yes
+			has_civic = civic_galactic_sovereign_megacorp
+			eg_allow_branch_offices = yes # ethical gestalts
+		}
+	}
+}
+
+# This = country
+can_support_branch_offices = {
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_NOT_FALLEN_EMPIRES
+		is_fallen_empire = no # undercoat: moved to scripted trigger
+	}
+	# Ethical Gestalts - guest hives can buld branch offices in corps, so moved this to the planet-scope rule
+	# custom_tooltip = {
+	# 	fail_text = BRANCH_OFFICE_NOT_ON_MEGACORP_PLANET
+	# 	NOR = {
+	# 		is_megacorp = yes
+	# 		has_civic = civic_galactic_sovereign_megacorp
+	# 	}
+	# }
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_NOT_REGULAR_EMPIRE
+		OR = {
+			is_gestalt = no
+			eg_allow_branch_offices_in_country = yes # ethical gestalts
+		}
+	}
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_NOT_ADVANCED_PRE_FTL
+		if = {
+			limit = {
+				is_primitive = yes
+				is_gestalt = no
+			}
+			OR = {
+				has_pre_ftl_age = atomic_age
+				has_pre_ftl_age = early_space_age
+			}
+		}
+	}
+}
+
+# This = planet
+# Root = country
+can_build_branch_office_on_planet = {
+	eg_no_branch_offices_on_own_country_rule = yes # Ethical Gestalts - guest hives can build in each other but not in themselves
+	custom_tooltip = {
+		fail_text = requires_recipient_not_fanatic_purifiers
+		exists = owner
+		owner = {
+			OR = {
+				is_same_species = root
+				NOT = { has_civic = civic_fanatic_purifiers }
+				eg_allow_infiltration = yes # Ethical Gestalts
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_NO_OBSERVATION_OUTPOST
+		if = {
+			limit = {
+				root = { is_criminal_syndicate = yes }
+				owner = { is_primitive = yes }
+			}
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_same_value = root
+			}
+		}
+	}
+	# requirements for megacorps and traders
+	if = {
+		limit = {
+			root = { eg_allow_branch_offices = no } # ethical gestalts
+		}
+		eg_megacorp_planet_branch_office_restrictions = yes # Ethical Gestalts - moved from country-scope rule
+		custom_tooltip = {
+			fail_text = BRANCH_OFFICE_NOT_COMMERCIAL_PACT
+			exists = owner
+			OR = {
+				root = { is_criminal_syndicate = yes }
+				owner = { has_commercial_pact = root }
+				owner = { is_in_federation_with = root }
+				AND = {
+					has_observation_outpost = yes
+					observation_outpost = {
+						has_modifier = preftl_action_trade_pact
+					}
+				}
+
+				# allow branch offices in subsidiaries and vice versa (and fellow subjects)
+				root = {
+					is_subject = yes
+					OR = {
+						is_megacorp = yes
+						has_civic = civic_galactic_sovereign_megacorp
+					}
+					overlord = {
+						OR = {
+							is_same_value = prevprev.owner
+							is_same_value = prevprev.owner.overlord
+						}
+					}
+				}
+				owner = {
+					is_subject = yes
+					overlord = {
+						OR = {
+							is_same_value = root
+							is_same_value = root.overlord
+						}
+						OR = {
+							is_megacorp = yes
+							has_civic = civic_galactic_sovereign_megacorp
+						}
+					}
+				}
+				AND = {
+					root = { has_civic = civic_galactic_sovereign_megacorp }
+					owner = { is_galactic_community_member = yes }
+				}
+				AND = {
+					root = { has_modifier = imperial_charter }
+					owner = { is_galactic_community_member = yes }
+				}
+			}
+		}
+		custom_tooltip = {
+			fail_text = BRANCH_OFFICE_MEGACORP_OVERLORD
+			exists = owner
+			# failure message for having a corporate overlord
+
+			if = {
+				limit = {
+					OR = {
+						# Not valid if you aren't a subject.
+						root = {
+							is_subject = no
+						}
+						# Or if your overlord isn't a megacorp.
+						root = {
+							is_subject = yes
+							overlord = {
+								NOR = {
+									is_megacorp = yes # undercoat: moved to scripted trigger
+									has_civic = civic_galactic_sovereign_megacorp
+								}
+							}
+						}
+					}
+				}
+				always = yes
+			}
+			else = {
+				AND = {
+					root = {
+						is_subject = yes
+						overlord = {
+							OR = {
+								is_megacorp = yes # undercoat: moved to scripted trigger
+								has_civic = civic_galactic_sovereign_megacorp
+							}
+						}
+					}
+					owner = {
+						OR = {
+							is_subject = no
+							AND = {
+								is_subject = yes
+								overlord = { NOT = { is_same_value = root.overlord } }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	eg_branch_office_planet_restrictions = yes # ethical gestalts
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_CRIMINAL_HERITAGE_HAS_TRUCE
+		exists = owner
+		OR = {
+			root = { is_criminal_syndicate = no }
+			owner = {
+				NOR = {
+					has_truce = root
+					is_at_war_with = root
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_CRIMINAL_COOLDOWN
+		exists = owner
+		OR = {
+			root = { is_criminal_syndicate = no }
+			AND = {
+				root = { is_criminal_syndicate = yes }
+				NOT = { has_planet_flag = criminal_branch_closed_cooldown_planet@root }
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = NO_BRANCH_OFFICE_ON_NANITE_WORLD
+		is_gray_goo_world = no # undercoat: moved to scripted trigger
+	}
+	custom_tooltip = {
+		fail_text = NO_BRANCH_OFFICE_ON_SYNAPTIC_LATHE
+		is_cosmogenesis_world = no # undercoat: moved to scripted trigger
+	}
+}
+
+# This = country
+# Checked by is_criminal_syndicate trigger
+is_criminal_syndicate_rule = {
+	OR = {
+		AND = {
+			OR = {
+				is_megacorp = yes # undercoat: moved to scripted trigger
+				has_valid_civic = civic_galactic_sovereign_megacorp
+			}
+			has_valid_civic = civic_criminal_heritage		
+		}
+		eg_allow_infiltration = yes # Ethical Gestalts
+	}
+}
+
+# Root = current planet
+# This = pop
+# Purge, Sapience, Migration Controls policy (ignored by Gestalts and Synths), and target habitability are checked in code.
+can_pop_auto_migrate = {
+	hidden_trigger = { is_unemployed = yes } #this is always true where this tooltip is called
+	custom_tooltip = {
+		fail_text = AUTO_MIGRATE_ASSIMILATED
+		is_being_assimilated = no
+	}
+	custom_tooltip = {
+		fail_text = AUTO_MIGRATE_VIRTUALITY
+		OR = {
+			has_virtual_species_trait = no
+			AND = {
+				has_virtual_species_trait = yes
+				exists = owner
+				owner = {
+					OR = {
+						is_individual_machine = no
+						is_machine_empire = no
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				is_shackled_robot = yes
+				is_enslaved = yes
+			}
+		}
+		custom_tooltip = {
+			fail_text = AUTO_MIGRATE_SLAVE_PROCESSING
+			OR = {
+				planet = {
+					OR = {
+						has_building = building_slave_processing
+						AND = {
+							exists = orbital_defence
+							orbital_defence = {
+								exists = starbase
+								starbase = {
+									has_starbase_building = ring_slave_processing_facility
+								}
+							}
+						}
+					}
+				}
+				solar_system = {
+					count_starbase_buildings = {
+						type = transit_hub
+						count >= 1
+						include_being_constructed = no
+					}
+				}
+			}
+		}
+	}
+	eg_auto_migration_restrictions = yes # ethical gestalts
+}
+
+#this/root = pop
+#checked if job's possible_precalc = can_fill_drone_job
+can_fill_drone_job = {
+	custom_tooltip = DRONE_JOB_TRIGGER
+	hidden_trigger = {
+		exists = owner
+		eg_drone_job_criteria = yes # ethical gestalts - replaces owner = { is_gestalt = yes }
+		is_being_purged = no
+		is_enslaved = no
+		is_being_assimilated = no
+		# NOT = { has_citizenship_type = { type = citizenship_organic_trophy country = owner } } # ethical gestalts - this is redundant with eg_drone_job_criteria
+	}
+}
+
+#this/root = pop
+#checked if job's possible_precalc = can_fill_worker_job
+can_fill_worker_job = {
+	custom_tooltip = WORKER_JOB_TRIGGER
+	hidden_trigger = {
+		if = {
+			limit = {
+				planet = {
+					is_cosmogenesis_world = yes #Everyone can become a chip slave # undercoat: moved to scripted trigger
+				}
+			}
+			always = yes
+		}
+		else = {
+			eg_worker_job_criteria = yes # ethical gestalts - replaces NOT = { has_ethic = ethic_gestalt_consciousness }
+			exists = owner
+			is_being_purged = no
+			is_being_assimilated = no
+			NOT = { has_citizenship_type = { type = citizenship_organic_trophy country = owner } }
+			NAND = {
+				has_citizenship_type = { type = citizenship_slavery }
+				OR = {
+					has_slavery_type = { type = slavery_livestock }
+					has_slavery_type = { type = slavery_matrix }
+				}
+			}
+			if = {
+				limit = {
+					divinity_right_to_work_job_check_trigger_exempt = no
+				}
+				divinity_right_to_work_job_check_trigger_worker = yes
+			}
+		}
+	}
+}
+

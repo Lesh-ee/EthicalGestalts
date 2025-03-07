@@ -1,0 +1,1573 @@
+#########################################
+#
+# Pre-FTL Situation Events
+#
+# Written by Byron Aytoun
+#
+#########################################
+
+namespace = preftl
+
+## Societal Guidance gatekeeper
+# Checks if pops are shifting ethics, with a chance of shifting the entire government's ethics
+situation_event = {
+	id = preftl.20
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_country_type = primitive
+			# check if it's under Societal Guidance or has been the target of an espionage op
+			OR = {
+				has_country_flag = preftl_societal_enlightenment_pact
+				has_country_flag = preftl_espionage_operation_recent_shift_ethic_target
+			}
+			OR = {
+				is_gestalt = yes
+				capital_scope = {
+					any_owned_pop = {
+						NOT = {
+							has_same_ethos = prevprev
+						}
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			fire_on_action = { on_action = on_pre_ftl_pop_ethic_shift }
+		}
+	}
+}
+
+# Pre-FTL ask system owner for starbase ownership
+country_event = {
+	id = preftl.180
+	title = preftl.180.name
+	location = from.capital_scope.solar_system
+	desc = {
+		trigger = {
+			from = {
+				NOT = { has_country_flag = knew_of_aliens }
+			}
+		}
+		text = preftl.180.desc.noawarness
+	}
+	desc = {
+		trigger = {
+			from = {
+				has_country_flag = knew_of_aliens
+			}
+		}
+		text = preftl.180.desc.awarness
+	}
+	desc = {
+		exclusive_trigger = {
+			from = {
+				NOT = { has_country_flag = knew_of_aliens }
+				capital_scope = {
+					OR = {
+						has_planet_flag = broken_shackles_homeworld@root
+						has_planet_flag = broken_shackles_abductees_world@root
+					}
+				}
+			}
+		}
+		text = preftl.180.desc.bshomeworld.noawarness
+	}
+	desc = {
+		exclusive_trigger = {
+			from = {
+				has_country_flag = knew_of_aliens
+				capital_scope = {
+					OR = {
+						has_planet_flag = broken_shackles_homeworld@root
+						has_planet_flag = broken_shackles_abductees_world@root
+					}
+				}
+			}
+		}
+		text = preftl.180.desc.bshomeworld.awarness
+	}
+	diplomatic = yes
+
+	is_triggered_only = yes
+
+	picture_event_data = {
+		portrait = from
+		planet_background = from
+		graphical_culture = from
+		city_level = from
+		room = from.ruler
+	}
+
+	immediate = {
+		establish_communications_no_message = from
+		establish_contact = {
+			who = from
+			location = FROM.capital_scope.solar_system
+		}
+	}
+
+	option = {
+		name = preftl.180.a # Cede
+		trigger = {
+			is_homicidal = no
+		}
+
+		if = {
+			limit = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophobe
+				}
+			}
+			add_resource = { influence = -200 }
+		}
+
+		custom_tooltip = preftl.180.a.tooltip
+		root = {
+			set_truce = {
+				target = from
+				type = guarantee
+			}
+		}
+		hidden_effect = {
+			from = {
+				set_truce = {
+					target = root
+					type = guarantee
+				}
+				achieve_ftl_effect = {
+					PRE_FTL = root.from
+					OWNER = root
+				}
+				capital_scope.solar_system.starbase = {
+					set_owner = root.from
+				}
+
+				add_opinion_modifier = {
+					modifier = opinion_ceded_starbase
+					who = root
+				}
+			}
+		}
+		ai_chance = {
+			modifier = {
+				factor = 50
+				is_xenophile = yes
+			}
+			modifier = {
+				factor = 0.1
+				is_xenophobe = yes
+			}
+		}
+	}
+
+	option = {
+		name = preftl.180.subjugate # Cede in exchange for subjugation
+		trigger = {
+			is_homicidal = no
+		}
+
+		if = {
+			limit = {
+				OR = {
+					has_ethic = ethic_fanatic_xenophobe
+					has_ethic = ethic_xenophobe
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_xenophile
+				}
+			}
+			add_resource = { influence = -50 }
+		}
+
+		custom_tooltip = preftl.180.subjugate.tooltip
+		hidden_effect = {
+			from = {
+				achieve_ftl_effect = {
+					PRE_FTL = root.from
+					OWNER = root
+				}
+				capital_scope.solar_system.starbase = {
+					set_owner = root.from
+				}
+				set_subject_of = {
+					who = ROOT
+					preset = preset_protectorate
+					allow_instant_negotiation = yes
+				}
+
+				add_opinion_modifier = {
+					modifier = opinion_not_ceded_starbase
+					who = root
+				}
+			}
+		}
+		ai_chance = {
+			modifier = {
+				factor = 25
+				has_ai_personality_behaviour = subjugator
+			}
+		}
+	}
+
+	option = {
+		name = preftl.180.b # Don't cede
+		trigger = {
+			is_homicidal = no
+		}
+
+		allow = {
+			OR = {
+				values_others = no
+				AND = {
+					values_others = yes
+					resource_stockpile_compare = {
+						resource = influence
+						value >= 100
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_xenophile = yes
+			}
+			add_resource = { influence = -100 }
+		}
+
+		custom_tooltip = preftl.180.b.tooltip
+
+		if = {
+			limit = {
+				From = {
+					is_hive_empire = yes
+				}
+				is_hive_empire = no
+			}
+			custom_tooltip = preftl.180.b.tt.nothive
+		}
+		if = {
+			limit = {
+				from = {
+					is_hive_empire = no
+				}
+				AND = {
+					is_gestalt = yes
+					NOR = {
+						is_servitor_empire = yes # undercoat: moved to scripted trigger
+						is_machine_assimilator = yes # undercoat: moved to scripted trigger
+					}
+				}
+			}
+			custom_tooltip = preftl.180.b.tt.notregular
+		}
+		hidden_effect = {
+			from = {
+				achieve_ftl_effect = {
+					PRE_FTL = root.from
+					OWNER = root
+				}
+				add_opinion_modifier = {
+					modifier = opinion_not_ceded_starbase
+					who = root
+				}
+			}
+			from.capital_scope = {
+				remove_modifier = prosp_uni_mod
+				remove_modifier = prosp_uni_mod_gestalt
+			}
+		}
+		ai_chance = {
+			modifier = {
+				factor = 50
+				has_ai_personality_behaviour = conqueror
+				is_xenophile = no
+			}
+			modifier = {
+				factor = 0
+				from = { is_gestalt = yes }
+				is_xenophobe = no
+				NOR = {
+					has_ai_personality_behaviour = purger
+					has_tradition = tr_genetics_resequencing
+					is_machine_assimilator = yes
+					has_valid_civic = civic_hive_assimilator
+					AND = {
+						is_hive_empire = yes
+						has_technology = tech_gene_tailoring
+					}
+				}
+			}
+			modifier = {
+				factor = 50
+				is_xenophobe = yes
+			}
+			modifier = {
+				factor = 0.1
+				is_xenophile = yes
+			}
+		}
+	}
+
+	option = {
+		name = preftl.180.c
+		# Undercoat - moved to inline script
+		inline_script = {
+			script = events/homicidal_option_text
+			who = this
+		}
+		trigger = {
+			from.capital_scope.solar_system = {
+				any_system_planet = {
+					exists = owner
+					owner = { is_same_value = root }
+				} 
+			}
+		}
+		allow = {
+			OR = {
+				is_xenophile = no
+				AND = {
+					is_xenophile = yes
+					resource_stockpile_compare = {
+						resource = influence
+						value >= 200
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_xenophile = yes
+			}
+			add_resource = { influence = -200 }
+		}
+		from.capital_scope = {
+			set_owner = root
+			add_modifier = {
+				modifier = culture_shock_early_space_age
+				days = 3600
+			}
+		}
+		ai_chance = {
+			modifier = {
+				factor = 50
+				has_ai_personality_behaviour = conqueror
+				is_xenophile = no
+			}
+			modifier = {
+				factor = 0
+				from = { is_gestalt = yes }
+				is_xenophobe = no
+				NOR = {
+					has_ai_personality_behaviour = purger
+					has_tradition = tr_genetics_resequencing
+					is_machine_assimilator = yes
+					has_valid_civic = civic_hive_assimilator
+					AND = {
+						is_hive_empire = yes
+						has_technology = tech_gene_tailoring
+					}
+				}
+			}
+			modifier = {
+				factor = 50
+				is_xenophobe = yes
+			}
+			modifier = {
+				factor = 0.1
+				is_xenophile = yes
+			}
+		}
+	}
+
+}
+
+### Plague Situation
+
+# Trigger event for Plague
+situation_event = {
+	id = preftl.2000
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		has_first_contact_dlc = yes
+		owner = {
+			species = { is_robotic = no }
+			current_awareness_level < full
+			has_blocked_random_devastating_pre_ftl_events = no
+		}
+	}
+
+	immediate = {
+		owner.capital_scope = {
+			if = {
+				limit = {
+					exists = observation_outpost_owner
+				}
+				observation_outpost_owner = {
+					country_event = { id = preftl.2001 }
+				}
+				observation_outpost = {
+					set_event_locked = yes
+				}
+			}
+		}
+	}
+}
+
+
+# Rise of the Warlords
+situation_event = {
+	id = preftl.2007
+	title = preftl.2007.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2007.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2007.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_open_revolt
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+	}
+
+	option = {
+		name = UNDERSTOOD
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			set_country_flag = rise_of_warlords
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				OR = {
+					is_militarist = yes
+					# has_valid_civic = civic_machine_warbots
+					# has_valid_civic = civic_hive_strength_of_legions
+				}
+			}
+		}
+		name = preftl.2007.a
+		owner = {
+			add_modifier = {
+				modifier = plague_01_militarist
+			}
+			set_country_flag = brilliant_banner
+		}
+		target.owner = {
+			add_awareness = 15
+		}
+	}
+}
+
+
+
+#Overwhelming Demand
+situation_event = {
+	id = preftl.2020
+	title = preftl.2020.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2020.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2020.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_ongoing_disaster
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			remove_country_flag = angels_of_mercy
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+	}
+
+	option = {
+		name = preftl.2020.a
+		owner = {
+			add_resource = {
+				energy = -500
+			}
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+			set_country_flag = overwhelming_demand
+		}
+	}
+
+	option = {
+		name = preftl.2020.b
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			set_country_flag = eyes_wide_open
+		}
+	}
+}
+
+
+# Messiah Syndrome
+situation_event = {
+	id = preftl.2025
+	title = preftl.2025.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2025.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2025.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_shroudwalker_teachers
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			set_country_flag = fervent_belief
+			remove_country_flag = religious_mania
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+		target.owner = {
+			hidden_effect = {
+				if = {
+					limit = { is_gestalt = no }
+					while = {
+						count = value:ten_percent_species
+						random_owned_pop = {
+							limit = {
+								NOT = { has_ethic = "ethic_spiritualist" }
+							}
+							pop_change_ethic = "ethic_spiritualist"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = UNDERSTOOD
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				is_spiritualist = yes
+			}
+		}
+		name = preftl.2025.a
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+# True Prophet
+situation_event = {
+	id = preftl.2026
+	title = preftl.2026.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2026.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2026.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_shroudwalker_teachers
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			remove_modifier = plague_01_spiritualist
+			remove_country_flag = true_prophet
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+		target.owner = {
+			shift_ethic = ethic_spiritualist
+			if = {
+				limit = { is_gestalt = no }
+				random_owned_pop = { pop_change_ethic = "ethic_fanatic_spiritualist" }
+			}
+		}
+	}
+
+	option = {
+		name = preftl.2026.a
+		custom_tooltip = true_prophet_tt
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+			add_modifier = {
+				modifier = plague_03_spiritualist
+				days = 1080
+			}
+			if = {
+				limit = {
+					root.target.owner = { is_gestalt = no }
+				}
+				create_leader = {
+					class = official
+					species = root.target.owner.species
+					name = random
+					skill = 5
+					traits = {
+						trait = leader_trait_zealot
+					}
+					event_leader = yes
+					effect = {
+						set_leader_flag = true_prophet
+					}
+				}
+			}
+			# else = {
+			# 	create_leader = {
+			# 		class = official
+			# 		species = root.target.owner.species
+			# 		name = random
+			# 		skill = 5
+			# 		traits = {
+			# 			trait = leader_trait_zealot
+			# 		}
+			# 		event_leader = yes
+			# 		effect = {
+			# 			set_leader_flag = true_prophet
+			# 		}
+			# 	}
+			# }
+		}
+		target.owner = {
+			add_awareness = 15
+		}
+	}
+
+	after = {
+		destroy_situation = this
+		target = {
+			remove_planet_flag = has_on_going_observation_situation
+		}
+	}
+}
+
+# Ragged Flags
+situation_event = {
+	id = preftl.2030
+	title = preftl.2030.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2030.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2030.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_open_revolt
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			set_country_flag = lords_of_the_battlefield
+			remove_country_flag = rise_of_warlords
+			set_country_flag = society_insights
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		target.owner.capital_scope = {
+			add_planet_devastation = 30
+			add_modifier = {
+				modifier = plague_05
+			}
+		}
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}
+
+# Brilliant Banner
+situation_event = {
+	id = preftl.2031
+	title = preftl.2031.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2031.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2031.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_victorious_army
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			remove_modifier = plague_01_militarist
+			remove_country_flag = brilliant_banner
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+	}
+
+	option = {
+		name = preftl.2031.a
+		custom_tooltip = brilliant_banner_tt
+		owner = {
+			create_leader = {
+				class = commander
+				species = root.target.owner.species
+				name = random
+				skill = 5
+				traits = {
+					1 = leader_trait_plague_hardened
+				}
+				event_leader = yes
+			}
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+			add_modifier = {
+				modifier = plague_03_militarist
+				days = 1080
+			}
+		}
+		target.owner = {
+			add_awareness = 15
+		}
+	}
+
+	after = {
+		destroy_situation = this
+		target = {
+			remove_planet_flag = has_on_going_observation_situation
+		}
+	}
+}
+
+# Apocalypse Now
+situation_event = {
+	id = preftl.2035
+	title = preftl.2035.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2035.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2035.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_scanning_remains
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			set_country_flag = apocalypse_now
+			remove_country_flag = rampant_contagion
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Dead World
+situation_event = {
+	id = preftl.2051
+	title = preftl.2051.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2051.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2051.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_relic_world
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		target = {
+			#just going to remove everything here, it wont show up on the tooltip if it doesn't exist
+			remove_modifier = plague_01_spiritualist
+			remove_modifier = plague_01_militarist
+			remove_modifier = plague_05
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		custom_tooltip = dead_world_tt
+	}
+
+	after = {
+		destroy_situation = this
+		hidden_effect = {
+			owner = {
+				remove_country_flag = apocalypse_now
+			}
+			target = {
+				every_owned_pop = {
+					kill_pop = yes
+				}
+				remove_planet_flag = has_on_going_observation_situation
+				destroy_colony = yes
+				observation_outpost = {
+					dismantle = yes
+				}
+			}
+		}
+	}
+}
+
+
+# Silent World - Informs player about an empty plague planet and kills the last pop
+situation_event = {
+	id = preftl.2063
+	title = preftl.2063.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2063.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2063.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_disease_outbreak
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		target = {
+			observation_outpost = {
+				set_event_locked = no
+			}
+			random_owned_pop = {
+				limit = {
+					is_robotic_species = no
+				}
+				kill_pop = yes
+			}
+		}
+		owner = {
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+	}
+
+	option = {
+		name = ACKNOWLEDGED
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+
+	after = {
+		destroy_situation = this
+		target = {
+			remove_planet_flag = has_on_going_observation_situation
+			observation_outpost = {
+				dismantle = yes
+			}
+		}
+	}
+}
+
+# Minds Wide Open
+situation_event = {
+	id = preftl.2065
+	title = preftl.2065.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2065.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2065.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	trigger = {
+		owner = {
+			has_country_flag = eyes_wide_open
+		}
+	}
+
+	immediate = {
+		owner = {
+			remove_country_flag = eyes_wide_open
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+		target = {
+			observation_outpost = {
+				set_event_locked = no
+			}
+		}
+	}
+
+	option = {
+		name = UNDERSTOOD
+		custom_tooltip = minds_open_tt
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+		}
+		target.owner = {
+			add_opinion_modifier = {
+				who = root.owner
+				modifier = opinion_plague_situation_01
+			}
+			set_awareness = 100
+		}
+	}
+
+	after = {
+		destroy_situation = this
+		target = {
+			remove_planet_flag = has_on_going_observation_situation
+		}
+	}
+}
+
+# Fervent Belief
+situation_event = {
+	id = preftl.2070
+	title = preftl.2070.name
+	desc = preftl.2070.desc
+	picture = GFX_evt_shroudwalker_teachers
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			remove_country_flag = fervent_belief
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+		target = {
+			observation_outpost = {
+				set_event_locked = no
+			}
+		}
+	}
+
+	option = {
+		name = UNDERSTOOD
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+		target.owner = {
+			shift_ethic = ethic_spiritualist
+			if = {
+				limit = { is_gestalt = no }
+				random_owned_pop = { pop_change_ethic = "ethic_fanatic_spiritualist" }
+			}
+		}
+	}
+	option = {
+		name = preftl.2026.a
+		trigger = {
+			owner = {
+				has_ethic = ethic_spiritualist
+			}
+		}
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_modifier = {
+				modifier = plague_03_spiritualist
+				days = -1
+			}
+		}
+		target.owner = {
+			shift_ethic = ethic_spiritualist
+			if = {
+				limit = { is_gestalt = no }
+				random_owned_pop = { pop_change_ethic = "ethic_fanatic_spiritualist" }
+			}
+		}
+	}
+
+	after = {
+		destroy_situation = this
+		target = {
+			remove_planet_flag = has_on_going_observation_situation
+		}
+	}
+}
+
+# Lords of the Battlefield
+situation_event = {
+	id = preftl.2075
+	title = preftl.2075.name
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = no }
+		}
+		text = preftl.2075.desc
+	}
+	desc = {
+		trigger = {
+			target.owner = { is_hive_empire = yes }
+		}
+		text = preftl.2075.desc.hive_pre_ftl
+	}
+	picture = GFX_evt_khan_throne_room
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			remove_country_flag = lords_of_the_battlefield
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+		target = {
+			observation_outpost = {
+				set_event_locked = no
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		}
+		name = UNDERSTOOD
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+		target = {
+			remove_modifier = plague_05
+		}
+		target.owner = {
+			if = {
+				limit = {
+					NOT = {
+						has_ethic = ethic_militarist
+					}
+				}
+				shift_ethic = ethic_militarist
+				if = {
+					limit = { is_gestalt = no }
+					random_owned_pop = { pop_change_ethic = "ethic_fanatic_militarist" }
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_militarist
+				}
+				shift_ethic = ethic_fanatic_militarist
+				if = {
+					limit = { is_gestalt = no }
+					random_owned_pop = { pop_change_ethic = "ethic_fanatic_militarist" }
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_fanatic_militarist
+					is_gestalt = no
+				}
+				while = {
+					count = value:ten_percent_species
+					random_owned_pop = { pop_change_ethic = "ethic_fanatic_militarist" }
+				}
+			}
+		}
+	}
+
+	option = {
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_militarist
+					has_ethic = ethic_fanatic_militarist
+				}
+			}
+		}
+		name = preftl.2031.a
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_modifier = {
+				modifier = plague_03_militarist
+				days = -1
+			}
+		}
+		target = {
+			remove_modifier = plague_05
+		}
+		target.owner = {
+			if = {
+				limit = {
+					NOT = {
+						has_ethic = ethic_militarist
+					}
+				}
+				shift_ethic = ethic_militarist
+				if = {
+					limit = { is_gestalt = no }
+					random_owned_pop = { pop_change_ethic = "ethic_fanatic_militarist" }
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_militarist
+				}
+				shift_ethic = ethic_fanatic_militarist
+				if = {
+					limit = { is_gestalt = no }
+					random_owned_pop = { pop_change_ethic = "ethic_fanatic_militarist" }
+				}
+			}
+			if = {
+				limit = {
+					has_ethic = ethic_fanatic_militarist
+					is_gestalt = no
+				}
+				while = {
+					count = value:ten_percent_species
+					random_owned_pop = { pop_change_ethic = "ethic_fanatic_militarist" }
+				}
+			}
+		}
+	}
+
+	after = {
+		destroy_situation = this
+		target = {
+			remove_planet_flag = has_on_going_observation_situation
+		}
+	}
+}
+
+
+
+# Mass Exorcism
+situation_event = {
+	id = preftl.2085
+	title = preftl.2085.name
+	desc = preftl.2085.desc
+	picture = GFX_evt_infiltration_failure
+	show_sound = event_wind_ruins
+	is_triggered_only = yes
+	location = target
+	situation = this
+
+	immediate = {
+		owner = {
+			remove_country_flag = power_of_faith
+			set_country_flag = society_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+		target = {
+			observation_outpost = {
+				set_event_locked = no
+			}
+		}
+	}
+
+	option = {
+		name = preftl.2085.a
+		custom_tooltip = mass_exorcism_tt
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+			add_modifier = {
+				modifier = plague_04
+				days = 1080
+			}
+		}
+		target.owner = {
+			shift_ethic = ethic_xenophobe
+			if = {
+				limit = { is_gestalt = no }
+				random_owned_pop = { pop_change_ethic = "ethic_spiritualist" }
+				random_owned_pop = { pop_change_ethic = "ethic_xenophobe" }
+			}
+			add_opinion_modifier = {
+				who = root.owner
+				modifier = opinion_plague_situation_03
+			}
+			set_awareness = 80
+		}
+	}
+
+	after = {
+		destroy_situation = this
+		target = {
+			remove_planet_flag = has_on_going_observation_situation
+		}
+	}
+}
+
+
+
+# Communion
+situation_event = {
+	id = preftl.2160
+	title = preftl.2160.name
+	desc = preftl.2160.desc
+	picture = GFX_evt_progenitor_throne
+	show_sound = event_bad_omen
+	location = target
+	situation = this
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			has_situation_flag = singular_communion
+		}
+	}
+
+	immediate = {
+		set_situation_flag = singular_communion
+		target.observation_outpost = {
+			set_event_locked = no
+		}
+		owner = {
+			set_country_flag = engineering_insights
+			set_predictive_observation_insight = {
+				VALUE = 10
+			}
+		}
+	}
+
+	option = {
+		name = EXCELLENT
+		custom_tooltip = preftl.2160.tt
+		owner = {
+			add_observation_insight_effect = {
+				VALUE = 10
+				OUTPOST = root.target.observation_outpost
+			}
+			add_monthly_resource_mult = {
+				resource = engineering_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+		hidden_effect = {
+			target = {
+				remove_modifier = singularity_situation_01
+				remove_modifier = singularity_situation_02
+				remove_modifier = singularity_situation_05
+				remove_modifier = singularity_situation_06
+				remove_all_buildings = yes
+				set_planet_flag = organic_singularity_communion #To avoid clash with observation event Nascent Collective
+			}
+
+			target.owner = {
+				if = {
+					limit = {
+						NOT = {
+							has_ethic = ethic_fanatic_authoritarian
+						}
+					}
+					shift_ethic = ethic_fanatic_authoritarian
+				}
+				change_government = {
+					authority = auth_hive_mind
+					remove_invalid_civics = yes
+					civics = {
+						civic = civic_hive_assimilator
+						civic = random
+					}
+				}
+				species = {
+					modify_species = {
+						species = this
+						add_trait = trait_hive_mind
+						remove_trait = trait_self_modified
+						remove_trait = trait_latent_psionic
+						remove_trait = trait_psionic
+						change_scoped_species = no
+
+						effect = {
+							save_event_target_as = convert_to_species
+						}
+					}
+				}
+				set_country_flag = organic_singularity_communion # To identify this country in 'abort' blocks, such as for Espionage Operations
+		
+				every_owned_pop = {
+					limit = {
+						is_robotic_species = no
+					}
+					change_species = event_target:convert_to_species
+				}
+	
+				ruler = {
+					kill_leader = { show_notification = no }
+				}
+
+				add_pre_ftl_buildings = yes
+
+				random_list = {
+					20 = {
+						if = {
+							limit = {
+								owner = {
+									NOT = {
+										has_valid_civic = civic_hive_devouring_swarm
+									}
+								}
+							}
+							change_government = {
+								civics = {
+									civic = civic_hive_devouring_swarm
+									civic = random
+								}
+							}
+						}
+					}
+					80 = { }
+				}
+			}
+		}
+	}
+
+	after = {
+		destroy_situation = this
+		target = {
+			check_planet_employment = yes
+			remove_planet_flag = has_on_going_observation_situation
+		}
+		owner = {
+			remove_country_flag = had_observation_situation
+			set_timed_country_flag = {
+				flag = had_observation_situation
+				days = 7200
+			}
+		}
+	}
+}

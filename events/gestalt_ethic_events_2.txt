@@ -1,0 +1,3918 @@
+namespace = gestalt_ethics
+
+# hive assimilation
+
+# Assimilate Pops on Yearly Pulse
+country_event = {
+	id = gestalt_ethics.30
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		has_valid_civic = civic_hive_assimilator
+		any_owned_species = {
+			NOR = {
+				is_robotic = yes
+				has_trait = trait_hive_mind
+				has_citizenship_type = { type = citizenship_assimilation country = prev }
+			}
+		}
+	}
+
+	immediate = {
+		every_owned_species = {
+			limit = {
+				NOR = {
+					is_robotic = yes
+					has_trait = trait_hive_mind
+					has_citizenship_type = {
+						type = citizenship_assimilation
+						country = prev
+					}	
+				}
+			}
+			if = {
+				limit = {
+					has_trait = trait_self_modified
+				}
+				modify_species = {
+					species = this
+					add_trait = trait_hive_mind
+					remove_trait = trait_self_modified
+					change_scoped_species = no
+
+					effect = {
+						set_timed_species_flag = {
+							flag = assimilation_species_of_species@prev
+							days = 30
+						}
+						set_timed_species_flag = {
+							flag = assimilation_species_of_empire@prevprev
+							days = 30
+						}
+					}
+				}
+			}
+			else = {
+				modify_species = {
+					species = this
+					add_trait = trait_hive_mind
+					change_scoped_species = no
+
+					effect = {
+						set_timed_species_flag = {
+							flag = assimilation_species_of_species@prev
+							days = 30
+						}
+						set_timed_species_flag = {
+							flag = assimilation_species_of_empire@prevprev
+							days = 30
+						}
+					}
+				}
+			}
+		}
+		every_owned_planet = {
+			planet_event = { id = gestalt_ethics.31 }
+		}
+	}
+}
+
+# Assimilate Pops
+planet_event = {
+	id = gestalt_ethics.31
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = {
+			any_owned_species = {
+				has_citizenship_type = {
+					type = citizenship_assimilation
+					country = from
+				}	
+			}
+		}
+		any_owned_species = {
+			NOR = {
+				is_robotic = yes
+				has_trait = trait_hive_mind
+				has_citizenship_type = { type = citizenship_assimilation country = from }
+			}
+		}
+		any_owned_species = {
+			has_trait = trait_hive_mind
+		}	
+	}
+
+	immediate = {
+		random_list = {
+			1 = { # 1 pop
+				set_variable = {
+					which = assimilation_counter
+					value = 1
+				}
+				while = {
+					count = 1
+					limit = {
+						any_owned_species = {
+							has_citizenship_type = {
+								type = citizenship_assimilation
+								country = root.owner
+							}
+						}
+						check_variable = {
+							which = assimilation_counter
+							value > 0
+						}
+					}
+					assimilation_effect = yes
+				}
+			}
+
+			1 = { # 2 pops
+				set_variable = {
+					which = assimilation_counter
+					value = 2
+				}
+				while = {
+					count = 2
+					limit = {
+						any_owned_species = {
+							has_citizenship_type = {
+								type = citizenship_assimilation
+								country = root.owner
+							}
+						}
+						check_variable = {
+							which = assimilation_counter
+							value > 0
+						}
+					}
+					assimilation_effect = yes
+				}
+			}
+
+			1 = { # 4 pops
+				set_variable = {
+					which = assimilation_counter
+					value = 4
+				}
+				while = {
+					count = 4
+					limit = {
+						any_owned_species = {
+							has_citizenship_type = {
+								type = citizenship_assimilation
+								country = root.owner
+							}
+						}
+						check_variable = {
+							which = assimilation_counter
+							value > 0
+						}
+					}
+					assimilation_effect = yes
+				}
+			}
+		}
+	}
+}
+
+# Assimilate Pops on Yearly Pulse, from infiltration branch offices
+country_event = {
+	id = gestalt_ethics.40
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { NOT = { is_hive_empire = yes } }
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				exists = branch_office_owner
+				branch_office_owner = {
+					has_policy_flag = infiltration_allowed
+				}
+			}
+
+			planet_event = { id = gestalt_ethics.41 }
+		}
+	}
+}
+
+# Assimilate Pops
+planet_event = {
+	id = gestalt_ethics.41
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		random_list = {
+			1 = { # 1 pops
+				while = {
+					count = 1
+					limit = {
+						any_owned_species = {
+							NOT = { has_trait = trait_hive_mind }
+							is_organic_species = yes
+						}
+					}
+					random_owned_pop = {
+						limit = {
+							species = {
+								NOT = { has_trait = trait_hive_mind }
+								is_organic_species = yes	
+							}
+						}
+						modify_species = {
+							species = this
+							add_trait = trait_hive_mind
+							add_traits_at_start_of_list = yes
+							#change_scoped_species = no
+						}
+						remove_culture_shock = yes
+						remove_self_modified = yes # scripted effect
+						root.branch_office_owner = { generate_cyborg_treats = yes } # scripted effect
+						set_living_standard = {
+							type = living_standard_hive_mind
+							country = root.branch_office_owner
+						}
+					}
+				}
+			}
+
+			1 = { # 2 pops
+				while = {
+					count = 2
+					limit = {
+						any_owned_species = {
+							NOT = { has_trait = trait_hive_mind }
+							is_organic_species = yes
+						}
+					}
+					random_owned_pop = {
+						limit = {
+							species = {
+								NOT = { has_trait = trait_hive_mind }
+								is_organic_species = yes	
+							}
+						}
+						modify_species = {
+							species = this
+							add_trait = trait_hive_mind
+							add_traits_at_start_of_list = yes
+							#change_scoped_species = no
+						}
+						remove_culture_shock = yes
+						remove_self_modified = yes # scripted effect
+						root.branch_office_owner = { generate_cyborg_treats = yes } # scripted effect
+						set_living_standard = {
+							type = living_standard_hive_mind
+							country = root.branch_office_owner
+						}
+					}
+				}
+			}
+
+			1 = { # 4 pops
+				while = {
+					count = 4
+					limit = {
+						any_owned_species = {
+							NOT = { has_trait = trait_hive_mind }
+							is_organic_species = yes
+						}
+					}
+					random_owned_pop = {
+						limit = {
+							species = {
+								NOT = { has_trait = trait_hive_mind }
+								is_organic_species = yes	
+							}
+						}
+						modify_species = {
+							species = this
+							add_trait = trait_hive_mind
+							add_traits_at_start_of_list = yes
+							#change_scoped_species = no
+						}
+						remove_culture_shock = yes
+						remove_self_modified = yes # scripted effect
+						root.branch_office_owner = { generate_cyborg_treats = yes } # scripted effect
+						set_living_standard = {
+							type = living_standard_hive_mind
+							country = root.branch_office_owner
+						}
+					}
+				}
+			}
+		}
+		if = { # if all potential ruler pops are infected, flip planet
+			limit = {
+				NOT = {
+					any_owned_pop = {
+						NOR = {
+							has_trait = trait_hive_mind
+							can_fill_ruler_job = no
+						}
+					}	
+				}
+			}
+			owner = { country_event = { id = gestalt_ethics.42 } }
+			set_owner = branch_office_owner
+			set_controller = owner
+			close_branch_office = yes
+			owner = { country_event = { id = gestalt_ethics.43 } }
+		}
+	}
+}
+
+country_event = {
+	id = gestalt_ethics.42
+	title = evt_planet_lost_to_infiltration
+	is_triggered_only = yes
+	picture = GFX_evt_hive_mind
+	location = from
+	desc = {
+		trigger = {
+			from = {
+				NOT = {
+					any_owned_species = {
+						NOR = {
+							has_trait = trait_hive_mind
+							has_trait = trait_machine_unit
+							AND = {
+								has_trait = trait_mechanical
+								root = {
+									AND = {
+										has_technology = tech_synthetic_workers
+										NOT = { has_policy_flag = ai_outlawed }
+									}
+								}
+							}
+							is_sapient = no
+						}	
+					}
+				}
+			}
+		}
+		text = evt_planet_lost_to_infiltration_desc
+	}
+	desc = {
+		trigger = {
+			from = {
+				any_owned_species = {
+					NOR = {
+						has_trait = trait_hive_mind
+						AND = {
+							has_trait = trait_mechanical
+							root = {
+								AND = {
+									has_technology = tech_synthetic_workers
+									NOT = { has_policy_flag = ai_outlawed }
+								}
+							}
+						}
+						is_sapient = no
+					}	
+				}
+			}
+		}
+		text = evt_planet_lost_to_infiltration_slaver_desc
+	}
+
+	option = {
+		name = UNFORTUNATE
+	}
+}
+
+country_event = {
+	id = gestalt_ethics.43
+	title = evt_planet_gained_infiltration
+	picture = GFX_evt_hive_mind
+	location = from
+	is_triggered_only = yes
+	desc = {
+		trigger = {
+			from = {
+				NOT = {
+					any_owned_species = {
+						NOR = {
+							has_trait = trait_hive_mind
+							AND = {
+								has_trait = trait_mechanical
+								from.owner = {
+									AND = {
+										has_technology = tech_synthetic_workers
+										NOT = { has_policy_flag = ai_outlawed }
+									}
+								}
+							}
+							is_sapient = no
+						}	
+					}
+				}
+			}
+		}
+		text = evt_planet_gained_infiltration_desc
+	}
+	desc = {
+		trigger = {
+			from = {
+				any_owned_species = {
+					NOR = {
+						has_trait = trait_hive_mind
+						AND = {
+							has_trait = trait_mechanical
+							from.owner = {
+								AND = {
+									has_technology = tech_synthetic_workers
+									NOT = { has_policy_flag = ai_outlawed }
+								}
+							}
+						}
+						is_sapient = no
+					}	
+				}
+			}
+		}
+		text = evt_planet_gained_infiltration_slaver_desc
+	}
+
+	option = {
+		name = EXCELLENT
+	}
+}
+
+# Infiltrators found
+country_event = {
+	id = gestalt_ethics.50
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_owned_planet = {
+			has_branch_office = yes
+			branch_office_owner = { 
+				has_valid_civic = civic_hive_assimilator
+			}
+			planet_crime < 1
+		}
+	}
+
+	immediate = {
+		random_list = {
+			14 = { }
+			1 = {
+				random_owned_planet = {
+					limit = {
+						has_branch_office = yes
+						branch_office_owner = { 
+							has_policy_flag = infiltration_allowed
+						}
+						planet_crime < 1
+					}
+					planet_event = { id = gestalt_ethics.51 days = 360 random = 40 }
+				}
+			}
+		}
+	}
+}
+
+# infiltrators Found (Planet)
+planet_event = {
+	id = gestalt_ethics.51
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		planet_crime < 1
+		has_branch_office = yes
+		branch_office_owner = {
+			has_valid_civic = civic_hive_assimilator
+			NOT = { has_migration_access = from }
+		}
+	}
+
+	immediate = {
+		random_list = {
+			1 = {
+				while = {
+					count = 2
+					if = {
+						limit = { any_owned_pop = { has_trait = trait_hive_mind } }
+						random_owned_pop = {
+							limit = { has_trait = trait_hive_mind }
+							kill_pop = yes
+						}
+					}
+					else = {
+						planet_event = { id = gestalt_ethics.52 }
+					}
+				}		
+			}
+		}
+	}
+}
+
+# Infiltrator Branch Office Closes (Planet Owner)
+planet_event = {
+	id = gestalt_ethics.52
+	title = evt_infiltration_ended
+	desc = evt_infiltration_ended_desc
+	picture = GFX_evt_dark_alley
+	show_sound = event_criminal_activity
+	location = root
+
+	is_triggered_only = yes
+
+	immediate = { branch_office_owner = { save_event_target_as = office_owner } }
+
+	option = {
+		name = EXCELLENT		
+		close_branch_office = yes
+		hidden_effect = {
+			set_timed_planet_flag = { flag = criminal_branch_closed_cooldown_planet@event_target:office_owner days = 3600 }
+			event_target:office_owner = {
+			 	country_event = { id = gestalt_ethics.53 }
+			}
+		}
+	}
+}
+
+# Infiltrator Branch Office Closes (Office Owner)
+country_event = {
+	id = gestalt_ethics.53
+	title = evt_our_infiltration_ended
+	desc = evt_our_infiltration_ended_desc
+	picture = GFX_evt_dark_alley
+	show_sound = event_criminal_activity
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = UNFORTUNATE
+		custom_tooltip = crime.1002.tooltip
+	}
+}
+
+# Spore Assimilation
+planet_event = {
+	id = gestalt_ethics.60
+	hide_window = yes
+
+	is_triggered_only = yes
+	trigger = { owner = { is_synthetic_empire = no } }
+
+	immediate = {
+		from.owner = { country_event = { id = gestalt_ethics.61 } }
+
+		if = {
+			limit = {
+				OR = {
+					is_active_resolution = "resolution_rulesofwar_independent_tribunals"
+					is_active_resolution = "resolution_rulesofwar_last_resort_doctrine"
+					is_active_resolution = "resolution_rulesofwar_demobilization_initiative"
+				}
+			}
+			from.owner = {
+				set_timed_country_flag = { flag = resolution_breached_fired_assimilator days = 3600 }
+			}
+		}
+
+		if = {
+			limit = {
+				exists = owner
+				owner = {
+					NOT = { is_same_value = from.owner }
+					OR = {
+						is_country_type = default
+						is_country_type = fallen_empire
+						is_country_type = awakened_fallen_empire
+					}
+				}
+			}
+			# Generate threat
+			add_threat = { who = from.owner amount = 3 }
+			# modifier for allies + those upset by robots
+			every_country = {
+				limit = {
+					NOR = {
+						is_same_value = from.owner
+						is_same_value = root.owner
+						AND = {
+							has_federation = yes
+							is_in_federation_with = from.owner
+						}
+					}
+					OR = {
+						has_communications = from.owner
+						has_communications = root.owner
+					}
+					OR = {
+						AND = {
+							has_federation = yes
+							is_in_federation_with = root.owner
+						}
+						has_ai_personality = awakened_fallen_empire_spiritualist
+						AND = {
+							is_country_type = default
+							OR = {
+								is_egalitarian = yes
+								is_spiritualist = yes
+							}
+						}
+					}
+				}
+				add_opinion_modifier = {
+					modifier = opinion_assimilated_a_world
+					who = from.owner
+				}
+			}
+			# modifiers for victim
+			owner = {
+				add_opinion_modifier = {
+					modifier = opinion_assimilated_my_world
+					who = from.owner
+				}
+				if = {
+					limit = { is_gestalt = no }
+					add_modifier = {
+						modifier = colossus_victim
+						days = 10800 # 30 years
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				exists = owner
+				owner = { is_country_type = primitive }
+			}
+			# modifier for allies + those upset by genocide
+			every_country = {
+				limit = {
+					NOR = { is_same_value = from.owner }
+					OR = {
+						has_communications = from.owner
+						has_communications = root.owner
+					}
+					is_country_type = default
+					NOR = {
+						is_xenophobe = yes
+						is_homicidal = yes
+						is_xenophile = yes
+					}
+				}
+				add_opinion_modifier = {
+					modifier = opinion_assimilated_a_primitive_world
+					who = from.owner
+				}
+			}
+			every_country = {
+				limit = {
+					NOR = { is_same_value = from.owner }
+					OR = {
+						has_communications = from.owner
+						has_communications = root.owner
+					}
+					OR = {
+						has_ai_personality = awakened_fallen_empire_xenophile
+						AND = {
+							is_country_type = default
+							is_xenophile = yes
+						}
+					}
+				}
+				add_opinion_modifier = {
+					modifier = opinion_assimilated_a_primitive_world_phile
+					who = from.owner
+				}
+			}
+		}
+		# Add war exhaustion to planet owner
+		owner = {
+			add_static_war_exhaustion = {
+				attacker = from.fleet.owner
+				location = root
+				value_for_planet_destruction = 1.0
+			}
+		}
+		if = {
+			limit = {
+				NAND = {
+					exists = owner
+					owner = { is_same_value = from.owner }	
+				}
+			}
+			# already owned
+			set_owner = from.owner
+		}
+		every_owned_pop = {
+			limit = {
+				is_valid_pop_for_PLANET_KILLER_NANOBOTS = yes
+			}
+			modify_species = {
+				species = this
+				add_trait = trait_hive_mind
+				add_traits_at_start_of_list = yes
+				change_scoped_species = yes
+			}
+		}
+		every_owned_pop = {
+			limit = {
+				has_modifier = pop_recently_conquered
+			}
+			remove_modifier = pop_recently_conquered
+		}
+		every_owned_pop = {
+			set_citizenship_type = {
+				type = citizenship_full
+				cooldown = yes
+			}
+		}
+		# Special graphics for Habitats and Ring Worlds
+		if = {
+			limit = {
+				is_planet_class = pc_habitat
+			}
+			spawn_habitat_nanobot_effect = yes
+		}
+		else_if = {
+			limit = {
+				is_planet_class = pc_ringworld_habitable
+			}
+			spawn_ringworld_nanobot_effect = yes
+		}
+		if = {
+			limit = {
+				OR = {
+					is_planet_class = pc_habitat
+					is_planet_class = pc_ringworld_habitable
+				}
+			}
+			# nothing
+		}
+		else = {
+			switch = {
+				trigger = is_planet_class
+				pc_desert = { change_pc = pc_desert }
+				pc_arid = { change_pc = pc_arid }
+				pc_savannah = { change_pc = pc_savannah }
+				pc_ocean = { change_pc = pc_ocean }
+				pc_continental = { change_pc = pc_continental }
+				pc_tropical = { change_pc = pc_tropical }
+				pc_tundra = { change_pc = pc_tundra }
+				pc_arctic = { change_pc = pc_arctic }
+				pc_alpine = { change_pc = pc_alpine }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = gestalt_ethics.61
+	title = evt_planet_infected_spores
+	desc = evt_planet_infected_spores_desc
+	picture = GFX_evt_hive_mind
+	show_sound = event_mystic_reveal
+	location = from
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = fired_nanobots }
+		FROM = {
+			NOR = {
+				is_planet_class = pc_habitat
+				is_planet_class = pc_ringworld_habitable
+			}
+		}
+	}
+
+	immediate = {
+		set_country_flag = fired_nanobots
+	}
+
+	option = {
+		name = OK
+		from = {
+			custom_tooltip = evt_planet_infected_spores_tooltip
+		}
+	}
+}
+
+# Gestaltization Project
+
+country_event = {
+	id = gestalt_ethics.70
+	title = evt_gestaltization_project
+	picture = GFX_evt_unity_symbol
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+	desc = {
+		trigger = { has_country_flag = synthetic_empire }
+		text = evt_gestaltization_project_comp_desc
+	}
+	desc = {
+		trigger = {
+			has_ascension_perk = ap_transcendence
+			NOT = { has_country_flag = synthetic_empire }
+		}
+		text = evt_gestaltization_project_psi_desc
+	}
+	desc = {
+		trigger = {
+			has_tradition = tr_genetics_resequencing
+			NOR = {
+				has_country_flag = synthetic_empire
+				has_ascension_perk = ap_transcendence
+			}
+		}
+		text = evt_gestaltization_project_bio_desc
+	}
+
+	option = {
+		name = EXCELLENT
+		hidden_effect = { save_event_target_as = gestaltization_owner }
+		if = {
+			limit = { has_country_flag = synthetic_empire }
+			capital_scope = {
+				enable_special_project = {
+					name = gestaltization_comp_projet
+					location = this
+					owner = root
+				}	
+			}
+		}
+		else = {
+			capital_scope = {
+				enable_special_project = {
+					name = gestaltization_soc_projet
+					location = this
+					owner = root
+				}	
+			}
+		}
+	}
+}
+
+country_event = {
+	id = gestalt_ethics.71
+	title = evt_comp_gestaltization_project_complete
+	desc = evt_comp_gestaltization_project_complete_desc
+	picture = GFX_evt_unity_symbol
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	immediate = {
+
+		# set some flags that will be used to keep these countries from suddenly abandoning their ideals for no reason, and to select civics
+		if = {
+			limit = { has_valid_civic = civic_environmentalist }
+			set_country_flag = was_environmentalist
+		}
+		if = {
+			limit = { has_valid_civic = civic_shared_burden }
+			set_country_flag = had_shared_burden
+		}
+		if = {
+			limit = { has_valid_civic = civic_warrior_culture }
+			set_country_flag = had_warrior_culture
+		}
+		if = {
+			limit = { has_valid_civic = civic_catalytic_processing }
+			set_timed_country_flag = {
+				flag = had_catalytic_processing
+				days = 1
+			}
+		}
+		if = {
+			limit = { has_valid_civic = civic_memorialist }
+			set_timed_country_flag = {
+				flag = was_memorialist
+				days = 1
+			}
+		}
+		if = {
+			limit = { has_valid_civic = civic_toxic_baths }
+			set_timed_country_flag = {
+				flag = had_toxic_baths
+				days = 1
+			}
+		}
+		if = {
+			limit = { has_valid_civic = civic_functional_architecture }
+			set_timed_country_flag = {
+				flag = had_functional_architecture
+				days = 1
+			}
+		}
+		if = {
+			limit = { has_valid_civic = civic_mining_guilds }
+			set_timed_country_flag = {
+				flag = had_mining_guilds
+				days = 1
+			}
+		}
+		export_modifier_to_variable = {
+			modifier = country_government_civic_points_add
+			variable = civic_points
+		}
+		change_variable = {
+			which = civic_points
+			value = 1
+		}
+
+		# avoid requirement conflicts
+		switch = {
+			trigger = has_origin
+			origin_mechanists = {
+				set_origin = origin_default
+				set_country_flag = had_mechanists
+			}
+			origin_syncretic_evolution = {
+				set_origin = origin_default
+				set_country_flag = had_syncretic_evolution
+			}
+			origin_void_dwellers = {
+				set_origin = origin_default
+				set_country_flag = had_void_dwellers
+			}
+			origin_shoulders_of_giants = {
+				set_origin = origin_default
+				set_country_flag = had_shoulders_of_giants
+			}
+			origin_lost_colony = {
+				set_origin = origin_default
+				set_country_flag = had_lost_colony
+			}
+			origin_clone_army = {
+				set_origin = origin_default
+				set_country_flag = had_clone_army
+			}
+			origin_life_seeded = {
+				set_origin = origin_default
+				set_country_flag = had_life_seeded
+			}
+			origin_post_apocalyptic = {
+				set_origin = origin_default
+				set_country_flag = had_post_apocalyptic
+			}
+			origin_necrophage = {
+				set_origin = origin_default
+				set_country_flag = had_necrophage
+			}
+			origin_ocean_paradise = {
+				set_origin = origin_default
+				set_country_flag = had_ocean_paradise
+			}
+			origin_subterranean = {
+				set_origin = origin_default
+				set_country_flag = had_subterranean
+			}
+			origin_overtuned = {
+				set_origin = origin_default
+				set_country_flag = had_overtuned
+			}
+			default = { }
+		}
+
+		# change government
+		if = {
+			limit = {
+				has_civic = civic_fanatic_purifiers
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_machine_intelligence
+				civics = {
+					civic = civic_machine_terminator
+				}
+			}
+		}
+		else = {
+			change_government = {
+				cooldown = no
+				authority = auth_machine_intelligence
+				civics = {
+					civic = civic_machine_dynamic_objectives
+				}
+			}
+		}
+		while = {
+			count = civic_points
+			IF = {
+				limit = { has_country_flag = was_memorialist }
+				remove_country_flag = was_memorialist
+				force_add_civic = civic_machine_memorialist
+			}
+			ELSE_IF = {
+				limit = { has_country_flag = had_catalytic_processing }
+				remove_country_flag = had_catalytic_processing
+				force_add_civic = civic_machine_catalytic_processing
+			}
+			ELSE_IF = {
+				limit = { has_country_flag = had_toxic_baths }
+				remove_country_flag = had_toxic_baths
+				force_add_civic = civic_machine_toxic_baths
+			}
+			ELSE_IF = {
+				limit = {
+					NOT = { has_civic = civic_machine_dynamic_objectives }
+				}
+				force_add_civic = civic_machine_dynamic_objectives
+			}
+			ELSE_IF = {
+				limit = { has_country_flag = had_functional_architecture }
+				remove_country_flag = had_functional_architecture
+				force_add_civic = civic_machine_builder
+			}
+			ELSE_IF = {
+				limit = {
+					has_country_flag = was_environmentalist
+					NOT = { has_civic = civic_machine_zero_waste_protocols }
+				}
+				force_add_civic = civic_machine_zero_waste_protocols
+			}
+			ELSE_IF = {
+				limit = {
+					NOT = { has_civic = civic_machine_delegated_functions }
+					NOT = { has_ethic = ethic_fanatic_authoritarian }
+				}
+				force_add_civic = civic_machine_delegated_functions
+			}
+			ELSE_IF = {
+				limit = { has_country_flag = had_functional_architecture }
+				remove_country_flag = had_functional_architecture
+				force_add_civic = civic_machine_builder
+			}
+			ELSE_IF = {
+				limit = {
+					OR = {
+						has_country_flag = had_warrior_culture
+						has_ethic = ethic_fanatic_militarist
+					}
+					NOT = { has_civic = civic_machine_warbots }
+				}
+				force_add_civic = civic_machine_warbots
+			}
+			ELSE_IF = {
+				limit = {
+					has_country_flag = had_mining_guilds
+					NOT = { has_civic = civic_machine_rockbreakers }
+				}
+				force_add_civic = civic_machine_rockbreakers
+			}
+			ELSE = {
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							has_civic = civic_machine_factory_overclock
+						}
+						force_add_civic = civic_machine_factory_overclock
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_civic = civic_machine_unitary_cohesion
+						}
+						force_add_civic = civic_machine_unitary_cohesion
+					}
+					5 = {
+						modifier = {
+							factor = 0
+							has_civic = civic_machine_zero_waste_protocols
+						}
+						force_add_civic = civic_machine_zero_waste_protocols
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_civic = civic_machine_ota_updates
+						}
+						force_add_civic = civic_machine_ota_updates
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_civic = civic_machine_introspective
+						}
+						force_add_civic = civic_machine_introspective
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_civic = civic_machine_predictive_analysis
+						}
+						force_add_civic = civic_machine_predictive_analysis
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_civic = civic_machine_maintenance_protocols
+						}
+						force_add_civic = civic_machine_maintenance_protocols
+					}
+				}
+			}
+		}
+		if = {
+			limit = { is_galactic_emperor = yes }
+			set_name = random
+			store_galactic_community_leader_backup_data = {
+				name = yes
+				government = yes
+			}
+			force_add_civic = civic_galactic_sovereign
+		}
+
+		set_name = random
+
+		give_technology = {
+			tech = tech_singlemind_governance
+			message = no
+		}
+		switch = {
+			trigger = has_technology
+			tech_robomodding_points_2 = {
+				give_technology = { tech = tech_robomodding_m message = no }
+				give_technology = { tech = tech_binary_motivators message = no }
+				give_technology = { tech = tech_nanite_assemblers message = no }
+			}
+			tech_robomodding_points_1 = {
+				give_technology = { tech = tech_robomodding_m message = no }
+				give_technology = { tech = tech_binary_motivators message = no }
+			}
+			tech_robomodding = {
+				give_technology = { tech = tech_robomodding_m message = no }
+			}
+		}
+
+		# change species
+		if = {
+			limit = {
+				has_country_flag = synthetic_empire
+				any_owned_species = {
+					is_exact_same_species = root
+				}
+			}
+			random_owned_pop = {
+				limit = { is_exact_same_species = root }
+				create_machine_species_mod = yes
+				species = { save_event_target_as = new_main_species }
+			}
+			change_dominant_species = { species = event_target:new_main_species }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = synthetic_empire
+			}
+			random_owned_pop = {
+				limit = { is_same_species = root }
+				create_machine_species_mod = yes
+				species = { save_event_target_as = new_main_species }
+			}
+			change_dominant_species = { species = event_target:new_main_species }
+		}
+		while = {
+			limit = {
+				any_owned_pop = { has_trait = trait_mechanical }
+			}
+			random_owned_pop = {
+				limit = { has_trait = trait_mechanical }
+				create_machine_species_mod = yes
+			}
+		}
+		while = {
+			limit = {
+				any_owned_leader = { has_trait = trait_mechanical }
+			}
+			random_owned_leader = {
+				limit = { has_trait = trait_mechanical }
+				root.capital_scope = { #Presumably vanilla does things this way for a reason?
+					create_pop = {
+						species = prev
+					}
+					last_created_pop = {
+						create_machine_species_mod = yes
+						kill_pop = yes
+					}
+				}
+			}
+		}
+		while = {
+			limit = {
+				any_pool_leader = { has_trait = trait_mechanical }
+			}
+			random_pool_leader = {
+				limit = { has_trait = trait_mechanical }
+				root.capital_scope = { #Presumably vanilla does things this way for a reason?
+					create_pop = {
+						species = prev
+					}
+					last_created_pop = {
+						create_machine_species_mod = yes
+						kill_pop = yes
+					}
+				}
+			}
+		}
+		while = {
+			limit = {
+				any_owned_army = {
+					exists = species
+					species = { has_trait = trait_mechanical }
+				}
+			}
+			random_owned_army = {
+				limit = {
+					exists = species
+					species = { has_trait = trait_mechanical }
+				}
+				root.capital_scope = { #Presumably vanilla does things this way for a reason?
+					create_pop = {
+						species = prev
+					}
+					last_created_pop = {
+						create_machine_species_mod = yes
+						kill_pop = yes
+					}
+				}
+			}
+		}
+		every_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				species = { has_trait = trait_mechanical }
+			}
+			root.capital_scope = { #Presumably vanilla does things this way for a reason?
+				create_pop = {
+					species = prev
+				}
+				last_created_pop = {
+					create_machine_species_mod = yes
+					kill_pop = yes
+				}
+			}
+		}
+
+		# create new leader and update flags and buildings
+		create_leader = {
+			name = integration_mi_name
+			species = owner_main_species
+			class = random_ruler
+		}
+		set_leader = last_created_leader
+		remove_country_flag = flesh_weakened
+		remove_country_flag = synthetic_empire
+		set_country_flag = synthetic_integration
+		every_owned_planet = {
+			validate_planet_buildings_and_districts = yes
+			every_owned_pop = {
+				unemploy_pop = yes
+				clear_pop_category = yes
+			}
+			check_planet_employment = yes
+		}
+
+		# revert origin
+		switch = {
+			trigger = has_country_flag
+			had_mechanists = {
+				set_origin = origin_mechanists
+			}
+			had_syncretic_evolution = {
+				set_origin = origin_syncretic_evolution
+			}
+			had_void_dwellers = {
+				set_origin = origin_void_dwellers
+			}
+			had_shoulders_of_giants = {
+				set_origin = origin_shoulders_of_giants
+			}
+			had_lost_colony = {
+				set_origin = origin_lost_colony
+			}
+			had_clone_army = {
+				set_origin = origin_clone_army
+			}
+			had_life_seeded = {
+				set_origin = origin_life_seeded
+			}
+			had_post_apocalyptic = {
+				set_origin = origin_post_apocalyptic
+			}
+			had_necrophage = {
+				set_origin = origin_necrophage
+			}
+			had_ocean_paradise = {
+				set_origin = origin_ocean_paradise
+			}
+			had_subterranean  = {
+				set_origin = origin_subterranean
+			}
+			had_overtuned = {
+				set_origin = origin_overtuned
+			}
+			default = { }
+		}
+	}
+
+	option = {
+		name = glorious_day
+		custom_tooltip = become_machine_intelligence
+	}
+}
+
+country_event = {
+	id = gestalt_ethics.72
+	title = evt_soc_gestaltization_project_complete
+	desc = evt_soc_gestaltization_project_complete_desc
+	picture = GFX_evt_hive_mind
+	show_sound = event_mystic_reveal
+	is_triggered_only = yes
+
+	immediate = {
+
+		# set some flags that will be used to keep these countries from suddenly abandoning their ideals for no reason, and to select civics
+		if = {
+			limit = { has_valid_civic = civic_environmentalist }
+			set_country_flag = was_environmentalist
+		}
+		if = {
+			limit = { has_valid_civic = civic_shared_burden }
+			set_country_flag = had_shared_burden
+		}
+		if = {
+			limit = { has_valid_civic = civic_warrior_culture }
+			set_country_flag = had_warrior_culture
+		}
+		if = {
+			limit = { has_valid_civic = civic_idyllic_bloom }
+			set_timed_country_flag = {
+				flag = had_idyllic_bloom
+				days = 1
+			}
+		}
+		if = {
+			limit = { has_valid_civic = civic_catalytic_processing }
+			set_timed_country_flag = {
+				flag = had_catalytic_processing
+				days = 1
+			}
+		}
+		if = {
+			limit = { has_valid_civic = civic_memorialist }
+			set_timed_country_flag = {
+				flag = was_memorialist
+				days = 1
+			}
+		}
+		if = {
+			limit = { has_valid_civic = civic_diplomatic_corps }
+			set_timed_country_flag = {
+				flag = had_diplomatic_corps
+				days = 1
+			}
+		}
+		if = {
+			limit = { has_valid_civic = civic_toxic_baths }
+			set_timed_country_flag = {
+				flag = had_toxic_baths
+				days = 1
+			}
+		}
+		if = {
+			limit = { has_valid_civic = civic_efficient_bureaucracy }
+			set_timed_country_flag = {
+				flag = had_efficient_bureaucracy
+				days = 1
+			}
+		}
+		export_modifier_to_variable = {
+			modifier = country_government_civic_points_add
+			variable = civic_points
+		}
+		change_variable = {
+			which = civic_points
+			value = 1
+		}
+
+		# avoid requirement conflicts
+		switch = {
+			trigger = has_origin
+			origin_mechanists = {
+				set_origin = origin_default
+				set_country_flag = had_mechanists
+			}
+			origin_syncretic_evolution = {
+				set_origin = origin_default
+				set_country_flag = had_syncretic_evolution
+			}
+			origin_void_dwellers = {
+				set_origin = origin_default
+				set_country_flag = had_void_dwellers
+			}
+			origin_shoulders_of_giants = {
+				set_origin = origin_default
+				set_country_flag = had_shoulders_of_giants
+			}
+			origin_lost_colony = {
+				set_origin = origin_default
+				set_country_flag = had_lost_colony
+			}
+			origin_clone_army = {
+				set_origin = origin_default
+				set_country_flag = had_clone_army
+			}
+			default = { }
+		}
+
+		# change government
+		if = {
+			limit = {
+				is_megacorp = yes
+				is_xenophile = yes
+				NOT = { has_civic = civic_criminal_heritage }
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = civic_hive_guest
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_civic = civic_criminal_heritage
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = civic_hive_assimilator
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_civic = civic_fanatic_purifiers
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = civic_hive_devouring_swarm
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = had_idyllic_bloom
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = civic_hive_idyllic_bloom
+				}
+			}
+			remove_country_flag = had_idyllic_bloom
+		}
+		else_if = {
+			limit = {
+				NOT = { has_ethic = ethic_fanatic_authoritarian }
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = civic_hive_natural_neural_network
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = had_catalytic_processing
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = civic_hive_catalytic_processing
+				}
+			}
+			remove_country_flag = had_catalytic_processing
+		}
+		else_if = {
+			limit = {
+				has_country_flag = was_memorialist
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = civic_hive_memorialist
+				}
+			}
+			remove_country_flag = was_memorialist
+		}
+		else_if = {
+			limit = {
+				has_country_flag = had_toxic_baths
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = civic_hive_toxic_baths
+				}
+			}
+			remove_country_flag = had_toxic_baths
+		}
+		else_if = {
+			limit = {
+				is_xenophile = yes
+			}
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = civic_hive_guest
+				}
+			}
+		}
+		else = {
+			change_government = {
+				cooldown = no
+				authority = auth_hive_mind
+				civics = {
+					civic = random
+				}
+			}
+		}
+		while = {
+			count = civic_points
+			IF = {
+				limit = { has_country_flag = had_idyllic_bloom }
+				remove_country_flag = had_idyllic_bloom
+				force_add_civic = civic_hive_idyllic_bloom
+			}
+			ELSE_IF = {
+				limit = { has_country_flag = was_memorialist }
+				remove_country_flag = was_memorialist
+				force_add_civic = civic_hive_memorialist
+			}
+			ELSE_IF = {
+				limit = { has_country_flag = had_catalytic_processing }
+				remove_country_flag = had_catalytic_processing
+				force_add_civic = civic_hive_catalytic_processing
+			}
+			ELSE_IF = {
+				limit = { has_country_flag = was_memorialist }
+				remove_country_flag = was_memorialist
+				force_add_civic = civic_hive_memorialist
+			}
+			ELSE_IF = {
+				limit = {
+					NOT = { has_civic = civic_hive_natural_neural_network }
+					NOT = { has_ethic = ethic_fanatic_authoritarian }
+				}
+				force_add_civic = civic_hive_natural_neural_network
+			}
+			ELSE_IF = {
+				limit = {
+					is_xenophile = yes
+					NOT = { has_civic = civic_hive_guest }
+				}
+				force_add_civic = civic_hive_guest
+			}
+			ELSE_IF = {
+				limit = {
+					has_country_flag = had_diplomatic_corps
+					is_xenophobe = no
+				}
+				remove_country_flag = had_diplomatic_corps
+				force_add_civic = civic_hive_empath
+			}
+			ELSE_IF = {
+				limit = {
+					has_country_flag = had_efficient_bureaucracy
+					NOT = { has_ethic = ethic_fanatic_egalitarian }
+				}
+				remove_country_flag = had_efficient_bureaucracy
+				force_add_civic = civic_hive_divided_attention
+			}
+			ELSE_IF = {
+				limit = {
+					has_country_flag = had_toxic_baths
+				}
+				remove_country_flag = had_toxic_baths
+				force_add_civic = civic_hive_toxic_baths
+			}
+			ELSE = {
+				random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							has_civic = civic_hive_subspace_ephapse
+						}
+						force_add_civic = civic_hive_subspace_ephapse
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_civic = civic_hive_unprincipled
+						}
+						force_add_civic = civic_hive_unprincipled
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								has_civic = civic_hive_one_mind
+								is_egalitarian = yes
+							}
+						}
+						force_add_civic = civic_hive_one_mind
+					}
+					5 = {
+						modifier = {
+							factor = 0
+							OR = {
+								has_civic = civic_hive_divided_attention
+								has_ethic = ethic_fanatic_egalitarian
+							}
+						}
+						force_add_civic = civic_hive_divided_attention
+					}
+					5 = {
+						modifier = {
+							factor = 0
+							OR = {
+								has_civic = civic_hive_empath
+								is_xenophobe = yes
+							}
+						}
+						force_add_civic = civic_hive_empath
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								has_civic = civic_hive_subsumed_will
+								has_ethic = ethic_fanatic_egalitarian
+							}
+						}
+						force_add_civic = civic_hive_subsumed_will
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							OR = {
+								has_civic = civic_hive_pooled_knowledge
+								has_ethic = ethic_fanatic_authoritarian
+							}
+						}
+						force_add_civic = civic_hive_pooled_knowledge
+					}
+				}
+			}
+		}
+		if = {
+			limit = { is_galactic_emperor = yes }
+			set_name = random
+			store_galactic_community_leader_backup_data = {
+				name = yes
+				government = yes
+			}
+			force_add_civic = civic_galactic_sovereign
+		}
+
+		give_technology = {
+			tech = tech_singlemind_governance
+			message = no
+		}
+
+		# change species
+		if = {
+			limit = {
+				any_owned_pop = {
+					is_exact_same_species = root
+				}
+			}
+			random_owned_pop = {
+				limit = { is_exact_same_species = root }
+				create_hive_species_mod = yes
+				species = { save_event_target_as = new_main_species }
+			}
+		}
+		else = {
+			random_owned_pop = {
+				limit = { is_same_species = root }
+				create_hive_species_mod = yes
+				species = { save_event_target_as = new_main_species }
+			}
+		}
+		change_dominant_species = { species = event_target:new_main_species }
+		while = {
+			limit = {
+				any_owned_pop = {
+					species = {
+						is_organic_species = yes
+						NOT = { has_trait = trait_hive_mind }
+					}
+				}
+			}
+			random_owned_pop = {
+				limit = {
+					species = {
+						is_organic_species = yes
+						NOT = { has_trait = trait_hive_mind }
+					}
+				}
+				create_hive_species_mod = yes
+			}
+		}						
+		while = {
+			limit = {
+				any_owned_leader = {
+					species = {
+						is_organic_species = yes
+						NOT = { has_trait = trait_hive_mind }
+					}
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					species = {
+						is_organic_species = yes
+						NOT = { has_trait = trait_hive_mind }
+					}
+				}
+				root.capital_scope = { #Presumably vanilla does things this way for a reason?
+					create_pop = {
+						species = prev
+					}
+					last_created_pop = {
+						create_hive_species_mod = yes
+						kill_pop = yes
+					}
+				}
+			}
+		}
+		while = {
+			limit = {
+				any_pool_leader = {
+					species = {
+						is_organic_species = yes
+						NOT = { has_trait = trait_hive_mind }
+					}
+				}
+			}
+			random_pool_leader = {
+				limit = {
+					species = {
+						is_organic_species = yes
+						NOT = { has_trait = trait_hive_mind }
+					}
+				}
+				root.capital_scope = { #Presumably vanilla does things this way for a reason?
+					create_pop = {
+						species = prev
+					}
+					last_created_pop = {
+						create_hive_species_mod = yes
+						kill_pop = yes
+					}
+				}
+			}
+		}
+		while = {
+			limit = {
+				any_owned_army = {
+					exists = species
+					species = {
+						is_organic_species = yes
+						NOT = { has_trait = trait_hive_mind }
+					}
+				}
+			}
+			random_owned_army = {
+				limit = {
+					exists = species
+					species = {
+						is_organic_species = yes
+						NOT = { has_trait = trait_hive_mind }
+					}
+				}
+				root.capital_scope = { #Presumably vanilla does things this way for a reason?
+					create_pop = {
+						species = prev
+					}
+					last_created_pop = {
+						create_hive_species_mod = yes
+						kill_pop = yes
+					}
+				}
+			}
+		}
+		every_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				species = {
+					is_organic_species = yes
+					NOT = { has_trait = trait_hive_mind }
+				}
+			}
+			root.capital_scope = { #Presumably vanilla does things this way for a reason?
+				create_pop = {
+					species = prev
+				}
+				last_created_pop = {
+					create_hive_species_mod = yes
+					kill_pop = yes
+				}
+			}
+		}
+
+		# create new leader and update flags and buildings
+		create_leader = {
+			name = integration_hive_name
+			species = owner_main_species
+			class = random_ruler
+			traits = { trait = leader_trait_ruler_hive_mind }
+		}
+		set_leader = last_created_leader
+		set_country_flag = hive_integration
+		every_owned_planet = {
+			validate_planet_buildings_and_districts = yes
+			every_owned_pop = {
+				unemploy_pop = yes
+				clear_pop_category = yes
+			}
+			check_planet_employment = yes
+		}
+
+		# revert origin
+		switch = {
+			trigger = has_country_flag
+			had_mechanists = {
+				set_origin = origin_mechanists
+			}
+			had_syncretic_evolution = {
+				set_origin = origin_syncretic_evolution
+			}
+			had_void_dwellers = {
+				set_origin = origin_void_dwellers
+			}
+			had_shoulders_of_giants = {
+				set_origin = origin_shoulders_of_giants
+			}
+			had_lost_colony = {
+				set_origin = origin_lost_colony
+			}
+			had_clone_army = {
+				set_origin = origin_clone_army
+			}
+			default = { }
+		}
+
+	}
+	option = {
+		name = glorious_day
+		custom_tooltip = become_hive_mind
+	}
+}
+
+# give certain gestalts singlemind governance on game start
+
+country_event = {
+	id = gestalt_ethics.90
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		OR = {
+			has_valid_civic = civic_machine_servitor
+			has_valid_civic = civic_machine_assimilator
+			has_valid_civic = civic_hive_assimilator
+			has_valid_civic = civic_hive_guest
+		}
+	}
+	immediate = {
+		give_technology = {
+			tech = tech_singlemind_governance
+			message = no
+		}
+	}
+}
+
+# Clear singlemind enclaves on planet transfer or colony destruction
+planet_event = {
+	id = gestalt_ethics.100
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		IF = {
+			limit = {
+				exists = from
+			}
+			from = {
+				OR = {
+					is_gestalt = no
+					is_homicidal = yes
+				}
+			}
+		}
+		any_deposit = {
+			has_deposit_category = deposit_cat_singlemind_enclave
+		}
+	}
+
+	immediate = {
+		every_deposit = {
+			limit = {
+				has_deposit_category = deposit_cat_singlemind_enclave
+			}
+			remove_deposit = yes
+		}
+		clear_variable = singlemind_industry
+		clear_variable = singlemind_farms
+		clear_variable = singlemind_farms_rw
+		clear_variable = singlemind_mines
+		clear_variable = singlemind_mines_hab
+		clear_variable = singlemind_generators
+		clear_variable = singlemind_generators_hab
+		clear_variable = singlemind_factories
+		clear_variable = singlemind_foundries
+
+	}
+}
+
+# Create singlemind enclaves on planet transfer
+planet_event = {
+	id = gestalt_ethics.101
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		days_passed > 2
+		from = {
+			is_gestalt = yes
+			is_homicidal = no
+		}
+	}
+
+	immediate = {
+		set_variable = {
+			which = pops_to_employ
+			value = 0
+		}
+		every_owned_pop = {
+			limit = {
+				NOR = {
+					has_trait = trait_hive_mind
+					has_trait = trait_machine_unit
+					AND = {
+						has_trait = trait_cybernetic
+						from = { has_valid_civic = civic_machine_assimilator }
+					}
+				}	
+			}
+			prev = {
+				change_variable = {
+					which = pops_to_employ
+					value = 1
+				}		
+			}
+		}
+		switch = {
+			trigger = uses_district_set
+			standard = {
+				IF = {
+					limit = {
+						from = {
+							can_govern_singleminds = yes
+						}
+					}
+					maximally_assign_singlemind_distict = {
+						district_type = district_industrial
+						deposit_type = singlemind_industry
+						jobs = 2
+					}
+				}
+				maximally_assign_singlemind_distict = {
+					district_type = district_farming
+					deposit_type = singlemind_farms
+					jobs = 2
+				}
+				maximally_assign_singlemind_distict = {
+					district_type = district_mining
+					deposit_type = singlemind_mines
+					jobs = 2
+				}
+				maximally_assign_singlemind_distict = {
+					district_type = district_generator
+					deposit_type = singlemind_generators
+					jobs = 2
+				}
+			}
+			ring_world = {
+				IF = {
+					limit = {
+						from = {
+							can_govern_singleminds = yes
+						}
+					}
+					maximally_assign_singlemind_distict = {
+						district_type = district_rw_industrial
+						deposit_type = singlemind_industry_rw
+						jobs = 10
+					}
+					maximally_assign_singlemind_distict = {
+						district_type = district_rw_farming
+						deposit_type = singlemind_farms_rw
+						jobs = 10
+					}
+				}
+			}
+			shattered_ring_world = {
+				IF = {
+					limit = {
+						from = {
+							can_govern_singleminds = yes
+						}
+					}
+					maximally_assign_singlemind_distict = {
+						district_type = district_industrial
+						deposit_type = singlemind_industry
+						jobs = 2
+					}
+				}
+				maximally_assign_singlemind_distict = {
+					district_type = district_farming_uncapped
+					deposit_type = singlemind_farms
+					jobs = 2
+				}
+				maximally_assign_singlemind_distict = {
+					district_type = district_mining_uncapped
+					deposit_type = singlemind_mines
+					jobs = 2
+				}
+				maximally_assign_singlemind_distict = {
+					district_type = district_generator_uncapped
+					deposit_type = singlemind_generators
+					jobs = 2
+				}
+			}
+			habitat = {
+				IF = {
+					limit = {
+						from = {
+							can_govern_singleminds = yes
+						}
+					}
+					maximally_assign_singlemind_distict = {
+						district_type = district_hab_industrial
+						deposit_type = singlemind_industry_hab
+						jobs = 2
+					}
+				}
+				maximally_assign_singlemind_distict = {
+					district_type = district_hab_mining
+					deposit_type = singlemind_mines_hab
+					jobs = 2
+				}
+				maximally_assign_singlemind_distict = {
+					district_type = district_hab_energy
+					deposit_type = singlemind_generators_hab
+					jobs = 2
+				}
+			}
+			city_world = {
+				IF = {
+					limit = {
+						owner = {
+							is_machine_empire = yes
+							can_govern_singleminds = yes
+						}
+					}
+					maximally_assign_singlemind_distict = {
+						district_type = district_arcology_civilian_industry
+						deposit_type = singlemind_factories
+						jobs = 6
+					}
+					maximally_assign_singlemind_distict = {
+						district_type = district_arcology_arms_industry
+						deposit_type = singlemind_foundries
+						jobs = 6
+					}
+				}
+				ELSE_IF = {
+					limit = {
+						owner = {
+							is_hive_empire = yes
+							can_govern_singleminds = yes
+						}
+					}
+					export_trigger_value_to_variable = {
+						trigger = num_districts
+						variable = district_count
+						parameters = {
+							type = district_arcology_civilian_industry
+						}
+					}
+					while = {
+						count = 6
+						subtract_variable = {
+							which = pops_to_employ
+							value = district_count
+						}
+					}
+					maximally_assign_singlemind_distict = {
+						district_type = district_arcology_arms_industry
+						deposit_type = singlemind_foundries
+						jobs = 6
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				from = { is_ai = yes }
+			}
+			planet_event = {
+				id = gestalt_ethics.111
+				days = 10
+			}
+		}
+
+	}
+}
+
+# Setup for singlemind management
+country_event = {
+	id = gestalt_ethics.102
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_gestalt = yes
+	}
+
+	immediate = {
+		every_owned_planet = {
+			switch = {
+				trigger = uses_district_set
+				standard = {
+					set_variable = {
+						which = singlemind_industry
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_farms
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_mines
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_generators
+						value = 0
+					}
+				}
+				ring_world = {
+					set_variable = {
+						which = singlemind_industry_rw
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_farms_rw
+						value = 0
+					}
+				}
+				shattered_ring_world = {
+					set_variable = {
+						which = singlemind_industry
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_farms
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_mines
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_generators
+						value = 0
+					}
+				}
+				habitat = {
+					set_variable = {
+						which = singlemind_industry_hab
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_mines_hab
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_generators_hab
+						value = 0
+					}
+				}
+				city_world = {
+					set_variable = {
+						which = singlemind_factories
+						value = 0
+					}
+					set_variable = {
+						which = singlemind_foundries
+						value = 0
+					}
+				}
+			}				
+		}
+	}
+}
+planet_event = {
+	id = gestalt_ethics.103
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			is_gestalt = yes
+		}
+	}
+
+	immediate = {
+		switch = {
+			trigger = uses_district_set
+			standard = {
+				set_variable = {
+					which = singlemind_industry
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_farms
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_mines
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_generators
+					value = 0
+				}
+			}
+			ring_world = {
+				set_variable = {
+					which = singlemind_industry_rw
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_farms_rw
+					value = 0
+				}
+			}
+			shattered_ring_world = {
+				set_variable = {
+					which = singlemind_industry
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_farms
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_mines
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_generators
+					value = 0
+				}
+			}
+			habitat = {
+				set_variable = {
+					which = singlemind_industry_hab
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_mines_hab
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_generators_hab
+					value = 0
+				}
+			}
+			city_world = {
+				set_variable = {
+					which = singlemind_factories
+					value = 0
+				}
+				set_variable = {
+					which = singlemind_foundries
+					value = 0
+				}
+			}
+		}
+	}
+}
+
+
+# Trigger AI singlemind management
+country_event = {
+	id = gestalt_ethics.110
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_ai = yes
+		is_gestalt = yes
+		any_owned_species = {
+			OR = {
+				has_citizenship_type = {
+					type = citizenship_limited
+					country = root
+				}
+				AND = {
+					has_citizenship_type = {
+						type = citizenship_slavery
+						country = root
+					}
+					NOR = {
+						has_slavery_type = {
+							type = slavery_livestock
+							country = root
+						}
+						has_slavery_type = {
+							type = slavery_matrix
+							country = root
+						}
+					}						
+				}
+			}
+		}
+	}
+
+	immediate = {
+		every_owned_planet = {
+			limit = {
+				any_owned_species = {
+					has_trait = trait_hive_mind
+					has_trait = trait_machine_unit
+					AND = {
+						has_trait = trait_cybernetic
+						root = { has_valid_civic = civic_machine_assimilator }
+					}
+					NAND = {
+						has_citizenship_type = {
+							type = citizenship_slavery
+							country = root
+						}
+						OR = {
+							has_slavery_type = {
+								type = slavery_livestock
+								country = root
+							}
+							has_slavery_type = {
+								type = slavery_matrix
+								country = root
+							}
+						}
+					}
+				}		
+			}
+			planet_event = { id = gestalt_ethics.111 }
+		}
+	}
+}
+
+# Managing Singleminds
+planet_event = {
+	id = gestalt_ethics.111
+	title = evt_manage_singleminds
+	desc = evt_manage_singleminds_desc
+	picture = GFX_evt_alien_segregation
+	location = root
+
+	is_triggered_only = yes
+
+	# ASSIGNMENT
+
+	# industrial district
+	option = {
+		name = assign_industry
+		trigger = {
+			exists = owner
+			owner = {
+				can_govern_singleminds = yes
+			}
+			OR = {
+				uses_district_set = standard
+				uses_district_set = shattered_ring_world
+			}
+			num_districts = {
+				type = district_industrial
+				value > singlemind_industry
+			}
+			planet_singlemind_specialists_check = yes
+		}
+		add_deposit = d_singlemind_industry
+		change_variable = {
+			which = singlemind_industry
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NAND = {
+					free_jobs > 2
+					any_owned_pop = {
+						OR = {
+							is_pop_category = worker
+							is_pop_category = specialist
+						}
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_foundry_designation = yes
+			}
+			modifier = {
+				factor = 100
+				has_foundry_designation = yes
+				owner = {
+					is_hive_empire = yes
+				}
+			}
+			modifier = {
+				factor = 10
+				has_foundry_designation = no
+				owner = {
+					country_uses_consumer_goods = yes
+					has_monthly_income = {
+						resource = consumer_goods
+						value < 6
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				has_foundry_designation = no
+				owner = {
+					country_uses_consumer_goods = no
+				}
+			}
+			modifier = {
+				factor = 0
+				has_foundry_designation = yes
+				owner = {
+					has_deficit = consumer_goods
+				}
+			}
+		}
+	}
+	# farming district
+	option = {
+		name = assign_farms
+		trigger = {
+			OR = {
+				uses_district_set = standard
+				uses_district_set = shattered_ring_world
+			}
+			OR = {
+				num_districts = {
+					type = district_farming
+					value > singlemind_farms
+				}
+				num_districts = {
+					type = district_farming_uncapped
+					value > singlemind_farms
+				}		
+			}
+			planet_singlemind_workers_check = yes
+		}
+		add_deposit = d_singlemind_farms
+		change_variable = {
+			which = singlemind_farms
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NAND = {
+					free_jobs > 2
+					any_owned_pop = {
+						is_pop_category = worker
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				owner = { is_machine_empire = yes }
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_hive_mind
+					has_trait = trait_agrarian
+				}
+			}
+			modifier = {
+				factor = 5
+				any_owned_species = {
+					has_trait = trait_agrarian
+					NOT = {
+						has_trait = trait_hive_mind
+					}
+				}
+			}
+		}
+	}
+	# mining district
+	option = {
+		name = assign_mines
+		trigger = {
+			OR = {
+				uses_district_set = standard
+				uses_district_set = shattered_ring_world
+			}
+			OR = {
+				num_districts = {
+					type = district_mining
+					value > singlemind_mines
+				}
+				num_districts = {
+					type = district_mining_uncapped
+					value > singlemind_mines
+				}		
+			}
+			planet_singlemind_workers_check = yes
+		}
+		add_deposit = d_singlemind_mines
+		change_variable = {
+			which = singlemind_mines
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NAND = {
+					free_jobs > 2
+					any_owned_pop = {
+						is_pop_category = worker
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_hive_mind
+					has_trait = trait_industrious
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_machine_unit
+					has_trait = trait_robot_power_drills
+				}
+			}
+			modifier = {
+				factor = 5
+				any_owned_species = {
+					has_trait = trait_industrious
+					NOT = {
+						has_trait = trait_hive_mind
+					}
+				}
+			}
+		}
+	}
+	# generator district
+	option = {
+		name = assign_generators
+		trigger = {
+			OR = {
+				uses_district_set = standard
+				uses_district_set = shattered_ring_world
+			}
+			OR = {
+				num_districts = {
+					type = district_generator
+					value > singlemind_generators
+				}
+				num_districts = {
+					type = district_mining_uncapped
+					value > singlemind_generators
+				}		
+			}
+			planet_singlemind_workers_check = yes
+		}
+		add_deposit = d_singlemind_generators
+		change_variable = {
+			which = singlemind_generators
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NAND = {
+					free_jobs > 2
+					any_owned_pop = {
+						is_pop_category = worker
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_hive_mind
+					has_trait = trait_ingenious
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_machine_unit
+					has_trait = trait_robot_superconductive
+				}
+			}
+			modifier = {
+				factor = 5
+				any_owned_species = {
+					has_trait = trait_ingenious
+					NOT = {
+						has_trait = trait_hive_mind
+					}
+				}
+			}
+		}
+	}
+
+	# industrial district rw
+	option = {
+		name = assign_industry_rw
+		trigger = {
+			exists = owner
+			owner = {
+				can_govern_singleminds = yes
+			}
+			uses_district_set = ring_world
+			num_districts = {
+				type = district_rw_industrial
+				value > singlemind_industry_rw
+			}
+			planet_singlemind_specialists_check = yes
+		}
+		add_deposit = d_singlemind_industry_rw
+		change_variable = {
+			which = singlemind_industry_rw
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NOR = {
+					AND = {
+						owner = { is_machine_empire = yes }
+						free_jobs > 5
+						count_owned_pop = {
+							count > 5
+							limit = {
+								OR = {
+									is_pop_category = worker
+									is_pop_category = specialist
+								}
+								is_unemployed = yes									
+							}
+						}
+					}
+					AND = {
+						owner = { is_machine_empire = yes }
+						free_jobs > 10
+						count_owned_pop = {
+							count > 5
+							limit = {
+								OR = {
+									is_pop_category = worker
+									is_pop_category = specialist
+								}
+								is_unemployed = yes									
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					country_uses_consumer_goods = yes
+					has_monthly_income = {
+						resource = consumer_goods
+						value < 6
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				owner = {
+					country_uses_consumer_goods = no
+				}
+			}
+		}
+	}
+	# farming district rw
+	option = {
+		name = assign_farms_rw
+		trigger = {
+			uses_district_set = ring_world
+			num_districts = {
+				type = district_rw_farming
+				value > singlemind_farms_rw
+			}
+			planet_singlemind_workers_check = yes
+		}
+		add_deposit = d_singlemind_farms_rw
+		change_variable = {
+			which = singlemind_farms_rw
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NOR = {
+					AND = {
+						owner = { is_machine_empire = yes }
+						free_jobs > 5
+						count_owned_pop = {
+							count > 5
+							limit = {
+								is_pop_category = worker
+								is_unemployed = yes									
+							}
+						}
+					}
+					AND = {
+						owner = { is_machine_empire = yes }
+						free_jobs > 10
+						count_owned_pop = {
+							count > 5
+							limit = {
+								is_pop_category = worker
+								is_unemployed = yes									
+							}
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				owner = { is_machine_empire = yes }
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_hive_mind
+					has_trait = trait_agrarian
+				}
+			}
+			modifier = {
+				factor = 5
+				any_owned_species = {
+					has_trait = trait_agrarian
+					NOT = {
+						has_trait = trait_hive_mind
+					}
+				}
+			}
+		}
+	}
+	
+
+	# factory district
+	option = {
+		name = assign_factories
+		trigger = {
+			exists = owner
+			owner = {
+				can_govern_singleminds = yes
+			}
+			uses_district_set = city_world
+			num_districts = {
+				type = district_arcology_civilian_industry
+				value = singlemind_factories
+			}
+			planet_singlemind_specialists_check = yes
+		}
+		add_deposit = d_singlemind_factories
+		change_variable = {
+			which = singlemind_factories
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NAND = {
+					free_jobs > 2
+					any_owned_pop = {
+						OR = {
+							is_pop_category = worker
+							is_pop_category = specialist
+						}
+						is_unemployed = yes
+					}
+				}
+			}
+		}
+	}
+	# foundry distrct
+	option = {
+		name = assign_foundries
+		trigger = {
+			exists = owner
+			owner = {
+				can_govern_singleminds = yes
+			}
+			uses_district_set = city_world
+			num_districts = {
+				type = district_arcology_arms_industry
+				value > singlemind_foundries
+			}
+			planet_singlemind_specialists_check = yes
+		}
+		add_deposit = d_singlemind_foundries
+		change_variable = {
+			which = singlemind_foundries
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NAND = {
+					free_jobs > 2
+					any_owned_pop = {
+						OR = {
+							is_pop_category = worker
+							is_pop_category = specialist
+							AND = {
+								is_enslaved = yes
+								has_slavery_type = { type = slavery_indentured }
+							}
+						}
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = { is_hive_empire = yes }
+			}
+		}
+	}
+
+	# industrial district - habitat
+	option = {
+		name = assign_industry
+		trigger = {
+			exists = owner
+			owner = {
+				can_govern_singleminds = yes
+			}
+			uses_district_set = habitat
+			num_districts = {
+				type = district_hab_industrial
+				value > singlemind_industry
+			}
+			planet_singlemind_specialists_check = yes
+		}
+		add_deposit = d_singlemind_industry_hab
+		change_variable = {
+			which = singlemind_industry
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NAND = {
+					free_jobs > 2
+					any_owned_pop = {
+						OR = {
+							is_pop_category = worker
+							is_pop_category = specialist
+						}
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				has_foundry_designation = no
+				owner = {
+					country_uses_consumer_goods = yes
+					has_monthly_income = {
+						resource = consumer_goods
+						value < 6
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				has_foundry_designation = no
+				owner = {
+					country_uses_consumer_goods = no
+				}
+			}
+			modifier = {
+				factor = 0
+				has_foundry_designation = yes
+				owner = {
+					has_deficit = consumer_goods
+				}
+			}
+		}
+	}
+	# mining district - habitat
+	option = {
+		name = assign_mines_hab
+		trigger = {
+			exists = owner
+			owner = {
+				can_govern_singleminds = yes
+			}
+			uses_district_set = habitat
+			num_districts = {
+				type = district_hab_mining
+				value > singlemind_mines_hab
+			}
+			planet_singlemind_workers_check = yes
+		}
+		add_deposit = d_singlemind_mines_hab
+		change_variable = {
+			which = singlemind_mines_hab
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NAND = {
+					free_jobs > 2
+					any_owned_pop = {
+						is_pop_category = worker
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_hive_mind
+					has_trait = trait_industrious
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_machine_unit
+					has_trait = trait_robot_power_drills
+				}
+			}
+			modifier = {
+				factor = 5
+				any_owned_species = {
+					has_trait = trait_industrious
+					NOT = {
+						has_trait = trait_hive_mind
+					}
+				}
+			}
+		}
+	}
+	# generator district - habitat
+	option = {
+		name = assign_generators_hab
+		trigger = {
+			exists = owner
+			owner = {
+				can_govern_singleminds = yes
+			}
+			uses_district_set = habitat
+			num_districts = {
+				type = district_hab_energy
+				value > singlemind_generators_hab
+			}
+			planet_singlemind_workers_check = yes
+		}
+		add_deposit = d_singlemind_generators_hab
+		change_variable = {
+			which = singlemind_generators_hab
+			value = 1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				NAND = {
+					free_jobs > 2
+					any_owned_pop = {
+						is_pop_category = worker
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_hive_mind
+					has_trait = trait_ingenious
+				}
+			}
+			modifier = {
+				factor = 0.1
+				any_owned_species = {
+					has_trait = trait_machine_unit
+					has_trait = trait_robot_superconductive
+				}
+			}
+			modifier = {
+				factor = 5
+				any_owned_species = {
+					has_trait = trait_ingenious
+					NOT = {
+						has_trait = trait_hive_mind
+					}
+				}
+			}
+		}
+	}
+	
+	# UNASSIGNMENT
+
+	# industrial district
+	option = {
+		name = unassign_industry
+		trigger = {
+			has_deposit = d_singlemind_industry
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		remove_deposit = d_singlemind_industry
+		change_variable = {
+			which = d_singlemind_industry
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					any_owned_pop = {
+						is_pop_category = simple_drone
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOR = {
+					has_designation = col_foundry
+					has_designation = col_habitat_foundry
+				}
+				owner = {
+					country_uses_consumer_goods = yes
+					has_monthly_income = {
+						resource = consumer_goods
+						value < 12
+					}
+				}
+			}
+			modifier = {
+				factor = 100
+				NOR = {
+					has_designation = col_foundry
+					has_designation = col_habitat_foundry
+				}
+				owner = {
+					country_uses_consumer_goods = no
+				}
+			}
+		}
+	}
+	# farming district
+	option = {
+		name = unassign_farms
+		trigger = {
+			has_deposit = d_singlemind_farms
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		remove_deposit = d_singlemind_farms
+		change_variable = {
+			which = singlemind_farms
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					any_owned_pop = {
+						is_pop_category = simple_drone
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					is_hive_empire = yes
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					is_hive_empire = yes
+				}
+				any_owned_pop = {
+					is_pop_category = simple_drone
+					has_trait = trait_agrarian
+					NOT = { has_job = mining_drone }
+				}
+			}
+			modifier = {
+				factor = 0.25
+				any_owned_pop = {
+					has_job = farmer
+					has_trait = trait_agrarian
+				}
+			}
+		}
+	}
+	# mining district
+	option = {
+		name = unassign_mines
+		trigger = {
+			has_deposit = d_singlemind_mines
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		remove_deposit = d_singlemind_mines
+		change_variable = {
+			which = singlemind_mines
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					any_owned_pop = {
+						is_pop_category = simple_drone
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					is_hive_empire = yes
+				}
+			}
+			modifier = {
+				factor = 10
+				any_owned_pop = {
+					is_pop_category = simple_drone
+					OR = {
+						has_trait = trait_industrious
+						has_trait = trait_robot_power_drills
+					}
+					NOT = { has_job = mining_drone }
+				}
+			}
+			modifier = {
+				factor = 0.25
+				any_owned_pop = {
+					OR = {
+						has_job = miner
+						has_job = scrap_miner
+					}
+					has_trait = trait_industrious
+				}
+			}
+		}
+	}
+	# generator district
+	option = {
+		name = unassign_generators
+		trigger = {
+			has_deposit = d_singlemind_generators
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		remove_deposit = d_singlemind_generators
+		change_variable = {
+			which = singlemind_generators
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					any_owned_pop = {
+						is_pop_category = simple_drone
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					is_hive_empire = yes
+				}
+			}
+			modifier = {
+				factor = 10
+				any_owned_pop = {
+					is_pop_category = simple_drone
+					OR = {
+						has_trait = trait_ingenious
+						has_trait = trait_robot_superconductive
+					}
+					NOT = { has_job = technician_drone }
+				}
+			}
+			modifier = {
+				factor = 0.25
+				any_owned_pop = {
+					has_job = technician
+					has_trait = trait_ingenious
+				}
+			}
+		}
+	}
+
+	# industrial district rw
+	option = {
+		name = unassign_industry_rw
+		trigger = {
+			has_deposit = d_singlemind_industry_rw
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		remove_deposit = d_singlemind_industry_rw
+		change_variable = {
+			which = d_singlemind_industry_rw
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					count_owned_pop = {
+						count > 5
+						limit = {
+							is_pop_category = simple_drone
+							is_unemployed = yes								
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				owner = {
+					country_uses_consumer_goods = yes
+					has_monthly_income = {
+						resource = consumer_goods
+						value < 60
+					}
+				}
+			}
+			modifier = {
+				factor = 100
+				owner = {
+					country_uses_consumer_goods = no
+				}
+			}
+		}
+	}
+	# farming district rw
+	option = {
+		name = unassign_farms_rw
+		trigger = {
+			has_deposit = d_singlemind_farms_rw
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		remove_deposit = d_singlemind_farms_rw
+		change_variable = {
+			which = singlemind_farms_rw
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					count_owned_pop = {
+						count > 5
+						limit = {
+							is_pop_category = simple_drone
+							is_unemployed = yes
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					is_hive_empire = yes
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					is_hive_empire = yes
+				}
+				any_owned_pop = {
+					is_pop_category = simple_drone
+					has_trait = trait_agrarian
+					NOT = { has_job = mining_drone }
+				}
+			}
+			modifier = {
+				factor = 0.25
+				any_owned_pop = {
+					has_job = farmer
+					has_trait = trait_agrarian
+				}
+			}
+		}
+	}
+	
+
+	# factory district
+	option = {
+		name = unassign_factories
+		trigger = {
+			has_deposit = d_singlemind_factories
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		remove_deposit = d_singlemind_factories
+		change_variable = {
+			which = singlemind_factories
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					any_owned_pop = {
+						is_pop_category = simple_drone
+						is_unemployed = yes
+					}
+				}
+			}
+		}
+	}
+	# foundry district
+	option = {
+		name = unassign_foundries
+		trigger = {
+			has_deposit = d_singlemind_foundries
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		remove_deposit = d_singlemind_foundries
+		change_variable = {
+			which = singlemind_foundries
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					any_owned_pop = {
+						is_pop_category = simple_drone
+						is_unemployed = yes
+					}
+				}
+			}
+		}
+	}
+
+	# mining district - habitat
+	option = {
+		name = unassign_mines
+		trigger = {
+			has_deposit = d_singlemind_mines_hab
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		remove_deposit = d_singlemind_mines_hab
+		change_variable = {
+			which = singlemind_mines_hab
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					any_owned_pop = {
+						is_pop_category = simple_drone
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					is_hive_empire = yes
+				}
+			}
+			modifier = {
+				factor = 10
+				any_owned_pop = {
+					is_pop_category = simple_drone
+					OR = {
+						has_trait = trait_industrious
+						has_trait = trait_robot_power_drills
+					}
+					NOT = { has_job = mining_drone }
+				}
+			}
+			modifier = {
+				factor = 0.25
+				any_owned_pop = {
+					has_job = miner
+					has_trait = trait_industrious
+				}
+			}
+		}
+	}
+	# generator district - habitat
+	option = {
+		name = unassign_generators
+		trigger = {
+			has_deposit = d_singlemind_generators_hab
+		}
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = appropriation_not_allowed }
+			}
+		}
+		change_variable = {
+			which = singlemind_generators_hab
+			value = -1
+		}
+		check_planet_employment = yes
+		planet_event = { id = gestalt_ethics.111 }
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					any_owned_pop = {
+						is_pop_category = simple_drone
+						is_unemployed = yes
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				owner = {
+					is_hive_empire = yes
+				}
+			}
+			modifier = {
+				factor = 10
+				any_owned_pop = {
+					is_pop_category = simple_drone
+					OR = {
+						has_trait = trait_ingenious
+						has_trait = trait_robot_superconductive
+					}
+					NOT = { has_job = technician_drone }
+				}
+			}
+			modifier = {
+				factor = 0.25
+				any_owned_pop = {
+					has_job = technician
+					has_trait = trait_ingenious
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = finish
+		ai_chance = {
+			factor = 5
+		}
+	}
+
+}
+
+# remove excess singlemind enclaves
+planet_event = {
+	id = gestalt_ethics.112
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = { is_gestalt = yes }
+		any_deposit = {
+			has_deposit_category = deposit_cat_singlemind_enclave
+		}
+		switch = {
+			trigger = uses_district_set
+			standard = {
+				OR = {
+					num_districts = {
+						type = district_industrial
+						value < singlemind_industry
+					}
+					num_districts = {
+						type = district_farming
+						value < singlemind_farms
+					}
+					num_districts = {
+						type = district_mining
+						value < singlemind_mines
+					}
+					num_districts = {
+						type = district_generator
+						value < singlemind_generators
+					}
+				}
+			}
+			ring_world = {
+				OR = {
+					num_districts = {
+						type = district_rw_industrial
+						value < singlemind_industry_rw
+					}
+					num_districts = {
+						type = district_rw_farming
+						value < singlemind_farms_rw
+					}
+				}
+			}
+			shattered_ring_world = {
+				OR = {
+					num_districts = {
+						type = district_industrial
+						value < singlemind_industry
+					}
+					num_districts = {
+						type = district_farming_uncapped
+						value < singlemind_farms
+					}
+					num_districts = {
+						type = district_mining_uncapped
+						value < singlemind_mines
+					}
+					num_districts = {
+						type = district_generator_uncapped
+						value < singlemind_generators
+					}
+				}
+			}
+			city_world = {
+				OR = {
+					num_districts = {
+						type = district_arcology_civilian_industry
+						value < singlemind_factories
+					}
+					num_districts = {
+						type = district_arcology_arms_industry
+						value < singlemind_foundries
+					}
+				}
+			}
+			habitat = {
+				OR = {
+					num_districts = {
+						type = district_hab_industrial
+						value < singlemind_industry
+					}
+					num_districts = {
+						type = district_hab_mining
+						value < singlemind_mines_hab
+					}
+					num_districts = {
+						type = district_hab_energy
+						value < singlemind_generators_hab
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		switch = {
+			trigger = uses_district_set
+			standard = {
+				cap_deposits = {
+					district_type = district_industrial
+					deposit_type = singlemind_industry
+				}
+				cap_deposits = {
+					district_type = district_farming
+					deposit_type = singlemind_farms
+				}
+				cap_deposits = {
+					district_type = district_mining
+					deposit_type = singlemind_mines
+				}
+				cap_deposits = {
+					district_type = district_generator
+					deposit_type = singlemind_generators
+				}
+			}
+			ring_world = {
+				cap_deposits = {
+					district_type = district_rw_industrial
+					deposit_type = singlemind_industry_rw
+				}
+				cap_deposits = {
+					district_type = district_rw_farming
+					deposit_type = singlemind_farms_rw
+				}
+			}
+			shattered_ring_world = {
+				cap_deposits = {
+					district_type = district_industrial
+					deposit_type = singlemind_industry
+				}
+				cap_deposits = {
+					district_type = district_farming_uncapped
+					deposit_type = singlemind_farms
+				}
+				cap_deposits = {
+					district_type = district_mining_uncapped
+					deposit_type = singlemind_mines
+				}
+				cap_deposits = {
+					district_type = district_generator_uncapped
+					deposit_type = singlemind_generators
+				}
+			}
+			city_world = {
+				cap_deposits = {
+					district_type = district_arcology_civilian_industry
+					deposit_type = singlemind_factories
+				}
+				cap_deposits = {
+					district_type = district_arcology_arms_industry
+					deposit_type = singlemind_foundries
+				}
+			}
+			habitat = {
+				cap_deposits = {
+					district_type = district_hab_industrial
+					deposit_type = singlemind_industry
+				}
+				cap_deposits = {
+					district_type = district_hab_mining
+					deposit_type = singlemind_mines_hab
+				}
+				cap_deposits = {
+					district_type = district_hab_energy
+					deposit_type = singlemind_generators_hab
+				}
+			}
+		}
+	}
+}
+
+
+# # Assimilator setup - before main capital setup event
+# planet_event = {
+# 	id = gestalt_ethics.120
+# 	hide_window = yes
+# 	is_triggered_only = yes
+# 	trigger = {
+# 		owner = { has_valid_civic = civic_hive_assimilator }
+# 	}
+# 	immediate = {
+# 		last_created_species = {
+# 			set_citizenship_type = {
+# 				country = root.owner
+# 				type = citizenship_full
+# 			}
+# 			set_living_standard = {
+# 				country = root.owner
+# 				type = living_standard_hive_mind
+# 			}
+# 		}
+# 		while = {
+# 			count = 16
+# 			create_pop = {
+# 				species = last_created_species
+# 			}
+# 		}
+# 		owner = {
+# 			if = {
+# 				limit = {
+# 					last_created_species = { is_lithoid = yes }
+# 				}
+# 				set_country_flag = lithoid_subspecies
+# 			}
+# 			else = {
+# 				set_country_flag = non_lithoid_subspecies
+# 			}
+# 		}
+# 	}
+# }
+
+# Assimilator setup - after main capital setup event
+planet_event = {
+	id = gestalt_ethics.125
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		owner = { has_valid_civic = civic_hive_assimilator }
+	}
+	immediate = {
+		remove_deposit = d_collapsed_burrows
+		add_deposit = d_isolated_population
+	}
+}
+
+# Servitor setup - flag main species
+planet_event = {
+	id = gestalt_ethics.130
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		owner = {
+			OR = {
+				has_origin = origin_syncretic_evolution
+				has_origin = origin_necrophage
+				has_valid_civic = civic_machine_servitor
+				has_valid_civic = civic_machine_assimilator
+				has_valid_civic = civic_hive_assimilator
+			}	
+		}
+	}
+	immediate = {
+		last_created_species = {
+			set_species_flag = secondary_species_@root.owner
+			set_species_flag = creator_species@root.owner
+		}
+	}
+}
+
+# gestalt leader setup
+country_event = {
+	id = gestalt_ethics.200
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		from.species = {
+			OR = {
+				has_trait = trait_hive_mind
+				has_trait = trait_machine_unit
+				AND = {
+					has_trait = trait_cybernetic
+					root = { is_machine_empire = yes }
+				}
+			}
+		}
+	}
+	immediate = {
+		from = { change_background_ethic = ethic_gestalt_consciousness }
+	}
+}
+
+# singlemind vassal released
+country_event = {
+	id = gestalt_ethics.210
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_gestalt = yes
+		species = {
+			NOR = {
+				has_trait = trait_hive_mind
+				has_trait = trait_machine_unit
+				AND = {
+					has_trait = trait_cybernetic
+					root = { is_machine_assimilator = yes }
+				}
+			}
+		}
+	}
+	immediate = {
+		change_government = {
+			authority = random
+			civics = random
+		}
+		ruler = {
+			remove_trait = leader_trait_ruler_hive_mind
+			remove_trait = leader_trait_ruler_machine_intelligence
+		}
+	}
+}

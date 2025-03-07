@@ -1,0 +1,28 @@
+#	Example:
+# 
+#	example_trigger = {
+#		is_country_type = default
+#		num_communications > 0
+#	}
+#
+#
+#	In a script file:
+#
+#	trigger = {
+#		example_trigger = yes
+#	}
+#
+
+is_xenophile_faction = { is_pop_faction_type = xenoist }
+is_pacifist_faction = { is_pop_faction_type = prosperity }
+is_militarist_faction = { is_pop_faction_type = imperialist }
+is_materialist_faction = { is_pop_faction_type = technologist }
+is_spiritualist_faction = { is_pop_faction_type = traditionalist }
+is_egalitarian_faction = { is_pop_faction_type = progressive }
+is_authoritarian_faction = { is_pop_faction_type = totalitarian }
+is_xenophobe_faction = {
+	OR = {
+		is_pop_faction_type = supremacist
+		is_pop_faction_type = isolationist
+	}
+}

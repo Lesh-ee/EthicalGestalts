@@ -1,0 +1,104 @@
+namespace = cara
+
+#################################
+# Caravaneer Events
+# scripted by Maximilian Olbers
+#################################
+
+@ai_min_energy = 10000
+@ai_max_coinz = 50000
+
+
+#################################
+# Caravaneer Fleet Random Events
+#################################
+
+# Pops join Caravan
+country_event = {
+	id = cara.4000
+	title = cara.4000.name
+	desc = cara.4000.desc
+	picture = GFX_evt_caravaneers
+	location = event_target:pops_join_caravan_planet
+	show_sound = event_ship_thrusters
+	is_triggered_only = yes
+
+	trigger = {
+		caravaneer_fleet_events_valid = yes
+		NOR = {
+			is_gestalt = yes # undercoat: moved to scripted trigger
+			has_country_flag = pops_join_caravan_recent
+			has_country_flag = caravan_recent_event
+		}
+		any_system_within_border = {
+			caravaneer_fleet_in_system = yes
+			any_system_planet = {
+				is_colony = yes
+				count_owned_pop = {
+					count > 5
+					limit = {
+						pop_has_happiness = yes
+						is_enslaved = no
+						is_being_purged = no
+						happiness < 0.60
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = {
+			flag = pops_join_caravan_recent
+			days = 3600 # 10 years
+		}
+		set_timed_country_flag = {
+			flag = caravan_recent_event
+			days = 720
+		}
+		random_owned_planet = {
+			limit = {
+				is_colony = yes
+				solar_system = {
+					any_fleet_in_system = {
+						exists = owner
+						owner = { is_country_type = caravaneer_fleet }
+					}
+				}
+			}
+			solar_system = {
+				random_fleet_in_system = {
+					limit = {
+						exists = owner
+						owner = { is_country_type = caravaneer_fleet }
+					}
+					owner = { save_event_target_as = pops_join_caravan_fleet }
+				}
+			}
+			save_event_target_as = pops_join_caravan_planet
+			random_owned_pop = {
+				limit = {
+					pop_has_happiness = yes
+					is_enslaved = no
+					is_being_purged = no
+					happiness < 0.60
+				}
+				kill_pop = yes
+			}
+		}
+	}
+
+	option = {
+		name = UNFORTUNATE
+		custom_tooltip = cara.4000.a.tooltip
+		exclusive_trigger = { is_authoritarian = no }
+	}
+
+	option = {
+		name = OUTRAGE
+		custom_tooltip = cara.4000.a.tooltip
+		exclusive_trigger = { is_authoritarian = yes }
+		add_resource = { influence = -10 }
+	}
+}
+

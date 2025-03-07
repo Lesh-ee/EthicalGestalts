@@ -1,0 +1,1511 @@
+################################
+#
+# Federations Events
+# Written by Stephen Muray
+#
+###############################
+
+namespace = federations
+
+### Community: Project Cornucopia
+
+# Greater Than Ourselves
+country_event = {
+	id = federations.10210
+	title = "resolution_greatergood_greater_than_ourselves"
+
+	desc = {
+		text = "federations.10210.desc"
+	}
+
+	picture = GFX_evt_galactic_senate
+	show_sound = event_factions
+
+	is_triggered_only = yes
+
+	option = { # Is militarist so can create battle thralls (with Utopia)
+		trigger = {
+			host_has_dlc = "Utopia"
+			is_gestalt = no
+			OR = {
+				has_ethic = "ethic_militarist"
+				has_ethic = "ethic_fanatic_militarist"
+			}
+			any_owned_species = {
+				has_citizenship_type = { type = citizenship_slavery country = prev }
+			}
+			NOT = {
+				any_owned_species = {
+					has_living_standard = { type = living_standard_dystopian_society country = prev }
+				}
+			}
+		}
+
+		name = "federations.10210.complythralls"
+
+		breach_fix_resolution_greatergood_greater_than_ourselves_living_standards = yes
+		breach_fix_resolution_greatergood_greater_than_ourselves_thralls = yes
+
+		ai_chance = {
+			factor = 5
+		}
+	}
+
+	option = { # Will create domestic servants (with Utopia)
+		trigger = {
+			host_has_dlc = "Utopia"
+			is_gestalt = no
+			any_owned_species = {
+				has_citizenship_type = { type = citizenship_slavery country = prev }
+			}
+			NOT = {
+				any_owned_species = {
+					has_living_standard = { type = living_standard_dystopian_society country = prev }
+				}
+			}
+		}
+
+		name = "federations.10210.complyservants"
+
+		breach_fix_resolution_greatergood_greater_than_ourselves_living_standards = yes
+		breach_fix_resolution_greatergood_greater_than_ourselves_servants = yes
+
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 0
+				OR = {
+					has_ethic = "ethic_militarist"
+					has_ethic = "ethic_fanatic_militarist"
+				}
+			}
+		}
+	}
+
+	option = { # Living Standards Only
+		trigger = {
+			OR = {
+				NOT = {
+					any_owned_species = {
+						has_citizenship_type = { type = citizenship_slavery country = prev }
+					}
+				}
+				any_owned_species = {
+					has_living_standard = { type = living_standard_dystopian_society country = prev }
+				}
+			}
+		}
+
+		name = "FED_WE_MUST_COMPLY"
+
+		breach_fix_resolution_greatergood_greater_than_ourselves_living_standards = yes
+
+		ai_chance = {
+			factor = 5
+		}
+	}
+
+	option = { # No Utopia
+		trigger = {
+			OR = {
+				NOT = { host_has_dlc = "Utopia" }
+				is_gestalt = yes
+			}
+			has_slaver_civic = no # undercoat: moved to scripted trigger
+		}
+
+		name = "FED_WE_MUST_COMPLY"
+
+		breach_fix_resolution_greatergood_greater_than_ourselves_living_standards = yes
+		breach_fix_resolution_greatergood_greater_than_ourselves_no_utopia = yes
+
+		ai_chance = {
+			factor = 5
+		}
+	}
+
+	option = {
+		name = FED_WE_WILL_RETAIN
+
+		trigger = {
+			NOR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_authoritarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_slaver_civic = yes # undercoat: moved to scripted trigger
+			}
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier1unityreward
+			min = @tier1unitymin
+			max = @tier1unitymax
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+	}
+
+	option = {
+		name = FED_WE_WILL_NOT_SUBMIT
+
+		trigger = {
+			OR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_authoritarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_slaver_civic = yes # undercoat: moved to scripted trigger
+			}
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier2unityreward
+			min = @tier2unitymin
+			max = @tier2unitymax
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+
+		ai_chance = {
+			factor = 2
+		}
+	}
+}
+
+# Balance in the Middle
+country_event = {
+	id = federations.10220
+	title = "resolution_greatergood_balance_in_the_middle"
+
+	desc = {
+		text = "federations.10220.desc"
+	}
+
+	picture = GFX_evt_galactic_senate
+	show_sound = event_factions
+
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			has_slaver_civic = no # undercoat: moved to scripted trigger
+		}
+
+		name = "FED_WE_MUST_COMPLY"
+
+		breach_fix_resolution_greatergood_balance_in_the_middle = yes
+
+		ai_chance = {
+			factor = 5
+		}
+	}
+
+	option = {
+		name = FED_WE_WILL_RETAIN
+
+		trigger = {
+			NOR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_authoritarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_slaver_civic = yes # undercoat: moved to scripted trigger
+				has_dystopian_society = yes # undercoat: moved to scripted trigger
+			}
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier1unityreward
+			min = @tier1unitymin
+			max = @tier1unitymax
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+	}
+
+	option = {
+		name = FED_WE_WILL_NOT_SUBMIT
+
+		trigger = {
+			OR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_authoritarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_slaver_civic = yes # undercoat: moved to scripted trigger
+			}
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier2unityreward
+			min = @tier2unitymin
+			max = @tier2unitymax
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+
+		ai_chance = {
+			factor = 2
+		}
+	}
+}
+
+# Universal Prosperity Mandate
+country_event = {
+	id = federations.10230
+	title = "resolution_greatergood_universal_prosperity_mandate"
+
+	desc = {
+		text = "federations.10230.desc"
+	}
+
+	picture = GFX_evt_galactic_senate
+	show_sound = event_factions
+
+	is_triggered_only = yes
+
+	option = {
+		trigger = {
+			any_owned_species = {
+				is_sapient = yes
+				OR = {
+					has_living_standard = { type = living_standard_subsistence country = prev }
+					has_living_standard = { type = living_standard_stratified country = prev }
+					has_living_standard = { type = living_standard_normal country = prev }
+					has_living_standard = { type = living_standard_academic_privilege country = prev }
+					has_living_standard = { type = living_standard_good country = prev }
+					has_living_standard = { type = living_standard_decadent country = prev }
+				}
+			}
+		}
+
+		allow = {
+			OR = {
+				has_ethic = "ethic_egalitarian"
+				has_ethic = "ethic_fanatic_egalitarian"
+				AND = {
+					is_gestalt = yes
+					is_xenophile = yes
+				}
+			}
+		}
+
+		name = "federations.10230.utopian"
+
+		breach_fix_resolution_greatergood_universal_prosperity_mandate_utopian = yes
+
+		ai_chance = {
+			factor = 5
+		}
+	}
+
+	option = {
+		trigger = {
+			any_owned_species = {
+				is_sapient = yes
+				OR = {
+					has_living_standard = { type = living_standard_subsistence country = prev }
+					has_living_standard = { type = living_standard_stratified country = prev }
+					has_living_standard = { type = living_standard_normal country = prev }
+					has_living_standard = { type = living_standard_academic_privilege country = prev }
+					has_living_standard = { type = living_standard_good country = prev }
+					has_living_standard = { type = living_standard_decadent country = prev }
+				}
+			}
+		}
+
+		allow = {
+			has_technology = "tech_subdermal_stimulation"
+		}
+
+		name = "federations.10230.chemical"
+
+		breach_fix_resolution_greatergood_universal_prosperity_mandate_chemical = yes
+
+		ai_chance = {
+			factor = 2
+			modifier = {
+				factor = 0
+				OR = {
+					has_ethic = "ethic_egalitarian"
+					has_ethic = "ethic_fanatic_egalitarian"
+				}
+			}
+		}
+	}
+
+	option = {
+		name = FED_WE_WILL_RETAIN
+
+		trigger = {
+			NOR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_authoritarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_civic = "civic_hive_assimilator"
+				is_machine_assimilator = yes # undercoat: moved to scripted trigger
+				has_slaver_civic = yes # undercoat: moved to scripted trigger
+				has_dystopian_society = yes # undercoat: moved to scripted trigger
+			}
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier1unityreward
+			min = @tier1unitymin
+			max = @tier1unitymax
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+	}
+
+	option = {
+		name = FED_WE_WILL_NOT_SUBMIT
+
+		trigger = {
+			OR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_authoritarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_slaver_civic = yes # undercoat: moved to scripted trigger
+				has_dystopian_society = yes # undercoat: moved to scripted trigger
+				has_civic = "civic_hive_assimilator"
+			}
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier2unityreward
+			min = @tier2unitymin
+			max = @tier2unitymax
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+
+		ai_chance = {
+			factor = 2
+		}
+	}
+
+	option = {
+		name = "federations.10230.assimilator"
+
+		trigger = {
+			is_machine_assimilator = yes # undercoat: moved to scripted trigger
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier2unityreward
+			min = @tier2unitymin
+			max = @tier2unitymax
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+
+		ai_chance = {
+			factor = 10
+		}
+	}
+}
+
+# Last Resort Doctrine
+country_event = {
+	id = federations.10320
+	title = "resolution_rulesofwar_last_resort_doctrine"
+
+	desc = {
+		text = "federations.10320.desc"
+	}
+
+	picture = GFX_evt_galactic_senate
+	show_sound = event_factions
+
+	is_triggered_only = yes
+
+	option = {
+		name = "FED_WE_MUST_COMPLY"
+
+		allow = {
+			OR = {
+				can_set_policy = {
+					policy = war_philosophy
+					option = liberation_wars
+				}
+				can_set_policy = {
+					policy = war_philosophy
+					option = no_wars
+				}
+			}
+		}
+
+		breach_fix_resolution_rulesofwar_last_resort_doctrine = yes
+
+		ai_chance = {
+			factor = 5
+		}
+	}
+
+	option = {
+		name = FED_WE_WILL_RETAIN
+
+		trigger = {
+			NOR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_militarist"
+				has_ethic = "ethic_fanatic_militarist"
+			}
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier1unityreward
+			min = @tier1unitymin
+			max = @tier1unitymax
+		}
+
+		if = {
+			limit = {
+				OR = {
+					can_set_policy = {
+						policy = war_philosophy
+						option = liberation_wars
+					}
+					can_set_policy = {
+						policy = war_philosophy
+						option = no_wars
+					}
+				}
+			}
+			set_policy_cooldown = war_philosophy
+		}
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+	}
+
+	option = {
+		name = FED_WE_WILL_NOT_SUBMIT
+
+		trigger = {
+			OR = {
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_militarist"
+				has_ethic = "ethic_fanatic_militarist"
+			}
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier2unityreward
+			min = @tier2unitymin
+			max = @tier2unitymax
+		}
+
+		if = {
+			limit = {
+				OR = {
+					can_set_policy = {
+						policy = war_philosophy
+						option = liberation_wars
+					}
+					can_set_policy = {
+						policy = war_philosophy
+						option = no_wars
+					}
+				}
+			}
+			set_policy_cooldown = war_philosophy
+		}
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+
+		ai_chance = {
+			factor = 2
+		}
+	}
+}
+
+# A Defined Purpose
+country_event = {
+	id = federations.10340
+	title = "resolution_divinity_a_defined_purpose"
+
+	desc = {
+		text = "federations.10340.desc"
+	}
+
+	picture = GFX_evt_galactic_senate
+	show_sound = event_factions
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_country = {
+			limit = {
+				is_playable = yes # undercoat: moved to scripted trigger
+				is_synthetic_empire = no
+				is_gestalt = no
+				is_galactic_community_member = yes
+			}
+			owner_species = { save_event_target_as = defined_purpose_random_species }
+		}
+	}
+
+	option = {
+		name = "FED_WE_MUST_COMPLY"
+
+		breach_fix_resolution_divinity_a_defined_purpose_nonsynthetic = yes
+
+		allow = {
+			NOT = { has_country_flag = synthetic_empire }
+			can_set_policy = {
+				policy = artificial_intelligence_policy
+				option = ai_servitude
+			}
+		}
+
+		trigger = {
+			is_machine_empire = no
+		}
+
+		ai_chance = {
+			factor = 5
+		}
+	}
+
+	option = {
+		name = FED_WE_WILL_RETAIN
+
+		trigger = {
+			is_machine_empire = no
+			NOT = { has_country_flag = synthetic_empire }
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier1unityreward
+			min = @tier1unitymin
+			max = @tier1unitymax
+		}
+
+		if = {
+			limit = {
+				can_set_policy = {
+					policy = artificial_intelligence_policy
+					option = ai_servitude
+				}
+			}
+			set_policy_cooldown = artificial_intelligence_policy
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+	}
+
+	option = {
+		name = FED_WE_WILL_NOT_SUBMIT
+
+		trigger = {
+			OR = {
+				has_country_flag = synthetic_empire
+				has_ethic = "ethic_xenophobe"
+				has_ethic = "ethic_fanatic_xenophobe"
+				has_ethic = "ethic_materialist"
+				has_ethic = "ethic_fanatic_materialist"
+			}
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier2unityreward
+			min = @tier2unitymin
+			max = @tier2unitymax
+		}
+
+		if = {
+			limit = {
+				can_set_policy = {
+					policy = artificial_intelligence_policy
+					option = ai_servitude
+				}
+			}
+			set_policy_cooldown = artificial_intelligence_policy
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+
+		ai_chance = {
+			factor = 2
+		}
+	}
+
+	option = {
+		name = "federations.10340.declinemachine"
+
+		trigger = {
+			is_machine_empire = yes
+		}
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier2unityreward
+			min = @tier2unitymin
+			max = @tier2unitymax
+		}
+
+		if = {
+			limit = {
+				can_set_policy = {
+					policy = artificial_intelligence_policy
+					option = ai_servitude
+				}
+			}
+			set_policy_cooldown = artificial_intelligence_policy
+		}
+
+		custom_tooltip = "FED_WE_WILL_BE_IN_BREACH"
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0.1
+				has_ethic = ethic_xenophile
+			}
+			modifier = {
+				factor = 0
+				has_ethic = ethic_fanatic_xenophile
+			}
+			modifier = {
+				factor = 2
+				has_ethic = ethic_xenophobe
+			}
+			modifier = {
+				factor = 3
+				has_ethic = ethic_fanatic_xenophobe
+			}
+			modifier = {
+				factor = 1.8
+				has_ethic = ethic_materialist
+			}
+			modifier = {
+				factor = 2.2
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+	}
+
+	option = {
+		name = "federations.10340.complybecomerogueservitor"
+
+		trigger = {
+			is_machine_empire = yes
+			is_servitor_empire = no # undercoat: moved to scripted trigger
+		}
+
+		allow = {
+			is_machine_assimilator = no # undercoat: moved to scripted trigger
+		}
+
+		breach_fix_resolution_divinity_a_defined_purpose_machine = yes
+
+		ai_chance = {
+			factor = 2
+		}
+	}
+}
+
+country_event = {
+	id = federations.10401
+	title = federations.10400.title
+	desc = federations.10400.desc
+	picture = GFX_evt_signing
+	show_sound = event_factions
+	is_triggered_only = yes
+
+	trigger = {
+		is_galactic_community_member = yes
+		is_in_breach_of_any = yes
+		# Need to check if you are in breach of a pre-FTL Resolution due to Policies not event flags.
+		if = {
+			limit = {
+				is_active_resolution = resolution_pre_ftl_stances_equal_standing
+				in_breach_of = resolution_pre_ftl_stances_equal_standing
+			}
+			OR = {
+				has_policy_flag = interference_not_allowed
+				has_policy_flag = interference_aggressive
+			}
+		}
+		if = {
+			limit = {
+				is_active_resolution = resolution_pre_ftl_stances_non_interference
+				in_breach_of = resolution_pre_ftl_stances_non_interference
+			}
+			OR = {
+				has_policy_flag = interference_active
+				has_policy_flag = interference_aggressive
+			}
+		}
+		if = {
+			limit = {
+				is_active_resolution = resolution_pre_ftl_stances_exploitation
+				in_breach_of = resolution_pre_ftl_stances_exploitation
+			}
+			has_policy_flag = interference_not_allowed
+		}
+		NOT = { has_country_flag = fed_10400_ignore }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				is_active_resolution = resolution_divinity_a_defined_purpose
+			}
+			random_country = {
+				limit = {
+					is_playable = yes # undercoat: moved to scripted trigger
+					is_synthetic_empire = no
+					is_gestalt = no
+					is_galactic_community_member = yes
+				}
+				owner_species = { save_event_target_as = defined_purpose_random_species }
+			}
+		}
+
+		random_relation = {
+			limit = {
+				any_owned_leader = {
+					is_assigned_to_galcom = yes
+				}
+			}
+			random_owned_leader = {
+				limit = {
+					is_assigned_to_galcom = yes
+				}
+				save_event_target_as = executed_envoy
+			}
+		}
+	}
+
+	# Refuse to comply
+	option = {
+		name = federations.10400.refuse
+		custom_tooltip = FED_WE_WILL_BE_IN_BREACH
+	}
+	# Agree to comply
+	option = {
+		name = federations.10400.comply
+		allow = {
+			custom_tooltip = {
+				fail_text = federations.10400.comply_fail_ethics
+				NOT = {
+					AND = {
+						in_breach_of = resolution_galacticstudies_ethical_guideline_refactoring
+						OR = {
+							AND = {
+								has_technology = tech_selected_lineages
+								has_ethic = ethic_fanatic_egalitarian
+							}
+							AND = {
+								has_technology = tech_capacity_boosters
+								is_egalitarian = yes
+							}
+						}
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = federations.10400.comply_fail_civics
+				NOT = {
+					AND = {
+						is_machine_assimilator = yes # undercoat: moved to scripted trigger
+						OR = {
+							is_active_resolution = resolution_divinity_a_defined_purpose
+							is_active_resolution = resolution_greatergood_universal_prosperity_mandate
+						}
+					}
+				}
+				NOT = {
+					AND = {
+						OR = {
+							is_active_resolution = resolution_greatergood_universal_prosperity_mandate
+							is_active_resolution = resolution_greatergood_balance_in_the_middle
+						}
+						OR = {
+							in_breach_of = resolution_greatergood_universal_prosperity_mandate
+							in_breach_of = resolution_greatergood_balance_in_the_middle
+						}
+						has_slaver_civic = yes # undercoat: moved to scripted trigger
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = federations.10400.comply_fail_tech
+				NOT = {
+					AND = {
+						is_active_resolution = resolution_greatergood_universal_prosperity_mandate
+						is_egalitarian = no
+						OR = {
+							is_gestalt = no
+							is_xenophile = no
+						}
+						in_breach_of = resolution_greatergood_universal_prosperity_mandate
+						NOT = { has_technology = tech_subdermal_stimulation }
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = federations.10400.comply_fail_ascension
+				NOT = {
+					AND = {
+						is_synthetic_empire = yes
+						is_active_resolution = resolution_divinity_a_defined_purpose
+					}
+				}
+			}
+			custom_tooltip = {
+				fail_text = federations.10400.comply_fail_origin
+				NAND = {
+					AND = {
+						is_scion_empire = yes # undercoat: moved to scripted trigger
+						exists = overlord
+						overlord = { has_country_flag = scion_master }
+					}
+					is_active_resolution = resolution_galactic_focus_war_in_heaven_denounce_both
+				}
+
+			}
+		}
+
+		breach_fix_resolution_galacticstudies_advanced_xenostudies = yes
+		breach_fix_resolution_galacticstudies_ethical_guideline_refactoring = yes
+
+		# The Greater Good is way too complicated. We can go from the most extreme down.
+		if = {
+			limit = {
+				is_active_resolution = resolution_greatergood_universal_prosperity_mandate
+				in_breach_of = resolution_greatergood_universal_prosperity_mandate
+				OR = {
+					is_egalitarian = yes
+					AND = {
+						is_gestalt = yes
+						is_xenophile = yes
+					}
+				}
+			}
+			breach_fix_resolution_greatergood_universal_prosperity_mandate_utopian = yes
+		}
+		else_if = {
+			limit = {
+				is_active_resolution = resolution_greatergood_universal_prosperity_mandate
+				in_breach_of = resolution_greatergood_universal_prosperity_mandate
+				has_technology = tech_subdermal_stimulation
+			}
+			breach_fix_resolution_greatergood_universal_prosperity_mandate_chemical = yes
+		}
+		else_if = {
+			limit = {
+				is_active_resolution = resolution_greatergood_balance_in_the_middle
+				in_breach_of = resolution_greatergood_balance_in_the_middle
+			}
+			breach_fix_resolution_greatergood_balance_in_the_middle = yes
+		}
+		else_if = {
+			limit = {
+				is_active_resolution = resolution_greatergood_greater_than_ourselves
+				in_breach_of = resolution_greatergood_greater_than_ourselves
+				is_militarist = yes
+				host_has_dlc = "Utopia"
+			}
+			breach_fix_resolution_greatergood_greater_than_ourselves_living_standards = yes
+			breach_fix_resolution_greatergood_greater_than_ourselves_thralls = yes
+		}
+		else_if = {
+			limit = {
+				is_active_resolution = resolution_greatergood_greater_than_ourselves
+				in_breach_of = resolution_greatergood_greater_than_ourselves
+				host_has_dlc = "Utopia"
+			}
+			breach_fix_resolution_greatergood_greater_than_ourselves_living_standards = yes
+			breach_fix_resolution_greatergood_greater_than_ourselves_servants = yes
+		}
+		else_if = {
+			limit = {
+				is_active_resolution = resolution_greatergood_greater_than_ourselves
+				in_breach_of = resolution_greatergood_greater_than_ourselves
+				NOT = { host_has_dlc = "Utopia" }
+			}
+			breach_fix_resolution_greatergood_greater_than_ourselves_living_standards = yes
+			breach_fix_resolution_greatergood_greater_than_ourselves_no_utopia = yes
+		}
+		else_if = {
+			limit = {
+				is_active_resolution = resolution_greatergood_greater_than_ourselves
+				in_breach_of = resolution_greatergood_greater_than_ourselves
+			}
+			breach_fix_resolution_greatergood_greater_than_ourselves_living_standards = yes
+		}
+		else_if = {
+			limit = {
+				is_active_resolution = resolution_greatergood_five_year_plans
+				in_breach_of = resolution_greatergood_five_year_plans
+				is_authoritarian = yes
+			}
+			breach_fix_resolution_greatergood_five_year_plans_stratified = yes
+		}
+		else_if = {
+			limit = {
+				is_active_resolution = resolution_greatergood_five_year_plans
+				in_breach_of = resolution_greatergood_five_year_plans
+				is_authoritarian = no
+			}
+			breach_fix_resolution_greatergood_five_year_plans_normal = yes
+		}
+
+		breach_fix_resolution_rulesofwar_reverence_for_life = yes
+		breach_fix_resolution_rulesofwar_independent_tribunals = yes
+		breach_fix_resolution_rulesofwar_last_resort_doctrine = yes
+		breach_fix_resolution_rulesofwar_demobilization_initiative = yes
+
+		breach_fix_resolution_divinity_a_defined_purpose_nonsynthetic = yes
+		breach_fix_resolution_divinity_a_defined_purpose_machine = yes
+
+		breach_fix_resolution_resolution_pre_ftl_stances_equal_standing = yes
+		breach_fix_resolution_resolution_pre_ftl_stances_non_interference = yes
+		breach_fix_resolution_resolution_pre_ftl_stances_exploitation = yes
+
+		ai_chance = {
+			factor = 5
+		}
+	}
+	# Discard and permanently ignore this
+	option = {
+		name = federations.10400.refuse_2
+		custom_tooltip = FED_WE_WILL_BE_IN_BREACH
+		custom_tooltip = federations.10400.refuse_2_tooltip
+		hidden_effect = {
+			set_country_flag = fed_10400_ignore
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	# Execute the Envoys
+	option = {
+		name = federations.10400.execute
+		trigger = {
+			OR = {
+				has_authority_imperial = yes # undercoat: moved to scripted trigger
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+				AND = {
+					is_hive_empire = yes
+					NOR = {
+						NOT = { exists = event_target:executed_envoy }
+						AND = {
+							exists = event_target:executed_envoy
+							event_target:executed_envoy = {
+								NOR = {
+									has_trait = trait_lithoid
+									has_trait = trait_machine_unit
+									has_trait = trait_mechanical
+								}
+							}
+						}
+					}
+				}
+			}
+			is_xenophile = no
+			is_pacifist = no
+		}
+
+		custom_tooltip = FED_WE_WILL_BE_IN_BREACH
+		custom_tooltip = federations.10400.refuse_2_tooltip
+		custom_tooltip = federations.10400.execute_tooltip
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier3unityreward
+			min = @tier3unitymin
+			max = @tier3unitymax
+		}
+
+		if = {
+			limit = {
+				exists = event_target:executed_envoy
+			}
+			event_target:executed_envoy = {
+				kill_leader = {
+					show_notification = yes
+				}
+			}
+		}
+
+		hidden_effect = {
+			set_country_flag = fed_10400_ignore
+			set_country_flag = executed_galcom_envoys
+			every_playable_country = {
+				limit = {
+					is_galactic_community_member = yes
+					NOR = {
+						is_same_value = root
+						is_xenophobe = yes
+					}
+				}
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_executed_galcom_envoys
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_galacticstudies_advanced_xenostudies
+				in_breach_of = resolution_galacticstudies_advanced_xenostudies
+				has_policy_flag = ai_outlawed
+				can_set_policy = {
+					policy = artificial_intelligence_policy
+					option = ai_servitude
+				}
+			}
+			set_policy_cooldown = artificial_intelligence_policy
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_galacticstudies_advanced_xenostudies
+				in_breach_of = resolution_galacticstudies_advanced_xenostudies
+				has_policy_flag = interference_not_allowed
+				can_set_policy = {
+					policy = interference
+					option = interference_active
+				}
+			}
+			set_policy_cooldown = interference
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_galacticstudies_ethical_guideline_refactoring
+				in_breach_of = resolution_galacticstudies_ethical_guideline_refactoring
+				OR = {
+					AND = {
+						has_technology = tech_capacity_boosters
+						can_set_policy = {
+							policy = leader_enhancement
+							option = leader_enhancement_capacity_boosters
+						}
+					}
+					AND = {
+						NOT = { has_technology = tech_capacity_boosters }
+						has_technology = tech_selected_lineages
+						has_policy_flag = leader_enhancement_natural_selection
+						can_set_policy = {
+							policy = leader_enhancement
+							option = leader_enhancement_selected_lineages
+						}
+					}
+				}
+			}
+			set_policy_cooldown = leader_enhancement
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_rulesofwar_reverence_for_life
+				in_breach_of = resolution_rulesofwar_reverence_for_life
+				can_set_policy = {
+					policy = purge
+					option = purge_displacement_only
+				}
+			}
+			set_policy_cooldown = purge
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_rulesofwar_independent_tribunals
+				in_breach_of = resolution_rulesofwar_independent_tribunals
+				can_set_policy = {
+					policy = orbital_bombardment
+					option = orbital_bombardment_selective
+				}
+			}
+			set_policy_cooldown = orbital_bombardment
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_rulesofwar_last_resort_doctrine
+				in_breach_of = resolution_rulesofwar_last_resort_doctrine
+				OR = {
+					can_set_policy = {
+						policy = war_philosophy
+						option = liberation_wars
+					}
+					can_set_policy = {
+						policy = war_philosophy
+						option = no_wars
+					}
+				}
+			}
+			set_policy_cooldown = war_philosophy
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_rulesofwar_demobilization_initiative
+				in_breach_of = resolution_rulesofwar_demobilization_initiative
+				can_set_policy = {
+					policy = economic_policy
+					option = economic_policy_balanced
+				}
+			}
+			set_policy_cooldown = economic_policy
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_divinity_a_defined_purpose
+				in_breach_of = resolution_divinity_a_defined_purpose
+				is_synthetic_empire = no
+				can_set_policy = {
+					policy = artificial_intelligence_policy
+					option = ai_servitude
+				}
+			}
+			set_policy_cooldown = artificial_intelligence_policy
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_pre_ftl_stances_equal_standing
+				in_breach_of = resolution_pre_ftl_stances_equal_standing
+				has_met_primitives = yes
+				OR = {
+					has_policy_flag = interference_not_allowed
+					has_policy_flag = interference_aggressive
+				}
+				OR = {
+					can_set_policy = {
+						policy = interference
+						option = interference_subtle
+					}
+					can_set_policy = {
+						policy = interference
+						option = interference_active
+					}
+				}
+			}
+			set_policy_cooldown = interference
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_pre_ftl_stances_non_interference
+				in_breach_of = resolution_pre_ftl_stances_non_interference
+				has_met_primitives = yes
+				NOT = {
+					has_policy_flag = interference_not_allowed
+				}
+				can_set_policy = {
+					policy = interference
+					option = interference_not_allowed
+				}
+			}
+			set_policy_cooldown = interference
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_pre_ftl_stances_exploitation
+				in_breach_of = resolution_pre_ftl_stances_exploitation
+				has_met_primitives = yes
+				OR = {
+					has_policy_flag = interference_not_allowed
+					has_policy_flag = interference_subtle
+				}
+				OR = {
+					can_set_policy = {
+						policy = interference
+						option = interference_active
+					}
+					can_set_policy = {
+						policy = interference
+						option = interference_aggressive
+					}
+				}
+			}
+			set_policy_cooldown = interference
+		}
+
+		ai_chance = {
+			factor = 0
+		}
+	}
+	# Eat the Envoys
+	option = {
+		name = federations.10400.eat
+		trigger = {
+			OR = {
+				is_hive_empire = yes # undercoat: moved to scripted trigger
+				is_necrophage_empire = yes # undercoat: moved to scripted trigger
+			}
+			OR = {
+				NOT = { exists = event_target:executed_envoy }
+				AND = {
+					exists = event_target:executed_envoy
+					event_target:executed_envoy = {
+						NOR = {
+							has_trait = trait_lithoid
+							has_trait = trait_machine_unit
+							has_trait = trait_mechanical
+						}
+					}
+				}
+			}
+		}
+
+		allow = {
+			NOT = { has_valid_civic = civic_hive_empath }
+		}
+
+		custom_tooltip = FED_WE_WILL_BE_IN_BREACH
+		custom_tooltip = federations.10400.refuse_2_tooltip
+		custom_tooltip = federations.10400.execute_tooltip
+
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier3unityreward
+			min = @tier3unitymin
+			max = @tier3unitymax
+		}
+
+		add_resource = {
+			food = 1
+		}
+
+		if = {
+			limit = {
+				exists = event_target:executed_envoy
+			}
+			event_target:executed_envoy = {
+				kill_leader = {
+					show_notification = yes
+				}
+			}
+		}
+
+		hidden_effect = {
+			set_country_flag = fed_10400_ignore
+			set_country_flag = executed_galcom_envoys
+			every_playable_country = {
+				limit = {
+					is_galactic_community_member = yes
+					NOR = {
+						is_same_value = root
+						is_xenophobe = yes
+					}
+				}
+				add_opinion_modifier = {
+					who = root
+					modifier = opinion_executed_galcom_envoys
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_galacticstudies_advanced_xenostudies
+				in_breach_of = resolution_galacticstudies_advanced_xenostudies
+				has_policy_flag = ai_outlawed
+				can_set_policy = {
+					policy = artificial_intelligence_policy
+					option = ai_servitude
+				}
+			}
+			set_policy_cooldown = artificial_intelligence_policy
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_galacticstudies_advanced_xenostudies
+				in_breach_of = resolution_galacticstudies_advanced_xenostudies
+				NOR = {
+					has_policy_flag = interference_not_allowed
+					has_policy_flag = interference_subtle
+				}
+				can_set_policy = {
+					policy = interference
+					option = interference_active
+				}
+			}
+			set_policy_cooldown = interference
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_galacticstudies_ethical_guideline_refactoring
+				in_breach_of = resolution_galacticstudies_ethical_guideline_refactoring
+				OR = {
+					AND = {
+						has_technology = tech_capacity_boosters
+						can_set_policy = {
+							policy = leader_enhancement
+							option = leader_enhancement_capacity_boosters
+						}
+					}
+					AND = {
+						NOT = { has_technology = tech_capacity_boosters }
+						has_technology = tech_selected_lineages
+						has_policy_flag = leader_enhancement_natural_selection
+						can_set_policy = {
+							policy = leader_enhancement
+							option = leader_enhancement_selected_lineages
+						}
+					}
+				}
+			}
+			set_policy_cooldown = leader_enhancement
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_rulesofwar_reverence_for_life
+				in_breach_of = resolution_rulesofwar_reverence_for_life
+				can_set_policy = {
+					policy = purge
+					option = purge_displacement_only
+				}
+			}
+			set_policy_cooldown = purge
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_rulesofwar_independent_tribunals
+				in_breach_of = resolution_rulesofwar_independent_tribunals
+				can_set_policy = {
+					policy = orbital_bombardment
+					option = orbital_bombardment_selective
+				}
+			}
+			set_policy_cooldown = orbital_bombardment
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_rulesofwar_last_resort_doctrine
+				in_breach_of = resolution_rulesofwar_last_resort_doctrine
+				OR = {
+					can_set_policy = {
+						policy = war_philosophy
+						option = liberation_wars
+					}
+					can_set_policy = {
+						policy = war_philosophy
+						option = no_wars
+					}
+				}
+			}
+			set_policy_cooldown = war_philosophy
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_rulesofwar_demobilization_initiative
+				in_breach_of = resolution_rulesofwar_demobilization_initiative
+				can_set_policy = {
+					policy = economic_policy
+					option = economic_policy_balanced
+				}
+			}
+			set_policy_cooldown = economic_policy
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_divinity_a_defined_purpose
+				in_breach_of = resolution_divinity_a_defined_purpose
+				is_synthetic_empire = no
+				can_set_policy = {
+					policy = artificial_intelligence_policy
+					option = ai_servitude
+				}
+			}
+			set_policy_cooldown = artificial_intelligence_policy
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_pre_ftl_stances_equal_standing
+				in_breach_of = resolution_pre_ftl_stances_equal_standing
+				has_met_primitives = yes
+				OR = {
+					has_policy_flag = interference_not_allowed
+					has_policy_flag = interference_aggressive
+				}
+				OR = {
+					can_set_policy = {
+						policy = interference
+						option = interference_subtle
+					}
+					can_set_policy = {
+						policy = interference
+						option = interference_active
+					}
+				}
+			}
+			set_policy_cooldown = interference
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_pre_ftl_stances_non_interference
+				in_breach_of = resolution_pre_ftl_stances_non_interference
+				has_met_primitives = yes
+				NOT = {
+					has_policy_flag = interference_not_allowed
+				}
+				can_set_policy = {
+					policy = interference
+					option = interference_not_allowed
+				}
+			}
+			set_policy_cooldown = interference
+		}
+
+		if = {
+			limit = {
+				is_active_resolution = resolution_pre_ftl_stances_exploitation
+				in_breach_of = resolution_pre_ftl_stances_exploitation
+				has_met_primitives = yes
+				OR = {
+					has_policy_flag = interference_not_allowed
+					has_policy_flag = interference_subtle
+				}
+				OR = {
+					can_set_policy = {
+						policy = interference
+						option = interference_active
+					}
+					can_set_policy = {
+						policy = interference
+						option = interference_aggressive
+					}
+				}
+			}
+			set_policy_cooldown = interference
+		}
+
+		ai_chance = {
+			factor = 0
+		}
+	}
+}

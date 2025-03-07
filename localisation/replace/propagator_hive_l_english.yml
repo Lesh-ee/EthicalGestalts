@@ -1,0 +1,8 @@
+﻿l_english:
+
+ personality_hive_mind:0 "Propagator Hive"
+ personality_hive_mind_desc:0 "Propagator Hives concern themselves with the propagation of their species above all else. So long as they have room to expand, there is little to fear from them, but if boxed in they will think nothing of seizing worlds and slaughtering their native populations."
+
+ MESSAGE_NEW_BRANCH_OFFICE:0 "The $COUNTRY|Y$ has established a new Branch Office on $PLANET|Y$."
+ MESSAGE_CLOSED_BRANCH_OFFICE:0 "The $COUNTRY|Y$ has closed down their Branch Office on $PLANET|Y$."
+

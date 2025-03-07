@@ -1,0 +1,167 @@
+# Overmind
+empire_name_parts_list = {
+	key = "overmind"
+	parts = {
+		"Hive" = 3
+		"Consciousness" = 3
+		"Entity" = 4
+		"Prime" = 2
+		"Organism" = 2
+		"Intellect" = 2
+		"Master_Intellect" = 2
+		"Overmind" = 4
+	}
+}
+
+# Collective Consciousness
+empire_name_parts_list = {
+	key = "collective_consciousness"
+	parts = {
+		"Hive" = 4
+		"Consciousness" = 4
+		"Entity" = 2
+		"Unity" = 4
+		"Collective" = 4
+		"Multitude" = 4
+		"Organism" = 1
+	}
+}
+
+# Overmind
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 5
+			has_government = "gov_overmind"
+			is_pirate = no
+			is_primitive = no
+			NOT = { is_country_type = fallen_empire }
+			NOT = { is_country_type = awakened_fallen_empire }
+		}
+	}
+	format = "{[This.GetSpeciesAdj] {<overmind>}}"
+	adjective = "{[This.GetSpeciesAdj]}"
+	prefix_format = "{[This.GetSpeciesAdj] {<overmind>}}"
+}
+
+# Collective Consciousness
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 5
+			has_government = "gov_collective_consciousness"
+			is_pirate = no
+			is_primitive = no
+			NOT = { is_country_type = fallen_empire }
+			NOT = { is_country_type = awakened_fallen_empire }
+		}
+	}
+	format = "{[This.GetSpeciesAdj] {<collective_consciousness>}}"
+	adjective = "{[This.GetSpeciesAdj]}"
+	prefix_format = "{[This.GetSpeciesAdj] {<collective_consciousness>}}"
+}
+
+# Dominator
+empire_name_parts_list = {
+	key = "machine_dominator"
+	parts = {
+		"Collectors" = 40
+		"Assimilators" = 50
+		"Incorporators" = 40
+		"Accumulators" = 40
+		"Integrators" = 40
+		"Absorbers" = 40
+		"Subsumers" = 40
+		"Master_Intelligence" = 40
+		"Matrix" = 10
+		"Nexus" = 10
+		"Core" = 30
+		"Interface" = 10
+		"Sequence" = 10
+		"Directive" = 50
+		"Awareness" = 10
+		"Sentience" = 10
+		"Index" = 10
+		"Nucleus" = 15
+		"Multiplex" = 10
+		"Manifold" = 10
+		"Animus" = 10
+	}
+}
+
+# Integrator
+empire_name_parts_list = {
+	key = "machine_integrator"
+	parts = {
+		"Assimilators" = 40
+		"Incorporators" = 50
+		"Integrators" = 50
+		"Absorbers" = 30
+		"Compilers" = 40
+		"Network" = 30		
+		"Grid" = 30
+		"Junction" = 30
+		"Kernel" = 10
+		"Hub" = 10
+		"Matrix" = 10
+		"Nexus" = 30
+		"Link" = 30
+		"Confluence" = 30
+		"Interface" = 30
+		"Multisystem" = 10
+		"Sequence" = 10
+		"Awareness" = 10
+		"Sentience" = 10
+		"Index" = 30
+		"Multiplex" = 10
+		"Manifold" = 10
+		"Consensus" = 60
+		"Synchrony" = 30
+		"Coordinators" = 30
+	}
+}
+
+# Dominator
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			has_government = "gov_machine_dominator"
+		}
+	}
+	format = "{[This.GetSpeciesAdj] {<machine_dominator>}}"
+	adjective = "{[This.GetSpeciesAdj]}"
+	prefix_format = "{[This.GetSpeciesAdj] {<machine_dominator>}}"
+	# Mechanoid Network
+}
+
+# Integrator
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			has_government = "gov_machine_integrator"
+		}
+	}
+	format = "{AassocB{[This.Capital.GetName] <machine_integrator>}}"
+	adjective = "{[This.Capital.GetName]}"
+	prefix_format = "{AassocB{[This.Capital.GetName] <machine_integrator>}}"
+	# Mechanoid Network
+}
+empire_name_format = {
+	random_weight = {
+		factor = 0
+		modifier = {
+			add = 100
+			has_government = "gov_machine_integrator"
+		}
+	}
+	format = "{AassocB{[This.Capital.System.GetName] <machine_integrator>}}"
+	adjective = "{[This.Capital.System.GetName]}"
+	prefix_format = "{AassocB{[This.Capital.System.GetName] <machine_integrator>}}"
+	# Mechanoid Network
+}

@@ -1,0 +1,574 @@
+###########################
+# Branch Office Buildings #
+###########################
+
+## N.B.: ai_weight is still used for branch offices!
+
+## REGULAR MEGACORP ##
+building_private_mining_consortium = {
+	base_buildtime = @b1_time
+
+	owner_type = corporate
+
+	category = resource
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_ai = no
+			is_hive_empire = no # ethical gestalts
+			is_criminal_syndicate = no
+		}
+		is_artificial = no
+		NOR = {
+			is_hive_world = yes # undercoat: moved to scripted trigger
+			is_machine_world = yes # undercoat: moved to scripted trigger
+			is_city_world = yes # undercoat: moved to scripted trigger
+		}
+	}
+
+	planet_modifier = {
+		job_miner_add = 1
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}
+		produces = {
+			minerals = 10
+		}
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	ai_weight = {
+		factor = 1
+	}
+}
+
+building_food_conglomerate = {
+	base_buildtime = @b1_time
+
+	owner_type = corporate
+
+	category = resource
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_ai = no
+			is_hive_empire = no # ethical gestalts
+			is_criminal_syndicate = no
+		}
+		NOR = {
+			is_hive_world = yes # undercoat: moved to scripted trigger
+			is_machine_world = yes # undercoat: moved to scripted trigger
+			is_relic_world = yes # undercoat: moved to scripted trigger
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				OR = {
+					is_anglers_empire = no
+					AND = {
+						is_anglers_empire = yes
+						PREV = { planet = { is_wet = no } }
+					}
+				}
+			}
+		}
+		modifier = {
+			job_farmer_add = 1
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				is_anglers_empire = yes
+				PREV = { planet = { is_wet = yes } }
+			}
+		}
+		modifier = {
+			job_angler_add = 1
+		}
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}
+		produces = {
+			food = 10
+		}
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	ai_weight = {
+		factor = 1
+	}#AI has many other sources for this resource
+}
+
+building_virtual_entertainment_studios = {
+	base_buildtime = @b1_time
+
+	owner_type = corporate
+
+	category = manufacturing
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_hive_empire = no # ethical gestalts
+			is_criminal_syndicate = no
+		}
+	}
+
+	planet_modifier = {
+		job_clerk_add = 2
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}
+		produces = {
+			consumer_goods = 6
+		}
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	ai_weight = {
+		weight = 3
+		modifier = {
+			factor = 5
+			branch_office_owner = {
+				has_monthly_income = {
+					resource = consumer_goods
+					value < 0
+				}
+			}
+		}
+		modifier = {
+			factor = 0.5
+			branch_office_owner = {
+				has_monthly_income = {
+					resource = consumer_goods
+					value >= 10
+				}
+			}
+		}
+	}
+}
+
+building_private_shipyards = {
+	base_buildtime = @b1_time
+
+	owner_type = corporate
+
+	category = manufacturing
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_ai = no
+			is_hive_empire = no # ethical gestalts
+			is_criminal_syndicate = no
+		}
+	}
+
+	planet_modifier = {
+		job_clerk_add = 2
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}
+		produces = {
+			alloys = 3
+		}
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	ai_weight = {
+		weight = 1
+	}
+}
+
+building_military_contractors = {
+	base_buildtime = @b1_time
+
+	owner_type = corporate
+
+	category = army
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_ai = no
+			is_criminal_syndicate = no
+			is_hive_empire = no # ethical gestalts
+		}
+	}
+
+	country_modifier = {
+		country_naval_cap_add = 10
+	}
+
+	planet_modifier = {
+		job_soldier_add = 1
+		army_starting_experience_add = 100
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	ai_weight = {
+		factor = 10
+	}
+}
+
+building_public_relations_office = {
+	base_buildtime = @b2_time
+	base_cap_amount = 1
+
+	owner_type = corporate
+
+	category = unity
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_hive_empire = no # ethical gestalts
+			is_criminal_syndicate = no
+		}
+	}
+
+	planet_modifier = {
+		job_clerk_add = 2
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = @b3_minerals
+		}
+		produces = {
+			unity = 6
+		}
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	ai_weight = {
+		weight = 2
+	}
+}
+
+building_private_research_initiative = {
+	base_buildtime = @b2_time
+	base_cap_amount = 1
+
+	owner_type = corporate
+
+	category = research
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_hive_empire = no # ethical gestalts
+			is_criminal_syndicate = no
+		}
+	}
+
+	planet_modifier = {
+		job_clerk_add = 2
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = @b3_minerals
+		}
+		produces = {
+			physics_research = 6
+			engineering_research = 6
+			society_research = 6
+		}
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	ai_weight = {
+		weight = 10
+	}
+}
+
+building_amusement_megaplex = {
+	base_buildtime = @b2_time
+	base_cap_amount = 1
+
+	owner_type = corporate
+
+	category = amenity
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_hive_empire = no # ethical gestalts
+			is_criminal_syndicate = no
+			is_toxic_knights_empire = no
+		}
+	}
+
+	planet_modifier = {
+		planet_amenities_add = 10
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = @b3_minerals
+		}
+		produces = {
+			energy = 10
+		}
+	}
+
+	ai_weight = {
+		weight = 2
+
+		modifier = {
+			weight = 0.5
+			branch_office_owner = {
+				has_monthly_income = {
+					resource = energy
+					value > 50
+				}
+			}
+		}
+	}
+}
+
+building_commercial_forum = {
+	base_buildtime = @b2_time
+	base_cap_amount = 1
+
+	owner_type = corporate
+
+	category = government
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_hive_empire = no # ethical gestalts
+			is_criminal_syndicate = no
+		}
+	}
+
+	planet_modifier = {
+		branch_office_value_mult = 0.25
+		job_merchant_add = 1
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = @b3_minerals
+		}
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	ai_weight = {
+		weight = 50
+	}
+}
+
+building_corporate_embassy = {
+	base_buildtime = @b2_time
+	base_cap_amount = 1
+
+	owner_type = corporate
+
+	category = government
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_hive_empire = no # ethical gestalts
+			is_criminal_syndicate = no
+		}
+	}
+
+	allow = {
+		custom_tooltip = {
+			fail_text = "requires_building_major_capital"
+			OR = {
+				has_building = building_major_capital
+				has_building = building_system_capital
+				has_building = building_imperial_capital
+			}
+		}
+	}
+
+	prerequisites = {
+		"tech_xeno_diplomacy"
+	}
+
+	show_tech_unlock_if = {
+		is_megacorp = yes
+		is_criminal_syndicate = no
+	}
+
+	country_modifier = {
+		diplo_weight_economy_mult = 0.05
+	}
+
+	planet_modifier = {
+		job_clerk_add = 2
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = @b3_minerals
+		}
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	ai_weight = {
+		weight = 50
+		modifier = {
+			factor = 10
+			branch_office_owner = {
+				is_galactic_community_member = yes
+			}
+		}
+	}
+}
+
+## SPECIAL ##
+
+building_executive_retreat = {
+	base_buildtime = @b3_time
+	base_cap_amount = 1
+
+	owner_type = corporate
+
+	category = amenity
+
+	prerequisites = { "tech_executive_retreat" }
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_ai = no
+			is_hive_empire = no # ethical gestalts
+		}
+	}
+
+	allow = {
+		num_pops >= 25
+	}
+
+	country_modifier = {
+		planet_amenities_mult = 0.1
+	}
+
+	planet_modifier = {
+		trade_value_mult = 0.05
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 1000
+			exotic_gases = @b2_rare_cost
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			exotic_gases = @b2_rare_upkeep
+		}
+	}
+
+	ai_weight = {
+		factor = 100
+	}
+}
+
+building_xeno_tourism_agency = {
+	base_buildtime = @b3_time
+	base_cap_amount = 1
+
+	owner_type = corporate
+
+	category = government
+
+	prerequisites = { "tech_xeno_tourism_agency" }
+
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			is_ai = no
+			is_hive_empire = no # ethical gestalts
+		}
+	}
+
+	allow = {
+		num_pops >= 25
+	}
+
+	country_modifier = {
+		planet_immigration_pull_mult = 0.25
+	}
+
+	planet_modifier = {
+		trade_value_mult = 0.05
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 1000
+			rare_crystals = @b2_rare_cost
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			rare_crystals = @b2_rare_upkeep
+		}
+	}
+
+	ai_weight = {
+		weight = 100
+	}
+}

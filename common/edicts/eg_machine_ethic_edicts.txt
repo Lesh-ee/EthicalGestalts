@@ -1,0 +1,235 @@
+##########################################################################
+# Empire edicts
+##########################################################################
+
+# @Edict1Cost = 100
+# @Edict2Cost = 200
+# @Edict3Cost = 300
+
+# @EdictPerpetual = -1
+
+#################
+# Toggle Edicts
+#################
+
+# authoritarian_schema = {
+# 	length = @EdictPerpetual
+# 	icon = "GFX_edict_type_policy"
+# 	edict_cap_usage = 1
+
+# 	resources = {
+# 		category = edicts
+# 		cost = {
+# 			influence = @Edict1Cost
+# 		}
+# 	}
+
+# 	modifier = {
+# 		country_tech_influence_produces_add = 0.5
+# 	}
+
+# 	potential = {
+# 		is_machine_empire = yes
+# 		is_authoritarian = no
+# 	}
+
+# 	prerequisites = {
+# 		tech_xeno_ethic_schemas
+# 	}
+
+# 	ai_weight = {
+# 		weight = @EdictLowPrio
+# 	}
+# }
+
+# egalitarian_schema = {
+# 	length = @EdictPerpetual
+# 	icon = "GFX_edict_type_policy"
+# 	edict_cap_usage = 1
+
+# 	resources = {
+# 		category = edicts
+# 		cost = {
+# 			influence = @Edict1Cost
+# 		}
+# 	}
+
+# 	modifier = {
+# 		planet_jobs_complex_drone_produces_mult = 0.05
+# 	}
+
+# 	potential = {
+# 		is_machine_empire = yes
+# 		is_egalitarian = no
+# 	}
+
+# 	prerequisites = {
+# 		tech_xeno_ethic_schemas
+# 	}
+
+# 	ai_weight = {
+# 		weight = @EdictLowPrio
+# 	}
+# }
+
+# xenophobe_schema = {
+# 	length = @EdictPerpetual
+# 	icon = "GFX_edict_type_policy"
+# 	edict_cap_usage = 1
+
+# 	resources = {
+# 		category = edicts
+# 		cost = {
+# 			influence = @Edict1Cost
+# 		}
+# 	}
+
+# 	modifier = {
+# 		country_starbase_influence_cost_mult = -0.2
+# 	}
+
+# 	potential = {
+# 		is_machine_empire = yes
+# 		is_xenophobe = no
+# 	}
+
+# 	prerequisites = {
+# 		tech_xeno_ethic_schemas
+# 	}
+
+# 	ai_weight = {
+# 		weight = @EdictLowPrio
+# 	}
+# }
+
+# xenophile_schema = {
+# 	length = @EdictPerpetual
+# 	icon = "GFX_edict_type_policy"
+# 	edict_cap_usage = 1
+
+# 	resources = {
+# 		category = edicts
+# 		cost = {
+# 			influence = @Edict1Cost
+# 		}
+# 	}
+
+# 	modifier = {
+# 		envoys_add = 1
+# 	}
+
+# 	potential = {
+# 		is_machine_empire = yes
+# 		is_xenophile = no
+# 	}
+
+# 	prerequisites = {
+# 		tech_xeno_ethic_schemas
+# 	}
+
+# 	ai_weight = {
+# 		weight = @EdictLowPrio
+# 	}
+# }
+
+# militarist_schema = {
+# 	length = @EdictPerpetual
+# 	icon = "GFX_edict_type_policy"
+# 	edict_cap_usage = 1
+
+# 	resources = {
+# 		category = edicts
+# 		cost = {
+# 			influence = @Edict1Cost
+# 		}
+# 	}
+
+# 	modifier = {
+# 		country_claim_influence_cost_mult = -0.1
+# 		ship_fire_rate_mult = 0.10
+# 	}
+
+# 	potential = {
+# 		is_machine_empire = yes
+# 		is_militarist = no
+# 	}
+
+# 	prerequisites = {
+# 		tech_xeno_ethic_schemas
+# 	}
+
+# 	ai_weight = {
+# 		weight = @EdictMedPrio
+# 		modifier = {
+# 			factor = 0.5
+# 			is_at_war = no
+# 			NOT = { has_policy_flag = unrestricted_wars }
+# 		}
+# 		modifier = {
+# 			factor = 2
+# 			is_at_war = yes
+# 		}
+# 	}
+# }
+
+# pacifist_schema = {
+# 	length = @EdictPerpetual
+# 	icon = "GFX_edict_type_policy"
+# 	edict_cap_usage = 1
+
+# 	resources = {
+# 		category = edicts
+# 		cost = {
+# 			influence = @Edict1Cost
+# 		}
+# 	}
+
+# 	modifier = {
+# 		empire_size_pops_mult = -0.30
+# 		planet_stability_add = 10
+# 	}
+
+# 	potential = {
+# 		is_machine_empire = yes
+# 		is_pacifist = no
+# 	}
+
+# 	prerequisites = {
+# 		tech_xeno_ethic_schemas
+# 	}
+
+# 	ai_weight = {
+# 		weight = @EdictMedPrio
+# 	}
+# }
+
+# materialist_schema = {
+# 	length = @EdictPerpetual
+# 	icon = "GFX_edict_type_policy"
+# 	edict_cap_usage = 1
+
+# 	resources = {
+# 		category = edicts
+# 		cost = {
+# 			influence = @Edict1Cost
+# 		}
+# 	}
+
+# 	modifier = {
+# 		planet_pops_robotics_upkeep_mult = -0.2
+# 		all_technology_research_speed = 0.10
+# 	}
+
+# 	potential = {
+# 		is_machine_empire = yes
+# 		is_materialist = no
+# 	}
+
+# 	prerequisites = {
+# 		tech_xeno_ethic_schemas
+# 	}
+
+# 	ai_weight = {
+# 		weight = @EdictHighPrio
+# 	}
+# }

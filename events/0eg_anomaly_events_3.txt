@@ -1,0 +1,75 @@
+############################
+#
+# Anomaly Events
+#
+# Written by Niclas Karlsson
+#
+############################
+
+namespace = anomaly
+
+#Special project completed
+ship_event = {
+	id = anomaly.4062
+	title = PROJECT_COMPLETE
+	desc = {
+		trigger = {
+			hidden:owner = {
+				switch = {
+					trigger = has_ethic
+					ethic_fanatic_spiritualist = { text = anomaly.4062.spirit.desc }
+					ethic_spiritualist = { text = anomaly.4062.spirit.desc }
+					default = {
+						if = {
+							limit = { is_machine_empire = yes }
+							text = anomaly.4062.desc.mach
+						}
+						else = { text = anomaly.4062.desc }
+					}
+				}
+			}
+		}
+	}
+	picture = GFX_evt_star_yellow
+	show_sound = event_solar_fusion
+	location = FROMFROM
+
+	is_triggered_only = yes
+
+	option = {
+		name = BREAKTHROUGH
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		owner = {
+			add_modifier = {
+				modifier = forth_dimension_knowledge
+				days = 7200
+			}
+		}
+	}
+	option = {
+		name = anomaly.4062.spirit.a
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_spiritualist
+					has_ethic = ethic_spiritualist
+				}
+			}
+		}
+		owner = {
+			add_modifier = {
+				modifier = forth_dimension_knowledge
+				days = 7200
+			}
+		}
+	}
+}
+
+

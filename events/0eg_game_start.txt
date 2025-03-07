@@ -1,0 +1,62 @@
+namespace = game_start
+
+# Create Gestalt Council.
+country_event = {
+	id = game_start.70
+	hide_window = yes
+	trigger = {
+		is_gestalt = yes
+		OR = {
+			is_playable = yes # undercoat: moved to scripted trigger
+			is_country_type = fallen_empire
+		}
+	}
+
+	is_triggered_only = yes
+
+	immediate = {
+		force_add_civic = civic_galactic_sovereign
+		force_remove_civic = civic_galactic_sovereign # triggers recalculation of required positions
+		if = {
+			limit = {
+				has_paragon_dlc = yes
+			}
+			ruler = {
+				assign_gestalt_ruler_subclass_trait = yes
+			}
+		}
+		country_create_gestalt_councilor = {
+			CLASS = official
+			COUNCIL_POS = councilor_gestalt_growth
+			DESC = councilor_gestalt_growth_desc
+		}
+		country_create_gestalt_councilor = {
+			CLASS = scientist
+			COUNCIL_POS = councilor_gestalt_cognitive
+			DESC = councilor_gestalt_cognitive_desc
+		}
+		country_create_gestalt_councilor = {
+			CLASS = commander
+			COUNCIL_POS = councilor_gestalt_legion
+			DESC = councilor_gestalt_legion_desc
+		}
+		country_create_gestalt_councilor = {
+			CLASS = official
+			COUNCIL_POS = councilor_gestalt_regulatory
+			DESC = councilor_gestalt_regulatory_desc
+		}
+		if = {
+			limit = {
+				is_country_type = fallen_empire
+			}
+			every_owned_leader = {
+				limit = {
+					is_councilor = yes
+					is_ruler = no
+				}
+				add_skill = 9
+				set_gestalt_node_protrait_effect = yes
+			}
+		}
+	}
+}

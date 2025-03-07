@@ -1,0 +1,185 @@
+###################################################
+#
+# "Overlord" Enclave Events
+# By Gemma Thomson, Hadrien Buytaers & Chad Inglis
+#
+###################################################
+namespace = enclave
+
+# enclave.1xxx	general-purpose
+# enclave.2xxx	Mercenary enclave
+# enclave.3xxx	Salvager enclave
+# enclave.4xxx	Shroudwalker enclave
+# enclave.5xxx	Divination events
+# enclave.6xxx	Shroud Tunnel events
+
+## Strange Manifestations - Shroud Tunnel Event
+
+fleet_event = {
+	id = enclave.6000
+	title = "enclave.6000.name"
+	desc = {
+		exclusive_trigger = {
+			owner = { is_machine_empire = yes }
+		}
+		text = enclave.6000.d.desc
+	}
+	desc = {
+		exclusive_trigger = {
+			owner = { is_hive_empire = yes }
+		}
+		text = enclave.6000.e.desc
+	}
+	desc = {
+		trigger = {
+			hidden:owner = {
+				switch = {
+					trigger = has_ethic
+					ethic_xenophile = { text = enclave.6000.a.desc }
+					ethic_xenophobe = { text = enclave.6000.b.desc }
+					default = { text = enclave.6000.a.desc }
+				}
+			}
+		}
+	}
+	picture = GFX_evt_shroud_tunnel
+	show_sound = event_mystic_reveal
+	location = FROM
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = leader
+		leader = {
+			NOR = {
+				has_leader_flag = renowned_leader
+				has_leader_flag = legendary_leader
+			}
+		}
+		NOR = {
+			owner = { has_country_flag = strange_manifestations_cooldown }
+			has_fleet_flag = strange_manifestations
+		}
+	}
+
+	immediate = {
+		set_fleet_flag = strange_manifestations
+		owner = {
+			set_timed_country_flag = {
+				flag = strange_manifestations_cooldown
+				days = 720
+			}
+		}
+		if = {
+			limit = {
+				exists = leader
+				leader = {
+					species = {
+						species_portrait = mol12
+					}
+				}
+			}
+			leader = {
+				change_leader_portrait = mam_rat
+			}
+		}
+		else = {
+			leader = {
+				change_leader_portrait = mol12
+			}
+		}
+	}
+
+	option = {
+		name = INTERESTING
+		leader = { add_experience = 200 }
+		ai_chance = {
+			factor = 1
+		}
+	}
+
+	option = {
+		name = enclave.6000b.a
+		trigger = {
+			owner = {
+				has_ethic = ethic_xenophobe
+			}
+		}
+		leader = {
+			save_event_target_as = dissected_leader
+			exile_leader_as = dissected_leader
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+
+	option = {
+		name = enclave.6000b.b
+		trigger = {
+			owner = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+		leader = {
+			save_event_target_as = dissected_leader
+			exile_leader_as = dissected_leader
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+
+	option = {
+		name = enclave.6000d.a
+		trigger = {
+			owner = {
+				is_machine_empire = yes
+			}
+		}
+		leader = {
+			save_event_target_as = terminated_leader
+			exile_leader_as = terminated_leader
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+
+	option = {
+		name = enclave.6000e.a
+		trigger = {
+			owner = {
+				is_gestalt = yes # undercoat: moved to scripted trigger
+				is_machine_empire = no # undercoat: moved to scripted trigger
+			}
+		}
+		leader = {
+			save_event_target_as = dissected_leader
+			exile_leader_as = dissected_leader
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier1researchreward
+				min = @tier1researchmin
+				max = @tier1researchmax
+			}
+		}
+	}
+}

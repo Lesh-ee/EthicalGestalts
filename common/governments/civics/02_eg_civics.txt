@@ -1,0 +1,168 @@
+#civic_example = {
+#	playable = {}								# AND trigger, no scope; use this to prevent the civic from being selectable by the player (UI)
+#	potential = {}								# requirements list, see ../readme_requirements.txt
+#	possible = {}								# requirements list, see ../readme_requirements.txt
+#	pickable_at_start = yes / no				# default: yes
+#	modification = yes / no						# default: yes, set to no to prevent adding or removing this after creation of the empire
+#
+#	random_weight = { base = 5 }				# scriptable weight for randomizing a civic; required, else the civic will not get assigned randomly
+#
+#	modifier = {}								# modifier added to the country if the civic is selected and valid
+#	can_build_ruler_ship = yes / no				# default: no
+#	traits = { trait = ... }					# default: empty; trait set to enforce on the primary species. They cannot be removed, but more can be added if points/picks permit
+#	has_secondary_species = {					# default: none; if present, will enable secondary species customization in empire designer and will create secondary species & pops at galaxy generation time (see empire_init_create_capital_secondary_pops)
+#		traits = { trait = ... }					# default: empty; trait set to enforce on the secondary species. They cannot be removed, but more can be added if points/picks permit
+#	}
+#}
+
+# New
+
+civic_hive_assimilator = {
+	potential = {
+		inline_script = "governments/conditions/is_hive"
+	}
+	possible = {
+		civics = {
+			NOT = {
+				value = civic_hive_devouring_swarm
+			}
+		}
+		ethics = {
+			NOT = {
+				value = ethic_fanatic_xenophobe
+			}
+		}
+		origin = {
+			NOT = {
+				value = origin_necrophage
+			}
+		}
+	}
+	modification = no
+	modifier = {
+		councilor_gestalt_regulatory_exp_gain = @gestalt_civic_node_xp_rate
+		pop_growth_speed = -0.1
+		pop_cat_worker_happiness = -0.4
+		pop_cat_specialist_happiness = -0.4
+		pop_cat_slave_happiness = -0.4
+		secondary_species_starting_pops = 12
+	}
+	random_weight = {
+		base = @civic_default_random_weight
+	}
+	description = civic_tooltip_hive_assimilator_effects
+	has_secondary_species = {	# see game_start.11
+		title = civic_hive_assimilator_secondary_species
+		traits = {
+			trait = trait_hive_mind
+			trait = trait_syncretic_proles
+		}
+	}
+}
+
+civic_hive_guest = {
+	potential = {
+		inline_script = "governments/conditions/is_hive"
+	}
+	possible = {
+		ethics = {
+			OR = {
+				text = civic_tooltip_xenophile
+				value = ethic_xenophile
+				value = ethic_fanatic_xenophile
+			}
+		}
+	}
+	modification = no
+	random_weight = {
+		base = 10
+	}
+	ai_weight = { 
+		base = 15
+	}
+	description = civic_tooltip_hive_guest_effects
+	modifier = {
+		councilor_gestalt_regulatory_exp_gain = @gestalt_civic_node_xp_rate
+	}
+}
+
+civic_hive_unprincipled = {
+	potential = {
+		inline_script = "governments/conditions/is_hive"
+	}
+	# possible = {
+	# 	civics = {
+	# 		NOT = { value = civic_hive_integral_ethics }
+	# 	}
+	# }
+	modifier = {
+		councilor_gestalt_regulatory_exp_gain = @gestalt_civic_node_xp_rate
+		edicts_ethic_shift_cost_mult = -0.4
+	}
+	random_weight = {
+		base = @ai_civic_default_base_weight
+	}
+	ai_weight = { 
+		base = 0
+	}
+	description = civic_tooltip_hive_unprincipled_effects
+}
+
+civic_hive_dimensional_worship = {
+	playable = { has_astral_planes_dlc = yes }
+	ai_playable = { has_astral_planes_dlc = yes }
+	description = "civic_dimensional_worship_effects"
+	potential = {
+		inline_script = "governments/conditions/is_hive"
+	}
+	possible = {
+		ethics = {
+			OR = {
+				text = civic_tooltip_spiritualist
+				value = ethic_spiritualist
+				value = ethic_fanatic_spiritualist
+			}
+		}
+	}
+	modifier = {
+		councilor_gestalt_cognitive_exp_gain = @gestalt_civic_node_xp_rate
+		country_astral_threads_produces_mult = 0.25
+	}
+	custom_tooltip_with_modifiers = "civic_dimensional_worship_effects_additional"
+}
+
+# civic_hive_integral_ethics = {
+# 	potential = {
+# 		inline_script = "governments/conditions/is_hive"
+# 	}
+# 	possible = {
+# 		civics = {s
+# 			NOT = { value = civic_hive_unprincipled }
+# 		}
+# 	}
+# 	modifier = {
+# 		planet_stability_add = 5
+# 		planet_crime_no_happiness_add = -0.05
+# 	}
+# 	random_weight = {
+# 		base = 5
+# 	}
+# 	description = civic_tooltip_hive_integral_ethics_effects
+# }
+
+civic_machine_dynamic_objectives = {
+	potential = {
+		inline_script = "governments/conditions/is_machine"
+	}
+	modifier = {
+		councilor_gestalt_cognitive_exp_gain = @gestalt_civic_node_xp_rate
+		edicts_ethic_shift_cost_mult = -0.2
+	}
+	random_weight = {
+		base = 10
+	}
+	ai_weight = { 
+		base = 0
+	}
+	description = civic_tooltip_machine_dynamic_objectives_effects
+}

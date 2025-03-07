@@ -1,0 +1,89 @@
+special_project = {
+	key = "gestaltization_comp_projet"
+	cost = {
+		base = 15000
+		scaled_modifier = {
+			scope = this
+			add = 50
+			calc = pop_count
+			limit = {
+				is_being_purged = no
+			}
+		}
+	}
+	tech_department = physics_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_main_quest.dds"
+	picture = GFX_evt_unity_symbol
+	
+	event_scope = planet_event
+	
+	requirements = {
+	}
+	
+	on_success = {
+		# use event target so a capital-conquering country is not affected
+		event_target:gestaltization_owner = {
+			# create_integration_faction = { ethic = authoritarian }
+			# create_integration_faction = { ethic = egalitarian }
+			# create_integration_faction = { ethic = xenophobe }
+			# create_integration_faction = { ethic = xenophile }
+			# create_integration_faction = { ethic = militarist }
+			# create_integration_faction = { ethic = pacifist }
+			# create_integration_faction = { ethic = spiritualist }
+			# create_integration_faction = { ethic = materialist }
+			# every_owned_pop = {
+			# 	limit = { member_of_faction = no }
+			# 	force_faction_evaluation = yes
+			# }
+			country_event = { id = gestalt_ethics.71 }
+		}
+	}
+	
+	on_fail = {
+	}
+}
+
+special_project = {
+	key = "gestaltization_soc_projet"
+	cost = {
+		base = 15000
+		scaled_modifier = {
+			scope = this
+			add = 50
+			calc = pop_count
+			limit = {
+				is_being_purged = no
+			}
+		}
+	}
+	tech_department = society_technology
+	icon = "gfx/interface/icons/situation_log/situation_log_main_quest.dds"
+	picture = GFX_evt_unity_symbol
+	
+	event_scope = planet_event
+	
+	requirements = {
+	}
+	
+	on_success = {
+		# use event target so a capital-conquering country is not affected
+		event_target:gestaltization_owner = {
+			# create_integration_faction = { ethic = authoritarian }
+			# create_integration_faction = { ethic = egalitarian }
+			# create_integration_faction = { ethic = xenophobe }
+			# create_integration_faction = { ethic = xenophile }
+			# create_integration_faction = { ethic = militarist }
+			# create_integration_faction = { ethic = pacifist }
+			# create_integration_faction = { ethic = spiritualist }
+			# create_integration_faction = { ethic = materialist }
+			# every_owned_pop = {
+			# 	limit = { member_of_faction = no }
+			# 	force_faction_evaluation = yes
+			# }
+			country_event = { id = gestalt_ethics.72 }
+		}
+	}
+	
+	on_fail = {
+	}
+}

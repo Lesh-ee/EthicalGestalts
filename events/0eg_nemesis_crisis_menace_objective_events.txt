@@ -1,0 +1,45 @@
+############################################
+#											#
+# Nemesis Crisis Menace Objective Events #
+#		 Written by Douglas Furen		 #
+#											#
+############################################
+
+namespace = crisis
+
+# Menace Objective - Purge Pops
+# Fired from on_action 'on_pop_purged'
+planet_event = {
+	id = crisis.4030
+	hide_window = yes
+	is_triggered_only = yes
+
+	# This = Planet scope
+	# From = Country
+	# FromFrom = Pop
+
+	trigger = {
+		from = {
+			has_ascension_perk = ap_become_the_crisis
+		}
+		NOT = {
+			fromfrom = {
+				OR = {
+					has_trait = trait_hive_mind
+					has_trait = trait_machine_unit
+				}
+				has_purge_type = {
+					type = purge_displacement
+					country = from
+				}
+			}
+		}
+	}
+
+	immediate = {
+		from = {
+			complete_crisis_objective = crisobj_purge_pops
+		}
+	}
+}
+

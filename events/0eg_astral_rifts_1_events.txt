@@ -1,0 +1,191 @@
+######################################
+# Astral Rifts Events - 1000 to 1900 #
+######################################
+
+################################
+# Astral Rift - Crystal Events #
+################################
+
+namespace = astral_rift
+
+# Event to create the mirrored country
+country_event = {
+	id = astral_rift.1699
+	hide_window = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_astral_planes_dlc = yes
+		from = {
+			has_astral_rift_flag = mirrored_rift
+		}
+		NOT = { exists = event_target:mirrored_empire }
+	}
+
+	immediate = {
+		create_species = {
+			is_mod = yes
+			name = this
+			plural = this
+			class = this
+			portrait = this
+			traits = this
+			can_be_modified = this
+			homeworld = this
+			namelist = this
+			gender = this
+			effect =  {
+				save_event_target_as = mirrored_species
+			}
+		}
+		create_country = {
+			type = "mirrored_country"
+			species = event_target:mirrored_species
+			set_capital_from_species = yes
+			origin = this
+			authority = this
+			civics = this
+			ignore_initial_colony_error = yes
+			day_zero_contact = no
+			flag = random
+			ethos = this
+			effect = {
+				save_global_event_target_as = mirrored_empire
+			}
+		}
+		event_target:mirrored_empire = {
+			if = {
+				limit = { prev = { is_gestalt = yes } }
+				prev.from = { set_astral_rift_flag = explorer_is_gestalt }
+				shift_ethic = ethic_fanatic_egalitarian
+			}
+			else_if = {
+				limit = { prev = { has_ethic = ethic_fanatic_materialist } }
+				prev.from = { set_astral_rift_flag = explorer_is_materialist }
+				country_remove_ethic = ethic_fanatic_materialist
+				country_add_ethic = ethic_fanatic_spiritualist
+			}
+			else_if = {
+				limit = { prev = { has_ethic = ethic_fanatic_spiritualist } }
+				prev.from = { set_astral_rift_flag = explorer_is_spiritualist }
+				country_remove_ethic = ethic_fanatic_spiritualist
+				country_add_ethic = ethic_fanatic_materialist
+			}
+			else_if = {
+				limit = { prev = { has_ethic = ethic_fanatic_militarist } }
+				prev.from = { set_astral_rift_flag = explorer_is_militarist }
+				country_remove_ethic = ethic_fanatic_militarist
+				country_add_ethic = ethic_fanatic_pacifist
+			}
+			else_if = {
+				limit = { prev = { has_ethic = ethic_fanatic_pacifist } }
+				prev.from = { set_astral_rift_flag = explorer_is_pacifist }
+				country_remove_ethic = ethic_fanatic_pacifist
+				country_add_ethic = ethic_fanatic_militarist
+			}
+			else_if = {
+				limit = { prev = { has_ethic = ethic_fanatic_xenophile } }
+				prev.from = { set_astral_rift_flag = explorer_is_xenophile }
+				country_remove_ethic = ethic_fanatic_xenophile
+				country_add_ethic = ethic_fanatic_xenophobe
+			}
+			else_if = {
+				limit = { prev = { has_ethic = ethic_fanatic_xenophobe } }
+				prev.from = { set_astral_rift_flag = explorer_is_xenophobe }
+				country_remove_ethic = ethic_fanatic_xenophobe
+				country_add_ethic = ethic_fanatic_xenophile
+			}
+			else_if = {
+				limit = { prev = { has_ethic = ethic_fanatic_authoritarian } }
+				prev.from = { set_astral_rift_flag = explorer_is_authoritarian }
+				country_remove_ethic = ethic_fanatic_authoritarian
+				country_add_ethic = ethic_fanatic_egalitarian
+			}
+			else_if = {
+				limit = { prev = { has_ethic = ethic_fanatic_egalitarian } }
+				prev.from = { set_astral_rift_flag = explorer_is_egalitarian }
+				country_remove_ethic = ethic_fanatic_egalitarian
+				country_add_ethic = ethic_fanatic_authoritarian
+			}
+			else = {
+				random_list = {
+					1 = {
+						modifier = {
+							factor = 0
+							prev = { NOT = { has_ethic = ethic_materialist } }
+						}
+						prev.from = { set_astral_rift_flag = explorer_is_materialist }
+						country_remove_ethic = ethic_materialist
+						country_add_ethic = ethic_spiritualist
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							prev = { NOT = { has_ethic = ethic_spiritualist } }
+						}
+						prev.from = { set_astral_rift_flag = explorer_is_spiritualist }
+						country_remove_ethic = ethic_spiritualist
+						country_add_ethic = ethic_materialist
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							prev = { NOT = { has_ethic = ethic_militarist } }
+						}
+						prev.from = { set_astral_rift_flag = explorer_is_militarist }
+						country_remove_ethic = ethic_militarist
+						country_add_ethic = ethic_pacifist
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							prev = { NOT = { has_ethic = ethic_pacifist } }
+						}
+						prev.from = { set_astral_rift_flag = explorer_is_pacifist }
+						country_remove_ethic = ethic_pacifist
+						country_add_ethic = ethic_militarist
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							prev = { NOT = { has_ethic = ethic_xenophile } }
+						}
+						prev.from = { set_astral_rift_flag = explorer_is_xenophile }
+						country_remove_ethic = ethic_xenophile
+						country_add_ethic = ethic_xenophobe
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							prev = { NOT = { has_ethic = ethic_xenophobe } }
+						}
+						prev.from = { set_astral_rift_flag = explorer_is_xenophobe }
+						country_remove_ethic = ethic_xenophobe
+						country_add_ethic = ethic_xenophile
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							prev = { NOT = { has_ethic = ethic_authoritarian } }
+						}
+						prev.from = { set_astral_rift_flag = explorer_is_authoritarian }
+						country_remove_ethic = ethic_authoritarian
+						country_add_ethic = ethic_egalitarian
+					}
+					1 = {
+						modifier = {
+							factor = 0
+							prev = { NOT = { has_ethic = ethic_egalitarian } }
+						}
+						prev.from = { set_astral_rift_flag = explorer_is_egalitarian }
+						country_remove_ethic = ethic_egalitarian
+						country_add_ethic = ethic_authoritarian
+					}
+				}
+			}
+			change_government = random
+			set_name = random
+		}
+	}
+}

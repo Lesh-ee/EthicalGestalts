@@ -1,0 +1,3 @@
+is_hive_assimilator = { has_civic = civic_hive_assimilator }
+
+has_ethical_gestalts = { always = yes }

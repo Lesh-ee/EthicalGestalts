@@ -1,0 +1,2008 @@
+############################
+#
+# Observation Post Events
+#
+# Written by Henrik Thyrwall
+# and Chad Inglis
+#
+# Refactored by Byron Aytoun
+#
+############################
+
+namespace = observation
+
+### Ethics Changes Gatekeeper (HIDDEN)
+situation_event = {
+	id = observation.1300
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		owner = {
+			NOT = {
+				has_country_flag = observation_1300_fired
+			}
+			is_primitive = yes
+			is_machine_empire = no
+			capital_scope = {
+				has_observation_outpost = yes
+				observation_outpost = { has_mission = specimen_collection }
+			}
+		}
+	}
+
+	immediate = {
+		owner = {
+			set_timed_country_flag = {
+				flag =  observation_1300_fired
+				years = 20
+			}
+			save_event_target_as = pre_ftl_country
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+				observation_outpost_owner = {
+					country_event = { id = observation.1301 }
+				}
+			}
+			random_list = {
+				25 = {
+					# Xenophobe
+					set_timed_country_flag = {
+						flag = xenophobe
+						days = 30
+					}
+					modifier = {
+						factor = 0
+						event_target:pre_ftl_country = {
+							is_xenophobe = yes
+						}
+					}
+				}
+				25 = {
+					# Xenophile
+					set_timed_country_flag = {
+						flag = xenophile
+						days = 30
+					}
+					modifier = {
+						factor = 0
+						event_target:pre_ftl_country = {
+							is_xenophile = yes
+						}
+					}
+				}
+				25 = {
+					# Spiritualist
+					set_timed_country_flag = {
+						flag = spiritualist
+						days = 30
+					}
+					modifier = {
+						factor = 0
+						event_target:pre_ftl_country = {
+							OR = {
+								is_spiritualist = yes
+								is_mechanist_empire = yes # undercoat: moved to scripted trigger
+							}
+						}
+					}
+					modifier = {
+						factor = 0
+						capital_scope.observation_outpost_owner = { is_gestalt = yes } # drones won't make crop circles
+					}
+				}
+				25 = {
+					# Materialist
+					set_timed_country_flag = {
+						flag = materialist
+						days = 30
+					}
+					modifier = {
+						factor = 0
+						event_target:pre_ftl_country = {
+							is_materialist = yes
+						}
+					}
+					modifier = {
+						factor = 0
+						capital_scope.observation_outpost_owner = { is_gestalt = yes } # drones won't make crop circles
+					}
+				}
+			}
+		}
+	}
+}
+
+# Pre-FTL shifts Ethics
+country_event = {
+	id = observation.1301
+	title = "observation.1301.name"
+	desc = {
+		text = observation.1301.xenophobe
+		exclusive_trigger = {
+			event_target:pre_ftl_country = {
+				has_country_flag = xenophobe
+			}
+		}
+	}
+	desc = {
+		text = observation.1301.xenophile
+		exclusive_trigger = {
+			event_target:pre_ftl_country = {
+				has_country_flag = xenophile
+			}
+		}
+	}
+	desc = {
+		text = observation.1301.spiritualist
+		exclusive_trigger = {
+			event_target:pre_ftl_country = {
+				has_country_flag = spiritualist
+			}
+		}
+	}
+	desc = {
+		text = observation.1301.materialist
+		exclusive_trigger = {
+			event_target:pre_ftl_country = {
+				has_country_flag = materialist
+			}
+		}
+	}
+	picture = GFX_evt_failed_observation
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	immediate = {
+		save_event_target_as = observation_post_owner
+	}
+
+	option = {
+		name = "INTERESTING"
+		event_target:pre_ftl_country = {
+			add_awareness = 10
+			switch = {
+				trigger = has_country_flag
+				xenophobe = {
+					shift_ethic = "ethic_xenophobe"
+					while = {
+						count = value:fifty_percent_species
+						random_owned_pop = {
+							limit = {
+								NOT = { has_ethic = "ethic_xenophobe" }
+							}
+							pop_change_ethic = "ethic_xenophobe"
+						}
+					}
+				}
+				xenophile = {
+					shift_ethic = "ethic_xenophile"
+					while = {
+						count = value:fifty_percent_species
+						random_owned_pop = {
+							limit = {
+								NOT = { has_ethic = "ethic_xenophile" }
+							}
+							pop_change_ethic = "ethic_xenophile"
+						}
+					}
+				}
+				spiritualist = {
+					shift_ethic = "ethic_spiritualist"
+					while = {
+						count = value:fifty_percent_species
+						random_owned_pop = {
+							limit = {
+								NOT = { has_ethic = "ethic_spiritualist" }
+							}
+							pop_change_ethic = "ethic_spiritualist"
+						}
+					}
+				}
+				materialist = {
+					shift_ethic = "ethic_materialist"
+					while = {
+						count = value:fifty_percent_species
+						random_owned_pop = {
+							limit = {
+								NOT = { has_ethic = "ethic_materialist" }
+							}
+							pop_change_ethic = "ethic_materialist"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	after = {
+		observation_breach_effect = {
+			RESOLUTION = resolution_pre_ftl_stances_non_interference
+		}
+	}
+}
+
+#####################################
+# Technological Enlightenment Events 
+#####################################
+
+# Xenophobe pre-FTLs
+
+country_event = {
+	id = observation.2011
+	title = "observation.2011.name"
+	desc = { # "many [pre_ftl_planet.Owner.GetSpeciesNamePlural] refuse" -> "many hives refuse"
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = yes
+			}
+		}
+		text = observation.2011.desc.hive_pre_ftl
+	}
+	desc = {
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = no
+			}
+		}
+		text = observation.2011.desc
+	}
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+	is_triggered_only = yes
+
+	trigger = {
+		any_observed_pre_ftl_within_border = {
+			is_under_open_technological_enlightenment = root
+			is_xenophobe = yes
+			NOR = {
+				has_country_flag = xenophobe_development
+				is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+			}
+			any_situation = {
+				is_situation_type = pre_ftl_tech_progress_situation
+				situation_progress > 400
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_open_technological_enlightenment = root
+				}
+				is_xenophobe = yes
+				NOR = {
+					has_country_flag = xenophobe_development
+					is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+				}
+			}
+			save_event_target_as = pre_ftl_country
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = xenophobe_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = -384
+			}
+		}
+	}
+
+	option = {
+		name = "UNFORTUNATE"
+		custom_tooltip = observation.2018.tt
+	}
+}
+
+# Quick Learners
+country_event = {
+	id = observation.2014
+	title = "observation.2014.name"
+	desc = { # "they have flocked" -> "diplomatic drones have flocked"
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = yes
+			}
+		}
+		text = observation.2014.desc.hive_pre_ftl
+	}
+	desc = {
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = no
+			}
+		}
+		text = observation.2014.desc
+	}
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_open_technological_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			species = {
+				has_trait = trait_quick_learners
+			}
+			NOT = {
+				has_country_flag = quick_learners_development
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_open_technological_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				species = {
+					has_trait = trait_quick_learners
+				}
+				NOT = {
+					has_country_flag = quick_learners_development
+				}
+			}
+			save_event_target_as = pre_ftl_country
+			set_variable = {
+				which = TechProgressPercentage
+				value = 20
+			}
+
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = quick_learners_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = 384
+			}
+		}
+	}
+
+	option = {
+		name = "EXCELLENT"
+		custom_tooltip = tech_progress_gain_tt
+	}
+
+	after = {
+		hidden_effect = {
+			event_target:pre_ftl_country = {
+				clear_variable = TechProgressPercentage
+			}
+		}
+	}
+}
+
+# Slow Learners
+
+country_event = {
+	id = observation.2016
+	title = "observation.2016.name"
+	desc = {
+		trigger = { # "our scientific advisors report" -> "we have found"
+			is_gestalt = yes
+		}
+		text = observation.2016.desc.gestalt
+	}
+	desc = {
+		trigger = {
+			is_gestalt = no
+		}
+		text = observation.2016.desc
+	}
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+	is_triggered_only = yes
+
+	trigger = {
+		any_observed_pre_ftl_within_border = {
+			NOR = {
+				has_country_flag = slow_learners_development
+				is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+			}
+			OR = {
+				is_under_open_technological_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			species = {
+				has_trait = trait_slow_learners
+			}
+			any_situation = {
+				is_situation_type = pre_ftl_tech_progress_situation
+				situation_progress > 400
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				NOR = {
+					has_country_flag = slow_learners_development
+					is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+				}
+				OR = {
+					is_under_open_technological_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				species = {
+					has_trait = trait_slow_learners
+				}
+				any_situation = {
+					is_situation_type = pre_ftl_tech_progress_situation
+					situation_progress > 400
+				}
+			}
+			save_event_target_as = pre_ftl_country
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = slow_learners_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = -384
+			}
+		}
+	}
+
+	option = {
+		name = "UNFORTUNATE"
+		custom_tooltip = observation.2016.tt
+	}
+}
+
+# Repugnant Learners
+
+country_event = {
+	id = observation.2018
+	title = "observation.2018.name"
+	desc = {
+		trigger = { # "our scientific advisors report" -> "we have found"
+			is_gestalt = yes
+		}
+		text = observation.2018.desc.gestalt
+	}
+	desc = {
+		trigger = {
+			is_gestalt = no
+		}
+		text = observation.2018.desc
+	}
+	picture = GFX_evt_alien_segregation
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_machine_empire = no
+		any_observed_pre_ftl_within_border = {
+			NOR = {
+				has_country_flag = repugnant_learners_development
+				is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+			}
+			OR = {
+				is_under_open_technological_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			species = {
+				has_trait = trait_repugnant
+			}
+			any_situation = {
+				is_situation_type = pre_ftl_tech_progress_situation
+				situation_progress > 400
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				NOR = {
+					has_country_flag = repugnant_learners_development
+					is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+				}
+				OR = {
+					is_under_open_technological_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				species = {
+					has_trait = trait_repugnant
+				}
+			}
+			save_event_target_as = pre_ftl_country
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = repugnant_learners_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = -384
+			}
+		}
+	}
+
+	option = {
+		name = "UNFORTUNATE"
+		custom_tooltip = observation.2018.tt
+	}
+}
+
+# Natural Scientist Learners
+
+country_event = {
+	id = observation.2020
+	title = "observation.2014.name"
+	desc = {
+		trigger = { # "our scientific advisors ... report" -> "our brain drones/calculators estimate"
+			is_gestalt = yes
+		}
+		text = observation.2020.desc.gestalt
+	}
+	desc = {
+		trigger = {
+			is_gestalt = no
+		}
+		text = observation.2020.desc
+	}
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+	is_triggered_only = yes
+
+	trigger = {
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_open_technological_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			species = {
+				OR = {
+					has_trait = trait_natural_engineers
+					has_trait = trait_natural_physicists
+					has_trait = trait_natural_sociologists
+				}
+			}
+			NOT = {
+				has_country_flag = scientists_development
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_open_technological_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				species = {
+					OR = {
+						has_trait = trait_natural_engineers
+						has_trait = trait_natural_physicists
+						has_trait = trait_natural_sociologists
+					}
+				}
+				NOT = {
+					has_country_flag = scientists_development
+				}
+			}
+			save_event_target_as = pre_ftl_country
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = scientists_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = 384
+			}
+		}
+	}
+
+	option = {
+		name = "EXCELLENT"
+		custom_tooltip = observation.2014.tt
+	}
+}
+
+# Intelligent Learners
+
+country_event = {
+	id = observation.2022
+	title = "observation.2014.name"
+	desc = {
+		trigger = { # "Our advisors see" -> "we see"
+			is_gestalt = yes
+		}
+		text = observation.2022.desc.gestalt
+	}
+	desc = {
+		trigger = {
+			is_gestalt = no
+		}
+		text = observation.2022.desc
+	}
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+	is_triggered_only = yes
+
+	trigger = {
+		any_observed_pre_ftl_within_border = {
+			NOR = {
+				has_country_flag = intelligent_learners_development
+				is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+			}
+			OR = {
+				is_under_open_technological_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			species = {
+				has_trait = trait_intelligent
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				NOR = {
+					has_country_flag = intelligent_learners_development
+					is_broken_shackles_pre_ftl_to_scope = { SCOPE = root }
+				}
+				OR = {
+					is_under_open_technological_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				species = {
+					has_trait = trait_intelligent
+				}
+			}
+			save_event_target_as = pre_ftl_country
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = scientists_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = 384
+			}
+		}
+	}
+
+	option = {
+		name = "EXCELLENT"
+		custom_tooltip = observation.2014.tt
+	}
+}
+
+# Ethical Changes Gatekeeper
+
+country_event = {
+	id = observation.2029
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_societal_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_societal_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+			}
+			save_event_target_as = pre_ftl_country
+		}
+		random_list = {
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						has_ethic = ethic_fanatic_xenophobe
+					}
+				}
+				country_event = { id = observation.2030 } # Xenophobe to Xenophile
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						is_xenophobe = yes
+					}
+				}
+				country_event = { id = observation.2031 } # Blossoming Xenophilia
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						is_militarist = yes
+					}
+				}
+				country_event = { id = observation.2032 } # Blossoming Pacifism
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						is_pacifist = yes
+					}
+				}
+				country_event = { id = observation.2033 } # Blossoming Militarism
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						is_egalitarian = yes
+					}
+				}
+				country_event = { id = observation.2034 } # Blossoming Authoritarianism
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						is_authoritarian = yes
+					}
+				}
+				country_event = { id = observation.2035 } # Blossoming Egalitarianism
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						is_spiritualist = yes
+					}
+				}
+				country_event = { id = observation.2036 } # Blossoming Materialists
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						is_materialist = yes
+					}
+				}
+				country_event = { id = observation.2037 } # Blossoming Spiritualist
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						has_ethic = ethic_fanatic_militarist
+					}
+				}
+				country_event = { id = observation.2038 } # Pacifists Enlighten Militarists
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						has_ethic = ethic_fanatic_pacifist
+					}
+				}
+				country_event = { id = observation.2039 } # Militarists Enlightening Pacifists
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						has_ethic = ethic_fanatic_spiritualist
+					}
+				}
+				country_event = { id = observation.2040 } # Materialists Enlightening Spiritualists
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						has_ethic = ethic_fanatic_materialist
+					}
+				}
+				country_event = { id = observation.2041 } # Spiritualists Enlightening Materialists
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						has_ethic = ethic_fanatic_authoritarian
+					}
+				}
+				country_event = { id = observation.2042 } # Egalitarians Enlightening Authoritarians
+			}
+			1 = {
+				modifier = {
+					factor = 0.5
+					event_target:pre_ftl_country = {
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+				country_event = { id = observation.2043 } # Authoritarians Enlightening Egalitarians
+			}
+		}
+	}
+}
+
+# Xenophobes turn Xenophile
+# no change needed
+
+# Blossoming Xenophiles
+# no change needed
+
+# Blossoming Pacifists
+
+country_event = {
+	id = observation.2032
+	title = "observation.2030.name"
+	desc = { # "various cultural groups" -> "various hives"
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = yes
+			}
+		}
+		text = observation.2032.desc.hive_pre_ftl
+	}
+	desc = {
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = no
+			}
+		}
+		text = observation.2032.desc
+	}
+	picture = GFX_evt_happy_reunion
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_pacifist = yes
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_societal_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			is_pacifist = no
+			NOT = {
+				has_country_flag = pacifist_development
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_societal_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				is_pacifist = no
+				NOT = {
+					has_country_flag = pacifist_development
+				}
+			}
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = pacifist_development
+			random_list = {
+				75 = { shift_ethic = "ethic_pacifist" }
+				25 = { shift_ethic = "ethic_fanatic_pacifist" }
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_pacifist" }
+		}
+	}
+	
+	option = {
+		name = "EXCELLENT"
+		custom_tooltip = observation.2032.tt
+	}
+}
+
+# Blossoming Militarists
+# no change needed
+
+# Blossoming Authoritarian
+
+country_event = {
+	id = observation.2034
+	title = "observation.2030.name"
+	desc = { # Added stuff about subsumation of weak hives by strong ones and pride in the obedience of drones
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = yes
+			}
+		}
+		text = observation.2034.desc.hive_pre_ftl
+	}
+	desc = {
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = no
+			}
+		}
+		text = observation.2034.desc
+	}
+	picture = GFX_evt_grand_speech
+	show_sound = event_pre_ftl_civilization
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_authoritarian = yes
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_societal_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			is_authoritarian = no
+			NOT = {
+				has_country_flag = authoritarian_development
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_societal_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				is_authoritarian = no
+				NOT = {
+					has_country_flag = authoritarian_development
+				}
+			}
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = authoritarian_development
+			random_list = {
+				75 = { shift_ethic = "ethic_authoritarian" }
+				25 = { shift_ethic = "ethic_fanatic_authoritarian" }
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_authoritarian" }
+			if = {
+				limit = {
+					OR = {
+						has_authority_democratic = yes # undercoat: moved to scripted trigger
+						has_authority_oligarchic = yes # undercoat: moved to scripted trigger
+					}
+				}
+				change_government = { authority = auth_imperial }
+			}
+		}
+	}
+
+	option = {
+		name = "INTERESTING"
+		custom_tooltip = observation.2034.tt
+	}
+}
+
+# Blossoming Egalitarian
+
+country_event = {
+	id = observation.2035
+	title = "observation.2030.name"
+	desc = { # stuff about increasing personal freedom replaced with stuff about no more forced subsumation
+		trigger = {
+			is_gestalt = yes
+			event_target:pre_ftl_country = {
+				is_gestalt = yes
+			}
+		}
+		text = observation.2035.desc.hive_pre_ftl.gestalt
+	}
+	desc = { # stuff about increasing personal freedom replaced with stuff about no more forced subsumation
+		trigger = {
+			is_gestalt = no
+			event_target:pre_ftl_country = {
+				is_gestalt = yes
+			}
+		}
+		text = observation.2035.desc.hive_pre_ftl
+	}
+	desc = {
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = no
+			}
+		}
+		text = observation.2035.desc
+	}
+	picture = GFX_evt_three_sided_deal
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_egalitarian = yes
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_societal_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			is_egalitarian = no
+			NOT = {
+				has_country_flag = egalitarian_development
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_societal_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				is_egalitarian = no
+				NOT = {
+					has_country_flag = egalitarian_development
+				}
+			}
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = egalitarian_development
+			random_list = {
+				75 = { shift_ethic = "ethic_egalitarian" }
+				25 = { shift_ethic = "ethic_fanatic_egalitarian" }
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_egalitarian" }
+			if = {
+				limit = {
+					OR = {
+						has_authority_dictatorial = yes # undercoat: moved to scripted trigger
+						has_authority_imperial = yes # undercoat: moved to scripted trigger
+					}
+				}
+				change_government = { authority = auth_democratic }
+			}
+		}
+	}
+
+	option = {
+		name = "INTERESTING"
+		custom_tooltip = observation.2035.tt
+	}
+}
+
+# Blossoming Materialists
+
+country_event = {
+	id = observation.2036
+	title = "observation.2030.name"
+	desc = { # "Organized religion" -> "Religion"
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = yes
+			}
+		}
+		text = observation.2036.desc.hive_pre_ftl
+	}
+	desc = {
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = no
+			}
+		}
+		text = observation.2036.desc
+	}
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			is_materialist = yes
+			is_machine_empire = yes # undercoat: moved to scripted trigger
+		}
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_societal_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			is_materialist = no
+			NOT = {
+				has_country_flag = materialist_development
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_societal_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				is_materialist = no
+				NOT = {
+					has_country_flag = materialist_development
+				}
+			}
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = materialist_development
+			random_list = {
+				75 = { shift_ethic = "ethic_materialist" }
+				25 = { shift_ethic = "ethic_fanatic_materialist" }
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_materialist" }
+		}
+	}
+
+	option = {
+		name = "INTERESTING"
+		custom_tooltip = observation.2036.tt
+	}
+}
+
+# Blossoming Spiritualists
+
+country_event = {
+	id = observation.2037
+	title = "observation.2030.name"
+	desc = { # "many [pre_ftl_species.GetNamePlural] are flocking" -> "many [pre_ftl_species.GetAdj] hives are returning"
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = yes
+			}
+		}
+		text = observation.2037.desc.hive_pre_ftl
+	}
+	desc = {
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = no
+			}
+		}
+		text = observation.2037.desc
+	}
+	picture = GFX_evt_shroudwalker_teachers
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_spiritualist = yes
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_societal_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			is_spiritualist = no
+			NOT = {
+				has_country_flag = spiritualist_development
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_societal_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				is_spiritualist = no
+				NOT = {
+					has_country_flag = spiritualist_development
+				}
+			}
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = spiritualist_development
+			random_list = {
+				75 = { shift_ethic = "ethic_spiritualist" }
+				25 = { shift_ethic = "ethic_fanatic_spiritualist" }
+			}
+			every_owned_pop = { pop_change_ethic = "ethic_spiritualist" }
+		}
+	}
+
+	option = {
+		name = "INTERESTING"
+		custom_tooltip = observation.2037.tt
+	}
+}
+
+# Pacifists Enlightening Militarists
+
+country_event = {
+	id = observation.2038
+	title = "observation.2018.name"
+	desc = {
+		trigger = { # "Some of the advisors ... are questioning" -> "Our experiences ... are forcing us to question"
+			is_gestalt = yes
+		}
+		text = observation.2038.desc.gestalt
+	}
+	desc = {
+		trigger = {
+			is_gestalt = no
+		}
+		text = observation.2038.desc
+	}
+	picture = GFX_evt_hostile_infiltration
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_pacifist = yes
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_open_technological_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			is_militarist = yes
+			NOT = {
+				has_country_flag = pac_vs_mil_development
+			}
+			any_situation = {
+				is_situation_type = pre_ftl_tech_progress_situation
+				situation_progress > 400
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_open_technological_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				is_militarist = yes
+				NOT = {
+					has_country_flag = pac_vs_mil_development
+				}
+			}
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = pac_vs_mil_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = -384
+			}
+		}
+	}
+
+	option = {
+		name = "UNFORTUNATE"
+		custom_tooltip = observation.2018.tt
+	}
+}
+
+# Militarists Enlightening Pacifists
+
+country_event = {
+	id = observation.2039
+	title = "observation.2018.name"
+	desc = { # "scientists frequently become horrified" -> "hives frequently become horrified"
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = yes
+			}
+		}
+		text = observation.2039.desc.hive_pre_ftl
+	}
+	desc = {
+		trigger = {
+			event_target:pre_ftl_country = {
+				is_gestalt = no
+			}
+		}
+		text = observation.2039.desc
+	}
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_militarist = yes
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_open_technological_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			is_pacifist = yes
+			NOT = {
+				has_country_flag = mil_vs_pac_development
+			}
+			any_situation = {
+				is_situation_type = pre_ftl_tech_progress_situation
+				situation_progress > 400
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_open_technological_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				is_militarist = yes
+				NOT = {
+					has_country_flag = mil_vs_pac_development
+				}
+			}
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = mil_vs_pac_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = -384
+			}
+		}
+	}
+
+	option = {
+		name = "UNFORTUNATE"
+		custom_tooltip = observation.2018.tt
+	}
+}
+
+# Materialists Enlightening Spiritualists
+# no change needed
+
+# Spiritualists Enlightening Materialists
+# no change needed
+
+# Egalitarians Enlightening Authoritarians
+# cannot fire for gestalt primitives
+
+country_event = {
+	id = observation.2042
+	title = "observation.2018.name"
+	desc = "observation.2042.desc"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_egalitarian = yes
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_open_technological_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			is_authoritarian = yes
+			is_gestalt = no
+			NOT = {
+				has_country_flag = egal_vs_auth_development
+			}
+			any_situation = {
+				is_situation_type = pre_ftl_tech_progress_situation
+				situation_progress > 400
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_open_technological_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				is_authoritarian = yes
+				is_gestalt = no
+				NOT = {
+					has_country_flag = egal_vs_auth_development
+				}
+			}
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = egal_vs_auth_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = -384
+			}
+		}
+	}
+
+	option = {
+		name = "UNFORTUNATE"
+		custom_tooltip = observation.2018.tt
+	}
+}
+
+# Authoritarians Enlightening Egalitarians
+# cannot fire for gestalt primitives
+
+country_event = {
+	id = observation.2043
+	title = "observation.2018.name"
+	desc = "observation.2043.desc"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_conversation
+	location = event_target:pre_ftl_planet
+
+	is_triggered_only = yes
+
+	trigger = {
+		is_authoritarian = yes
+		any_observed_pre_ftl_within_border = {
+			OR = {
+				is_under_open_technological_enlightenment = root
+				has_country_flag = espionage_operation_targeted_by@root
+			}
+			is_egalitarian = yes
+			is_gestalt = no
+			NOT = {
+				has_country_flag = auth_vs_egal_development
+			}
+			any_situation = {
+				is_situation_type = pre_ftl_tech_progress_situation
+				situation_progress > 400
+			}
+		}
+	}
+
+	immediate = {
+		random_observed_pre_ftl_within_border = {
+			limit = {
+				OR = {
+					is_under_open_technological_enlightenment = root
+					has_country_flag = espionage_operation_targeted_by@root
+				}
+				is_egalitarian = yes
+				is_gestalt = no
+				NOT = {
+					has_country_flag = auth_vs_egal_development
+				}
+			}
+			species = {
+				save_event_target_as = pre_ftl_species
+			}
+			capital_scope = {
+				save_event_target_as = pre_ftl_planet
+			}
+			set_country_flag = auth_vs_egal_development
+			random_situation = {
+				limit = {
+					is_situation_type = pre_ftl_tech_progress_situation
+				}
+				add_situation_progress = -384
+			}
+		}
+	}
+
+	option = {
+		name = "UNFORTUNATE"
+		custom_tooltip = observation.2018.tt
+	}
+}
+
+namespace = eg_observation
+
+#### INDOCTRINATION EVENTS ####
+
+# Societal Shift towards Authoritarian
+country_event = {
+	id = eg_observation.3138
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = primitive
+		is_hive_empire = yes
+		NOT = { has_country_flag = indoctrination_cooldown }
+		is_authoritarian = no
+		capital_scope = {
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_authoritarian = yes
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			mult = 2
+			capital_scope.observation_outpost_owner = {
+				has_ethic = ethic_fanatic_authoritarian
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = { flag = indoctrination_cooldown days = 540 }
+		shift_ethic = "ethic_authoritarian"
+		capital_scope = {
+			observation_outpost_owner = { country_event = { id = eg_observation.3139 } }
+		}
+	}
+}
+
+country_event = {
+	id = eg_observation.3139
+	title = "observation.3139.name"
+	desc = "observation.3139.desc.hive_pre_ftl"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_hand_shake
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "observation.3139.a"
+	}
+}
+
+# Societal Shift towards Egalitarian
+country_event = {
+	id = eg_observation.3140
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = primitive
+		is_hive_empire = yes
+		NOT = { has_country_flag = indoctrination_cooldown }
+		is_egalitarian = no
+		capital_scope = {
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_egalitarian = yes
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			mult = 2
+			capital_scope.observation_outpost_owner = {
+				has_ethic = ethic_fanatic_egalitarian
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = { flag = indoctrination_cooldown days = 540 }
+		shift_ethic = "ethic_egalitarian"
+		capital_scope = {
+			observation_outpost_owner = { country_event = { id = eg_observation.3141 } }
+		}
+	}
+}
+
+country_event = {
+	id = eg_observation.3141
+	title = "observation.3139.name"
+	desc = "observation.3141.desc.hive_pre_ftl"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_hand_shake
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "observation.3139.a"
+	}
+}
+
+# Societal Shift towards Xenophobe
+country_event = {
+	id = eg_observation.3142
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = primitive
+		is_hive_empire = yes
+		NOT = { has_country_flag = indoctrination_cooldown }
+		is_xenophobe = no
+		capital_scope = {
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_xenophobe = yes
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			mult = 2
+			capital_scope.observation_outpost_owner = {
+				has_ethic = ethic_fanatic_xenophobe
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = { flag = indoctrination_cooldown days = 540 }
+		shift_ethic = "ethic_xenophobe"
+		capital_scope = {
+			observation_outpost_owner = { country_event = { id = eg_observation.3143 } }
+		}
+	}
+}
+
+country_event = {
+	id = eg_observation.3143
+	title = "observation.3139.name"
+	desc = "observation.3143.desc.hive_pre_ftl"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_hand_shake
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "observation.3139.a"
+	}
+}
+
+# Societal Shift towards Xenophile
+country_event = {
+	id = eg_observation.3144
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = primitive
+		is_hive_empire = yes
+		NOT = { has_country_flag = indoctrination_cooldown }
+		is_xenophile = no
+		capital_scope = {
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_xenophile = yes
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			mult = 2
+			capital_scope.observation_outpost_owner = {
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = { flag = indoctrination_cooldown days = 540 }
+		shift_ethic = "ethic_xenophile"
+		capital_scope = {
+			observation_outpost_owner = { country_event = { id = eg_observation.3145 } }
+		}
+	}
+}
+
+country_event = {
+	id = eg_observation.3145
+	title = "observation.3139.name"
+	desc = "observation.3145.desc.hive_pre_ftl"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_hand_shake
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "observation.3139.a"
+	}
+}
+
+# Societal Shift towards Militarist
+country_event = {
+	id = eg_observation.3146
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = primitive
+		is_hive_empire = yes
+		NOT = { has_country_flag = indoctrination_cooldown }
+		is_militarist = no
+		capital_scope = {
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_militarist = yes
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			mult = 2
+			capital_scope.observation_outpost_owner = {
+				has_ethic = ethic_fanatic_militarist
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = { flag = indoctrination_cooldown days = 540 }
+		shift_ethic = "ethic_militarist"
+		capital_scope = {
+			observation_outpost_owner = { country_event = { id = eg_observation.3147 } }
+		}
+	}
+}
+
+country_event = {
+	id = eg_observation.3147
+	title = "observation.3139.name"
+	desc = "observation.3147.desc.hive_pre_ftl"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_hand_shake
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "observation.3139.a"
+	}
+}
+
+# Societal Shift towards Pacifist
+country_event = {
+	id = eg_observation.3148
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = primitive
+		is_hive_empire = yes
+		NOT = { has_country_flag = indoctrination_cooldown }
+		is_pacifist = no
+		capital_scope = {
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_pacifist = yes
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			mult = 2
+			capital_scope.observation_outpost_owner = {
+				has_ethic = ethic_fanatic_pacifist
+			}
+		}
+	}
+	immediate = {
+		set_timed_country_flag = { flag = indoctrination_cooldown days = 540 }
+		shift_ethic = "ethic_pacifist"
+		capital_scope = {
+			observation_outpost_owner = { country_event = { id = eg_observation.3149 } }
+		}
+	}
+}
+
+country_event = {
+	id = eg_observation.3149
+	title = "observation.3139.name"
+	desc = "observation.3149.desc.hive_pre_ftl"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_hand_shake
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "observation.3139.a"
+	}
+}
+
+# Societal Shift towards Spiritualist
+country_event = {
+	id = eg_observation.3150
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = primitive
+		is_hive_empire = yes
+		NOT = { has_country_flag = indoctrination_cooldown }
+		is_spiritualist = no
+		capital_scope = {
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_spiritualist = yes
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			mult = 2
+			capital_scope.observation_outpost_owner = {
+				has_ethic = ethic_fanatic_spiritualist
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = { flag = indoctrination_cooldown days = 540 }
+		shift_ethic = "ethic_spiritualist"
+		capital_scope = {
+			observation_outpost_owner = { country_event = { id = eg_observation.3151 } }
+		}
+	}
+}
+
+country_event = {
+	id = eg_observation.3151
+	title = "observation.3139.name"
+	desc = "observation.3151.desc"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_hand_shake
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "observation.3139.a"
+	}
+}
+
+# Societal Shift towards Materialist
+country_event = {
+	id = eg_observation.3152
+	hide_window = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_country_type = primitive
+		is_hive_empire = yes
+		NOT = { has_country_flag = indoctrination_cooldown }
+		is_materialist = no
+		capital_scope = {
+			has_observation_outpost = yes
+			observation_outpost_owner = {
+				is_materialist = yes
+			}
+		}
+	}
+
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			mult = 2
+			capital_scope.observation_outpost_owner = {
+				has_ethic = ethic_fanatic_materialist
+			}
+		}
+	}
+
+	immediate = {
+		set_timed_country_flag = { flag = indoctrination_cooldown days = 540 }
+		shift_ethic = "ethic_materialist"
+		capital_scope = {
+			observation_outpost_owner = { country_event = { id = eg_observation.3153 } }
+		}
+	}
+}
+
+country_event = {
+	id = eg_observation.3153
+	title = "observation.3139.name"
+	desc = "observation.3153.desc"
+	picture = GFX_evt_friendly_enlightenment
+	show_sound = event_hand_shake
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "observation.3139.a"
+	}
+}

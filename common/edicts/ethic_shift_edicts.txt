@@ -1,0 +1,347 @@
+##########################################################################
+# Empire edicts
+##########################################################################
+
+@EthicShiftCooldown = 3600
+@EthicShiftCooldownUnprincipled = 180
+@EthicShiftCost = 8000
+shift_to_authoritarian = {
+	length = @EthicShiftCooldown
+	icon = "GFX_ethic_fanatic_authoritarian"
+	resources = {
+		category = edicts_ethic_shift
+		cost = {
+			unity = @EthicShiftCost
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	potential = {
+		OR = {
+			is_hive_empire = yes
+			has_valid_civic = civic_machine_dynamic_objectives
+		}
+	}
+
+	allow = {
+		allow_gestalt_ethic_shift = { ethic = authoritarian }
+	}
+
+	effect = {
+		shift_ethic = ethic_authoritarian
+	}
+	
+	ai_weight = {
+		base = 1
+		mult = value:ai_ethic_shift_weight|ethic|authoritarian|
+		modifier = {
+			factor = 0
+			has_valid_civic = civic_hive_natural_neural_network
+			has_ethic = ethic_authoritarian
+		}
+		modifier = {
+			factor = 0
+			has_valid_civic = civic_hive_divided_attention
+		}
+		modifier = {
+			factor = 0
+			has_valid_civic = civic_hive_pooled_knowledge
+			has_ethic = ethic_authoritarian
+		}
+		modifier = {
+			factor = 0
+			has_valid_civic = civic_machine_delegated_functions
+		}
+	}
+}
+
+shift_to_egalitarian = {
+	length = @EthicShiftCooldown
+	icon = "GFX_ethic_fanatic_egalitarian"
+	resources = {
+		category = edicts_ethic_shift
+		cost = {
+			unity = @EthicShiftCost
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	potential = {
+		OR = {
+			is_hive_empire = yes
+			has_valid_civic = civic_machine_dynamic_objectives
+		}
+	}
+
+	allow = {
+		allow_gestalt_ethic_shift = { ethic = egalitarian }
+	}
+
+	effect = {
+		shift_ethic = ethic_egalitarian
+	}
+	
+	ai_weight = {
+		base = 1
+		mult = value:ai_ethic_shift_weight|ethic|egalitarian|
+		modifier = {
+			factor = 0
+			has_valid_civic = civic_hive_one_mind
+		}
+		modifier = {
+			factor = 0
+			has_valid_civic = civic_hive_subsumed_will
+			has_ethic = ethic_egalitarian
+		}
+	}
+}
+
+shift_to_xenophobe = {
+	length = @EthicShiftCooldown
+	icon = "GFX_ethic_fanatic_xenophobe"
+	resources = {
+		category = edicts_ethic_shift
+		cost = {
+			unity = @EthicShiftCost
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	potential = {
+		OR = {
+			is_hive_empire = yes
+			has_valid_civic = civic_machine_dynamic_objectives
+		}
+	}
+
+	allow = {
+		allow_gestalt_ethic_shift = { ethic = xenophobe }
+		if = {
+			limit = { has_valid_civic = civic_machine_assimilator }
+			NOT = { has_valid_civic = civic_machine_assimilator }
+		}
+		if = {
+			limit = { has_valid_civic = civic_hive_assimilator }
+			NOT = { has_valid_civic = civic_hive_assimilator }
+		}
+		if = {
+			limit = {
+				AND = {
+					has_valid_civic = civic_machine_assimilator
+					has_ethic = ethic_xenophobe
+				}
+			}
+			NOT = { has_valid_civic = civic_machine_assimilator }
+		}
+	}
+
+	effect = {
+		shift_ethic = ethic_xenophobe
+	}
+	
+	ai_weight = {
+		base = 1
+		mult = value:ai_ethic_shift_weight|ethic|xenophobe|
+		modifier = {
+			factor = 0
+			has_valid_civic = civic_hive_guest
+		}
+	}
+}
+
+shift_to_xenophile = {
+	length = @EthicShiftCooldown
+	icon = "GFX_ethic_fanatic_xenophile"
+	resources = {
+		category = edicts_ethic_shift
+		cost = {
+			unity = @EthicShiftCost
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	potential = {
+		OR = {
+			is_hive_empire = yes
+			has_valid_civic = civic_machine_dynamic_objectives
+		}
+	}
+
+	allow = {
+		allow_gestalt_ethic_shift = { ethic = xenophile }
+		if = {
+			limit = { has_valid_civic = civic_hive_devouring_swarm }
+			NOT = { has_valid_civic = civic_hive_devouring_swarm }
+		}
+		if = {
+			limit = { has_valid_civic = civic_machine_terminator }
+			NOT = { has_valid_civic = civic_machine_terminator }
+		}
+	}
+
+	effect = {
+		shift_ethic = ethic_xenophile
+	}
+	
+	ai_weight = {
+		base = 1
+		mult = value:ai_ethic_shift_weight|ethic|xenophile|
+	}
+}
+
+shift_to_militarist = {
+	length = @EthicShiftCooldown
+	icon = "GFX_ethic_fanatic_militarist"
+	resources = {
+		category = edicts_ethic_shift
+		cost = {
+			unity = @EthicShiftCost
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	potential = {
+		OR = {
+			is_hive_empire = yes
+			has_valid_civic = civic_machine_dynamic_objectives
+		}
+	}
+
+	allow = {
+		allow_gestalt_ethic_shift = { ethic = militarist }
+	}
+
+	effect = {
+		shift_ethic = ethic_militarist
+	}
+	
+	ai_weight = {
+		base = 1
+		mult = value:ai_ethic_shift_weight|ethic|militarist|
+	}
+}
+
+shift_to_pacifist = {
+	length = @EthicShiftCooldown
+	icon = "GFX_ethic_fanatic_pacifist"
+	resources = {
+		category = edicts_ethic_shift
+		cost = {
+			unity = @EthicShiftCost
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	potential = {
+		OR = {
+			is_hive_empire = yes
+			has_valid_civic = civic_machine_dynamic_objectives
+		}
+	}
+
+	allow = {
+		allow_gestalt_ethic_shift = { ethic = pacifist }
+		if = {
+			limit = { has_valid_civic = civic_hive_devouring_swarm }
+			NOT = { has_valid_civic = civic_hive_devouring_swarm }
+		}
+		if = {
+			limit = { has_valid_civic = civic_machine_terminator }
+			NOT = { has_valid_civic = civic_machine_terminator }
+		}
+		if = {
+			limit = {
+				AND = {
+					has_valid_civic = civic_machine_assimilator
+					has_ethic = ethic_pacifist
+				}
+			}
+			NOT = { has_valid_civic = civic_machine_assimilator }
+		}
+	}
+
+	effect = {
+		shift_ethic = ethic_pacifist
+	}
+
+	ai_weight = {
+		base = 1
+		mult = value:ai_ethic_shift_weight|ethic|pacifist|
+	}
+}
+
+shift_to_spiritualist = {
+	length = @EthicShiftCooldown
+	icon = "GFX_ethic_fanatic_spiritualist"
+	resources = {
+		category = edicts_ethic_shift
+		cost = {
+			unity = @EthicShiftCost
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	potential = {
+		OR = {
+			is_hive_empire = yes
+			has_valid_civic = civic_machine_dynamic_objectives
+		}
+	}
+
+	allow = {
+		allow_gestalt_ethic_shift = { ethic = spiritualist }
+		if = {
+			limit = { is_machine_empire = yes }
+			is_machine_empire = no
+		}
+	}
+
+	effect = {
+		shift_ethic = ethic_spiritualist
+	}
+	
+	ai_weight = {
+		base = 1
+		mult = value:ai_ethic_shift_weight|ethic|spiritualist|
+	}
+}
+
+shift_to_materialist = {
+	length = @EthicShiftCooldown
+	icon = "GFX_ethic_fanatic_materialist"
+	resources = {
+		category = edicts_ethic_shift
+		cost = {
+			unity = @EthicShiftCost
+			multiplier = value:edict_size_effect
+		}
+	}
+
+	potential = {
+		OR = {
+			is_hive_empire = yes
+			has_valid_civic = civic_machine_dynamic_objectives
+		}
+	}
+
+	allow = {
+		allow_gestalt_ethic_shift = { ethic = materialist }
+	}
+
+	effect = {
+		shift_ethic = ethic_materialist
+	}
+	
+	ai_weight = {
+		base = 1
+		mult = value:ai_ethic_shift_weight|ethic|materialist|
+		modifier = {
+			factor = 0
+			has_valid_civic = civic_hive_ascensionists
+		}
+		modifier = {
+			factor = 0
+			has_valid_civic = civic_machine_ascensionists
+		}
+	}
+}

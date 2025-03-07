@@ -1,0 +1,673 @@
+##################
+# Spiritualist hives
+##################
+
+building_hive_shrine = {
+	base_buildtime = @b1_time
+	icon = building_temple
+
+	exempt_from_ai_planet_specialization = no
+
+	category = unity
+
+	potential = {
+		exists = owner
+		owner = {
+			is_hive_empire = yes
+			is_spiritualist = yes
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				OR = {
+					is_hive_empire = no
+					is_spiritualist = no
+				}
+			}
+			has_modifier = slave_colony
+		}
+	}
+
+	convert_to = {
+		building_temple
+		building_bureaucratic_1
+		building_hive_node
+		building_uplink_node
+		building_machine_shrine
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b1_minerals
+		}
+		upkeep = {
+			energy = @b1_upkeep
+		}
+		upkeep = {
+			trigger = {
+				exists = owner
+				owner = {
+					has_edict = synaptic_reinforcement
+				}
+			}
+			energy = 2
+		}
+	}
+
+	planet_modifier = {
+		pop_ethic_spiritualist_attraction_mult = 0.05
+	}
+
+	inline_script = {
+		script = jobs/priests_add
+		AMOUNT = @b1_jobs
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_active_tradition = tr_domination_synaptic_extensions
+			}
+		}
+		modifier = {
+			planet_housing_add = 2
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_edict = synaptic_reinforcement
+			}
+		}
+		job_maintenance_drone_add = 1
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				has_edict = synaptic_reinforcement
+			}
+		}
+		text = job_maintenance_drone_effect_desc
+	}
+
+	upgrades = {
+		building_hive_shrine_2
+	}
+
+	prerequisites = {
+		"tech_cultural_heritage"
+	}
+
+	show_tech_unlock_if = {
+		is_hive_empire = yes
+		is_spiritualist = yes
+	}
+}
+
+building_hive_shrine_2 = {
+	base_buildtime = @b2_time
+	can_build = no
+	icon = building_holotemple
+
+	category = unity
+
+	potential = {
+		exists = owner
+		owner = {
+			is_hive_empire = yes
+			is_spiritualist = yes
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				OR = {
+					is_hive_empire = no
+					is_spiritualist = no
+				}
+			}
+			has_modifier = slave_colony
+		}
+	}
+
+	convert_to = {
+		building_holotemple
+		building_bureaucratic_2
+		building_hive_cluster
+		building_network_junction
+		building_machine_shrine_2
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			rare_crystals = @b2_rare_cost
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			rare_crystals = @b2_rare_upkeep
+		}
+		upkeep = {
+			trigger = {
+				exists = owner
+				owner = {
+					has_edict = synaptic_reinforcement
+				}
+			}
+			energy = 2
+		}
+	}
+
+	planet_modifier = {
+		pop_ethic_spiritualist_attraction_mult = 0.10
+	}
+
+	inline_script = {
+		script = jobs/priests_add
+		AMOUNT = @b2_jobs
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_active_tradition = tr_domination_synaptic_extensions
+			}
+		}
+		modifier = {
+			planet_housing_add = 2
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_edict = synaptic_reinforcement
+			}
+		}
+		job_maintenance_drone_add = 1
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				has_edict = synaptic_reinforcement
+			}
+		}
+		text = job_maintenance_drone_effect_desc
+	}
+
+	upgrades = {
+		building_hive_shrine_3
+	}
+
+	prerequisites = {
+		"tech_holographic_rituals"
+	}
+
+	show_tech_unlock_if = {
+		is_hive_empire = yes
+		is_spiritualist = yes
+	}
+}
+
+building_hive_shrine_3 = {
+	base_buildtime = @b3_time
+	can_build = no
+	icon = building_sacred_nexus
+
+	category = unity
+
+	potential = {
+		exists = owner
+		owner = {
+			is_hive_empire = yes
+			is_spiritualist = yes
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	allow = {
+		has_major_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				OR = {
+					is_hive_empire = no
+					is_spiritualist = no
+				}
+			}
+			has_modifier = slave_colony
+		}
+	}
+
+	convert_to = {
+		building_sacred_nexus
+		building_bureaucratic_3
+		building_hive_confluence
+		building_system_conflux
+		building_machine_shrine_3
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b3_minerals
+			rare_crystals = @b3_rare_cost
+		}
+		upkeep = {
+			energy = @b3_upkeep
+			rare_crystals = @b3_rare_upkeep
+		}
+		upkeep = {
+			trigger = {
+				exists = owner
+				owner = {
+					has_edict = synaptic_reinforcement
+				}
+			}
+			energy = 2
+		}
+	}
+
+	planet_modifier = {
+		pop_ethic_spiritualist_attraction_mult = 0.15
+	}
+
+	# Add Priest & High Priest Jobs
+	inline_script = {
+		script = jobs/priests_add
+		AMOUNT = @b3_jobs
+	}
+
+	inline_script = buildings/job_high_priest_variants_add_saintly_hierarchy
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_active_tradition = tr_domination_synaptic_extensions
+			}
+		}
+		modifier = {
+			planet_housing_add = 2
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			exists = owner
+			owner = {
+				has_edict = synaptic_reinforcement
+			}
+		}
+		job_maintenance_drone_add = 1
+	}
+
+	triggered_desc = {
+		trigger = {
+			exists = owner
+			owner = {
+				has_edict = synaptic_reinforcement
+			}
+		}
+		text = job_maintenance_drone_effect_desc
+	}
+
+	prerequisites = {
+		"tech_consecration_fields"
+	}
+
+	show_tech_unlock_if = {
+		is_hive_empire = yes
+		is_spiritualist = yes
+	}
+}
+
+##################
+# Spiritualist machines
+##################
+
+building_machine_shrine = {
+	base_buildtime = @b1_time
+	icon = building_temple
+
+	exempt_from_ai_planet_specialization = no
+
+	category = unity
+
+	potential = {
+		exists = owner
+		owner = {
+			is_machine_empire = yes
+			is_spiritualist = yes
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				OR = {
+					is_machine_empire = no
+					is_spiritualist = no
+				}
+			}
+			has_modifier = slave_colony
+		}
+	}
+
+	convert_to = {
+		building_temple
+		building_bureaucratic_1
+		building_hive_node
+		building_uplink_node
+		building_hive_shrine
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b1_minerals
+		}
+		upkeep = {
+			energy = @b1_upkeep
+		}
+	}
+
+	planet_modifier = {
+		pop_ethic_spiritualist_attraction_mult = 0.05
+	}
+
+	inline_script = {
+		script = jobs/priests_add
+		AMOUNT = @b1_jobs
+	}
+
+	upgrades = {
+		building_machine_shrine_2
+	}
+
+	prerequisites = {
+		"tech_cultural_heritage"
+	}
+
+	show_tech_unlock_if = {
+		is_machine_empire = yes
+		is_spiritualist = yes
+	}
+}
+
+building_machine_shrine_2 = {
+	base_buildtime = @b2_time
+	can_build = no
+	icon = building_holotemple
+
+	category = unity
+
+	potential = {
+		exists = owner
+		owner = {
+			is_machine_empire = yes
+			is_spiritualist = yes
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	allow = {
+		has_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				OR = {
+					is_machine_empire = no
+					is_spiritualist = no
+				}
+			}
+			has_modifier = slave_colony
+		}
+	}
+
+	convert_to = {
+		building_holotemple
+		building_bureaucratic_2
+		building_hive_cluster
+		building_network_junction
+		building_hive_shrine_2
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b2_minerals
+			rare_crystals = @b2_rare_cost
+		}
+		upkeep = {
+			energy = @b2_upkeep
+			rare_crystals = @b2_rare_upkeep
+		}
+	}
+
+	planet_modifier = {
+		pop_ethic_spiritualist_attraction_mult = 0.10
+	}
+
+	inline_script = {
+		script = jobs/priests_add
+		AMOUNT = @b2_jobs
+	}
+
+	upgrades = {
+		building_sacred_nexus
+	}
+
+	prerequisites = {
+		"tech_holographic_rituals"
+	}
+
+	show_tech_unlock_if = {
+		is_machine_empire = yes
+		is_spiritualist = yes
+	}
+}
+
+building_machine_shrine_3 = {
+	base_buildtime = @b3_time
+	can_build = no
+	icon = building_sacred_nexus
+
+	category = unity
+
+	potential = {
+		exists = owner
+		owner = {
+			is_machine_empire = yes
+			is_spiritualist = yes
+		}
+		NOT = { has_modifier = slave_colony }
+	}
+
+	allow = {
+		has_major_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				OR = {
+					is_machine_empire = no
+					is_spiritualist = no
+				}
+			}
+			has_modifier = slave_colony
+		}
+	}
+
+	convert_to = {
+		building_sacred_nexus
+		building_bureaucratic_3
+		building_hive_confluence
+		building_system_conflux
+		building_hive_shrine_3
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			minerals = @b3_minerals
+			rare_crystals = @b3_rare_cost
+		}
+		upkeep = {
+			energy = @b3_upkeep
+			rare_crystals = @b3_rare_upkeep
+		}
+	}
+
+	planet_modifier = {
+		pop_ethic_spiritualist_attraction_mult = 0.15
+	}
+
+	# Add Priest & High Priest Jobs
+	inline_script = {
+		script = jobs/priests_add
+		AMOUNT = @b3_jobs
+	}
+
+	inline_script = buildings/job_high_priest_variants_add_saintly_hierarchy
+
+	prerequisites = {
+		"tech_consecration_fields"
+	}
+
+	show_tech_unlock_if = {
+		is_machine_empire = yes
+		is_spiritualist = yes
+	}
+}
+
+##################
+# Spiritualist machines
+##################
+
+building_faith_processor = {
+	base_buildtime = @b2_time
+	empire_limit = {
+		base = 1
+	}
+
+	category = unity
+
+	potential = {
+		exists = owner
+		owner = {
+			is_machine_empire = yes
+			is_spiritualist = yes
+		}
+		NOR = { 
+			has_modifier = slave_colony 
+			has_modifier = penal_colony 
+		}
+	}
+
+	allow = {
+		has_major_upgraded_capital = yes
+	}
+
+	destroy_trigger = {
+		exists = owner
+		OR = {
+			owner = {
+				OR = {
+					is_spiritualist = no
+					is_machine_empire = no
+				}
+			}
+			has_modifier = slave_colony
+		}
+	}
+
+	convert_to = {
+		building_autocurating_vault
+		building_alpha_hub
+		building_corporate_vault
+	}
+
+	resources = {
+		category = planet_buildings
+		cost = {
+			trigger = {
+				has_ringworld_output_boost = no
+			}
+			minerals = @b2_minerals
+			rare_crystals = @b2_rare_cost
+		}
+		cost = {
+			trigger = {
+				has_ringworld_output_boost = yes
+			}
+			minerals = 1200
+			rare_crystals = 375
+		}
+		upkeep = {
+			trigger = {
+				has_ringworld_output_boost = no
+			}
+			energy = @b2_upkeep
+			rare_crystals = @b2_rare_upkeep
+		}
+		upkeep = {
+			trigger = {
+				has_ringworld_output_boost = yes
+			}
+			energy = 8
+			rare_crystals = 3
+		}
+	}
+
+	# Add bonus High Priest OR Tech Hierophant Jobs
+	inline_script = {
+		script = jobs/priests_add
+		AMOUNT = 2
+	}
+
+	country_modifier = {
+		country_official_cap_add = 1
+		country_unity_produces_mult = 0.05
+	}
+
+	planet_modifier = {
+		planet_administrators_produces_mult = 0.15
+	}
+
+	prerequisites = {
+		"tech_transcendent_faith"
+	}
+}

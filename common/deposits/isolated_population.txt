@@ -1,0 +1,38 @@
+## Possible Deposit Variables ##
+# resources, resource and amount
+# potential trigger (planet scope)
+# planet_modifier - applied to planet only when deposit blocker has been cleared
+# constant_modifier - applied to planet always
+# station = station class in orbit to gather
+
+@blocker_high = 10
+@blocker_low = 5
+
+d_isolated_population = {
+	icon = d_tribal_settlement
+	time = 120
+
+	is_for_colonizable = yes
+	category = deposit_cat_blockers
+
+	potential = { always = no }
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+	}
+
+	on_cleared = {
+		create_pop = {
+			species = owner
+		}
+	}
+
+	inline_script = deposits/ai_weight_pop_creating_blocker
+
+	resources = {
+		category = deposit_blockers
+		cost = {
+			energy = 300
+		}
+	}
+}

@@ -1,0 +1,1 @@
+# namespace = eg_gestalt_variant_events

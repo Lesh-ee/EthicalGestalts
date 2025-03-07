@@ -1,0 +1,8 @@
+modifier = {
+	leader_has_ethic = { ethic = $IS$ }
+	factor = @ethic_weight_mult
+}
+modifier = {
+	leader_has_ethic = { ethic = $NOT$ }
+	factor = @ethic_weight_opp_mult
+}

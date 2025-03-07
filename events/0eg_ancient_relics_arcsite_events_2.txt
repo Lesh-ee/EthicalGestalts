@@ -1,0 +1,446 @@
+################################
+#
+# Ancient Relics Events
+#
+# Written by Henrik Thyrwall, Douglas Furen,
+# Stephen Muray, Joachim Holmsen,
+# Pierre du Plessis, Victor Haeggman
+# and Hadrien Buytaers
+#
+################################
+
+namespace = ancrel
+
+# Find peaceful applications
+country_event = {
+	id = ancrel.10020
+	title = "ancrel.10020.name"
+	desc = "ancrel.10020.desc"
+	picture = GFX_evt_society_research
+
+	is_triggered_only = yes
+
+	option = {
+		name = "artifact_find_peaceful_application_happy_bios"
+		custom_tooltip = "artifact_find_peaceful_application_happy_bios_desc"
+		trigger = {
+			OR = {
+				is_gestalt = no
+				is_servitor_empire = yes # undercoat: moved to scripted trigger
+                any_owned_species = {
+					is_sapient = yes
+					NOR = {
+						has_trait = trait_hive_mind
+						has_trait = trait_machine_unit
+						has_trait = trait_mechanical
+						AND = {
+							has_trait = trait_cybernetic
+							prev = { has_valid_civic = civic_machine_servitor }
+						}
+						has_citizenship_type = { type = citizenship_purge country = prev }
+						has_citizenship_type = { type = citizenship_purge_machine country = prev }
+						has_citizenship_type = { type = citizenship_slavery country = prev }
+						has_citizenship_type = { type = citizenship_assimilation country = prev }
+					}
+				}
+			}
+		}
+		add_modifier = {
+			modifier = "artifact_find_peaceful_application_happy_bios"
+			days = 1800
+		}
+		ai_chance = {
+			modifier = {
+				factor = 0
+				is_gestalt = yes
+				NOT = { has_valid_civic = civic_machine_servitor }
+			}
+		}
+	}
+	option = {
+		name = "artifact_find_peaceful_application_consumer_goods"
+		custom_tooltip = "artifact_find_peaceful_application_consumer_goods_desc"
+		trigger = {
+			OR = {
+				is_gestalt = no
+				is_servitor_empire = yes # undercoat: moved to scripted trigger
+				AND = {
+					can_govern_singleminds = yes
+					any_owned_species = {
+						is_sapient = yes
+						NOR = {
+							has_trait = trait_hive_mind
+							has_trait = trait_machine_unit
+							has_trait = trait_mechanical
+							AND = {
+								has_trait = trait_cybernetic
+								prev = { has_valid_civic = civic_machine_servitor }
+							}
+							has_citizenship_type = { type = citizenship_purge country = prev }
+							has_citizenship_type = { type = citizenship_purge_machine country = prev }
+							has_citizenship_type = { type = citizenship_slavery country = prev }
+							has_citizenship_type = { type = citizenship_assimilation country = prev }
+						}
+					}
+				}
+			}
+		}
+		add_modifier = {
+			modifier = "artifact_find_peaceful_application_consumer_goods"
+			days = 1800
+		}
+		ai_chance = {
+			modifier = {
+				factor = 0
+				is_gestalt = yes
+				NOT = { has_valid_civic = civic_machine_servitor }
+			}
+		}
+	}
+	option = {
+		name = "artifact_find_peaceful_application_amenities"
+		custom_tooltip = "artifact_find_peaceful_application_amenities_desc"
+		trigger = {	is_regular_empire = yes }
+		add_modifier = {
+			modifier = "artifact_find_peaceful_application_amenities"
+			days = 1800
+		}
+	}
+	option = {
+		name = "artifact_find_peaceful_application_amenities_hivemind"
+		custom_tooltip = "artifact_find_peaceful_application_amenities_hivemind_desc"
+		trigger = {	is_hive_empire = yes }
+		add_modifier = {
+			modifier = "artifact_find_peaceful_application_amenities_hivemind"
+			days = 1800
+		}
+	}
+	option = {
+		name = "artifact_find_peaceful_application_amenities_machine"
+		custom_tooltip = "artifact_find_peaceful_application_amenities_machine_desc"
+		trigger = {	is_machine_empire = yes }
+		add_modifier = {
+			modifier = "artifact_find_peaceful_application_amenities_machine"
+			days = 1800
+		}
+	}
+	option = {
+		name = "artifact_find_peaceful_application_leader_improvement"
+		custom_tooltip = "artifact_find_peaceful_application_leader_improvement_desc"
+		trigger = {	is_regular_empire = yes }
+		add_modifier = {
+			modifier = "artifact_find_peaceful_application_leader_improvement"
+			days = 1800
+		}
+	}
+	option = {
+		name = "artifact_find_peaceful_application_leader_improvement_hivemind"
+		custom_tooltip = "artifact_find_peaceful_application_leader_improvement_hivemind_desc"
+		trigger = {	is_hive_empire = yes }
+		add_modifier = {
+			modifier = "artifact_find_peaceful_application_leader_improvement_hivemind"
+			days = 1800
+		}
+	}
+	option = {
+		name = "artifact_find_peaceful_application_leader_improvement_machine"
+		custom_tooltip = "artifact_find_peaceful_application_leader_improvement_machine_desc"
+		trigger = {	is_machine_empire = yes }
+		add_modifier = {
+			modifier = "artifact_find_peaceful_application_leader_improvement_machine"
+			days = 1800
+		}
+	}
+	option = {
+		name = "marauder.30.e"
+
+		hidden_effect = {
+			add_resource = { minor_artifacts = 50 }
+			remove_modifier = "artifact_find_applications_cooldown"
+		}
+	}
+}
+
+
+
+fleet_event = {
+	id = ancrel.12090
+	title = ancrel.12090.name
+	desc = ancrel.12090.desc
+	picture = GFX_evt_ai_planet
+	show_sound = event_mystic_reveal
+	location = from
+
+	archaeology = yes
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_site_progress_locked = yes }
+	}
+
+	after = {
+		from = { set_site_progress_locked = no }
+		large_artifact_reward = yes
+	}
+
+	option = {
+		name = ancrel.12090.A
+		trigger = {
+			owner = { is_machine_empire = yes }
+		}
+		from.planet = {
+			change_pc = pc_machine
+			hidden_effect = {
+				set_owner = root.owner
+				create_species = {
+					class = MACHINE
+					name = NAME_Surveillance_Bots
+					portrait = random
+					traits = {
+						trait = trait_machine_unit
+						trait = trait_robot_logic_engines
+						trait = trait_robot_double_jointed
+						trait = trait_robot_enhanced_memory
+						trait = trait_robot_durable
+						trait = trait_robot_custom_made
+						trait = trait_robot_repurposed_hardware
+					}
+					effect = {
+						save_event_target_as = new_robots
+					}
+				}
+				add_building = building_machine_major_capital
+				add_building = building_machine_assembly_complex
+				while = {
+					count = 10
+					add_district = district_nexus
+				}
+				while = {
+					count = 5
+					add_district = district_industrial
+					add_district = district_generator_uncapped
+					add_district = district_mining_uncapped
+				}
+				while = {
+					count = 80
+					create_pop = {
+						species = event_target:new_robots
+					}
+				}
+			}
+		}
+
+		hidden_effect = {
+			owner = {
+				random = {
+					chance = 50
+					country_event = { id = ancrel.12095 days = 30 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ancrel.12090.B
+		solar_system = {
+			spawn_megastructure = {
+				type = spy_orb_restored
+				planet = from.planet
+				graphical_culture = root.owner
+			}
+		}
+	}
+	option = {
+		name = ancrel.12090.C
+		allow = {
+			owner = { has_policy_flag = robots_allowed }
+		}
+		custom_tooltip = ancrel.12090.C.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					owner = {
+						is_machine_empire = yes
+					}
+				}
+				create_species = {
+					class = MACHINE
+					name = NAME_Surveillance_Bots
+					portrait = random
+					traits = {
+						trait = trait_machine_unit
+						trait = trait_robot_logic_engines
+						trait = trait_robot_double_jointed
+						trait = trait_robot_enhanced_memory
+						trait = trait_robot_durable
+						trait = trait_robot_custom_made
+						trait = trait_robot_repurposed_hardware
+					}
+					effect = {
+						save_event_target_as = new_robots
+					}
+				}
+			}
+			else = {
+				create_species = {
+					class = ROBOT
+					name = NAME_Surveillance_Bots
+					portrait = random
+					traits = {
+						trait = trait_mechanical
+						trait = trait_robot_logic_engines
+						trait = trait_robot_double_jointed
+						trait = trait_robot_enhanced_memory
+						trait = trait_robot_durable
+						trait = trait_robot_custom_made
+						trait = trait_robot_repurposed_hardware
+					}
+					effect = {
+						save_event_target_as = new_robots
+					}
+				}
+			}
+			owner = {
+				while = {
+					count = 80
+					random_owned_planet = {
+						create_pop = {
+							species = event_target:new_robots
+						}
+						weights = {
+							base = 10
+							modifier = {
+								factor = 0.5
+								free_housing <= 0
+								num_free_districts = {
+									type = any
+									value <= 1
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		hidden_effect = {
+			owner = {
+				random = {
+					chance = 50
+					country_event = { id = ancrel.12095 days = 30 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ancrel.12090.D
+		trigger = {
+			owner = { has_policy_flag = ai_outlawed }
+		}
+		from.planet = {
+			add_deposit = d_alloys_25
+		}
+		hidden_effect = {
+			owner = {
+				random = {
+					chance = 50
+					country_event = { id = ancrel.12095 days = 30 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ancrel.12090.E
+		custom_tooltip = ancrel.12090.E.tooltip
+		allow = {
+			owner = {
+				NOT = { has_policy_flag = ai_outlawed }
+			}
+		}
+		hidden_effect = {
+			from.planet = {
+				create_species = {
+					class = MACHINE
+					name = NAME_Surveillance_Bots
+					portrait = random
+					traits = {
+						trait = trait_robot_logic_engines
+						trait = trait_robot_double_jointed
+						trait = trait_robot_enhanced_memory
+						trait = trait_robot_durable
+						trait = trait_robot_custom_made
+						trait = trait_robot_repurposed_hardware
+					}
+					effect = {
+						save_event_target_as = new_robots
+					}
+				}
+				create_country = {
+					type = default
+					name = "NAME_Repurposed_Surveillance_Network"
+					species = event_target:new_robots
+					ethos = {
+						ethic = ethic_fanatic_materialist
+						ethic = ethic_pacifist
+					}
+					authority = auth_machine_intelligence
+					civics = random
+
+					effect = {
+						prev.solar_system.starbase = {
+							set_owner = prev
+						}
+						give_starting_resources_effect = yes
+						add_resource = {
+							unity = 1000000
+						}
+						copy_techs_from = { target = root.owner }
+						set_subject_of = {
+							who = root.owner
+						}
+					}
+				}
+				change_pc = pc_machine
+				while = {
+					count = 80
+					create_pop = {
+						species = event_target:new_robots
+					}
+				}
+				while = {
+					count = 10
+					add_district = district_nexus
+				}
+				while = {
+					count = 5
+					add_district = district_industrial
+					add_district = district_generator_uncapped
+					add_district = district_mining_uncapped
+				}
+				add_building = building_machine_major_capital
+				add_building = building_machine_assembly_complex
+				solar_system = {
+					if = {
+						limit = {
+							NOR = {
+								has_megastructure = gateway_0
+								has_megastructure = gateway_final
+							}
+						}
+						spawn_megastructure = { #a bit weird, but otherwise they will probably be trapped here forever
+							type = gateway_ruined
+							random_pos = yes
+							orbit_angle = 360
+						}
+					}
+				}
+			}
+			owner = {
+				random = {
+					chance = 50
+					country_event = { id = ancrel.12095 days = 30 }
+				}
+			}
+		}
+	}
+}

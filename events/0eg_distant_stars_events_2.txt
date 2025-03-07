@@ -1,0 +1,318 @@
+namespace = distar
+
+#################################
+#
+# Anomaly Events
+# by Dee Majek
+#
+#################################
+
+# root = ship scope
+# from = planet scope
+
+# Nivlac
+country_event = { # First words
+	id = distar.3013
+	title = "distar.3013.name"
+	desc = "distar.3013.desc"
+	picture = GFX_evt_microscopic_life
+	show_sound = event_scanner
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_owned_planet = {
+			weights = {
+				base = 1
+				modifier = {
+					add = 2
+					free_housing > 0
+				}
+				modifier = {
+					add = 5
+					free_housing > 1
+				}
+				modifier = {
+					add = 10
+					free_housing > 5
+				}
+				modifier = {
+					add = 10
+					free_housing > 10
+				}
+				modifier = {
+					add = 5
+					planet_size > 17
+				}
+				modifier = {
+					add = 5
+					planet_size > 21
+				}
+			}
+			save_event_target_as = nivlac_joint_planet
+
+			export_trigger_value_to_variable = {
+				trigger = free_housing
+				variable = new_pops
+			}
+			if = {
+				limit = {
+					OR = {
+						check_variable = {
+							which = new_pops
+							value < 1
+						}
+						check_variable = {
+							which = new_pops
+							value > 7
+						}
+					}
+				}
+				set_variable = {
+					which = new_pops
+					value = 7
+				}
+			}
+		}
+	}
+
+	option = { # Astonishing. Every species-X should have one!
+		trigger = {
+			OR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+			}
+			is_gestalt = no
+		}
+
+		allow = {
+			#any_owned_planet = {
+			#	free_housing > 0
+			#}
+		}
+
+		name = distar.3013.a.xenophile
+		custom_tooltip = distar.3013.a.tooltip
+
+		hidden_effect = {
+			create_nivlac_effect = yes
+			event_target:nivlac_joint_planet = {
+				while = {
+					count = new_pops
+					create_pop = {
+						species = event_target:nivlac_species
+					}
+				}
+			}
+			country_event = { id = distar.3017 days = 10 }
+		}
+	}
+
+	option = { # Excellent. Species-X society could use them.
+		trigger = {
+			NOR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+				can_govern_singleminds = no
+			}
+		}
+
+		allow = {
+			#any_owned_planet = {
+			#	free_housing > 0
+			#}
+		}
+
+		name = distar.3013.a
+		custom_tooltip = distar.3013.a.tooltip
+
+		hidden_effect = {
+			create_nivlac_effect = yes
+			event_target:nivlac_joint_planet = {
+				while = {
+					count = new_pops
+					create_pop = {
+						species = event_target:nivlac_species
+					}
+				}
+			}
+			country_event = { id = distar.3017 days = 10 }
+		}
+	}
+
+	option = { # Servitor
+		trigger = {
+			is_servitor_empire = yes # undercoat: moved to scripted trigger
+			OR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+
+		allow = {
+			#any_owned_planet = {
+			#	free_housing > 0
+			#}
+		}
+
+		name = "distar.3013.a.serv"
+		custom_tooltip = "distar.3013.a.tooltip"
+
+		hidden_effect = {
+			create_nivlac_effect = yes
+			event_target:nivlac_joint_planet = {
+				while = {
+					count = new_pops
+					create_pop = {
+						species = event_target:nivlac_species
+					}
+				}
+			}
+			country_event = { id = distar.3017 days = 10 }
+		}
+	}
+
+	option = { # Gestalt
+		trigger = {
+			is_gestalt = yes
+			is_xenophile = no
+			is_machine_assimilator = no # undercoat: moved to scripted trigger
+		}
+
+		allow = {
+			#any_owned_planet = {
+			#	free_housing > 0
+			#}
+		}
+
+		name = "distar.3013.a.gestalt"
+		custom_tooltip = "distar.3013.a.tooltip"
+
+		hidden_effect = {
+			create_nivlac_effect = yes
+			event_target:nivlac_joint_planet = {
+				while = {
+					count = new_pops
+					create_pop = {
+						species = event_target:nivlac_species
+					}
+				}
+			}
+			country_event = { id = distar.3017 days = 10 }
+		}
+	}
+
+	option = { # Assimilator
+		trigger = {
+			OR = {
+				is_machine_assimilator = yes # undercoat: moved to scripted trigger
+				has_civic = civic_hive_assimilator
+			}
+		}
+
+		allow = {
+			#any_owned_planet = {
+			#	free_housing > 0
+			#}
+		}
+
+		name = "distar.3013.a.assi"
+		custom_tooltip = "distar.3013.a.assi.tooltip"
+
+		hidden_effect = {
+			create_nivlac_effect = yes
+			event_target:nivlac_species = {
+				set_species_flag = nivlac_no_procreation # checked in can_species_procreate game rule
+			}
+			event_target:nivlac_joint_planet = {
+				while = {
+					count = new_pops
+					create_pop = {
+						species = event_target:nivlac_species
+					}
+				}
+			}
+			country_event = { id = distar.3017 days = 10 }
+		}
+	}
+
+	option = { # No room, Assimilator
+		name = "distar.3013.b.no_room.kill"
+		custom_tooltip = "distar.3013.b.no_room.kill.tooltip"
+
+		trigger = {
+			is_xenophile = no
+		}
+		add_monthly_resource_mult = {
+			resource = influence
+			value = @tier3influencereward
+			min = @tier3influencemin
+			max = @tier3influencemax
+		}
+	}
+
+	option = { # Let's find them a home.
+		name = "distar.3013.b"
+		custom_tooltip = distar.3013.b.tooltip
+		trigger = {
+			is_machine_assimilator = no # undercoat: moved to scripted trigger
+		}
+		hidden_effect = {
+			country_event = { id = distar.3016 days = 720 random = 100 }
+		}
+	}
+
+	after = {
+		hidden_effect = {
+			event_target:nivlac_joint_planet = {
+				clear_variable = new_pops
+			}
+		}
+	}
+}
+
+country_event = { # Releasing fungoids into society as pops was successful
+	id = distar.3017
+	title = "distar.3017.name"
+	desc = {
+		trigger = {
+			NOT = { is_machine_empire = yes }
+		}
+		text = "distar.3017.desc"
+	}
+	desc = {
+		trigger = {
+			is_machine_assimilator = yes # undercoat: moved to scripted trigger
+		}
+		text = "distar.3017.desc.assim"
+	}
+	picture = GFX_evt_colony_settlement
+	show_sound = event_scanner
+	location = event_target:nivlac_joint_planet
+
+	is_triggered_only = yes
+
+	option = {
+		name = EXCELLENT
+		custom_tooltip = distar.3017.a.tooltip
+	}
+	option = {
+		exclusive_trigger = {
+			is_machine_assimilator = yes # undercoat: moved to scripted trigger
+		}
+		name = EXCELLENT
+		custom_tooltip = distar.3017.a.assi.tooltip
+	}
+	option = {
+		exclusive_trigger = {
+			is_servitor_empire = yes # undercoat: moved to scripted trigger
+			event_target:nivlac_species = {
+				has_citizenship_type = { country = prev type = citizenship_organic_trophy }
+			}
+		}
+		name = EXCELLENT
+		custom_tooltip = distar.3017.a.serv.tooltip
+	}
+}
+

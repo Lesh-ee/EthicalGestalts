@@ -1,0 +1,48 @@
+##########################################################################
+# Ancient Relics Decisions
+##########################################################################
+@minor_artifact_decision_cost = 2
+@minor_artifact_decision_duration = 3600
+
+decision_manage_singleminds = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_expel_population
+	
+	potential = {
+		owner = {
+			is_gestalt = yes
+		}
+		OR = {
+			any_owned_pop = {
+				OR = {
+					is_pop_category = worker
+					is_pop_category = specialist
+					is_pop_category = slave
+				}
+			}
+			any_deposit = {
+				has_deposit_category = deposit_cat_singlemind_enclave
+			}
+		}
+	}
+
+	allow = {
+		always = yes
+	}
+
+	resources = {
+		category = decisions
+	}
+	
+	effect = {
+		custom_tooltip = decisions_manage_singleminds_effect
+		hidden_effect = {
+			planet_event = { id = gestalt_ethics.111 }
+		}
+	}
+	
+	ai_weight = {
+		weight = 0
+	}
+}

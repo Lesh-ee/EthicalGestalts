@@ -1,0 +1,8 @@
+# ethics = { NOT = { value = ethic_gestalt_consciousness } }
+authority = {
+	NOR = {
+		value = auth_corporate
+		value = auth_hive_mind
+		value = auth_machine_intelligence
+	}
+}

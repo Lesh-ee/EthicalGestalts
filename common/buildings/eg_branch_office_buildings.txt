@@ -1,0 +1,356 @@
+###########################
+# Branch Office Buildings #
+###########################
+
+building_drone_mines = {
+	base_buildtime = 360
+	
+	owner_type = corporate
+	category = resource
+	
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = { 
+			is_hive_empire = yes
+			is_criminal_syndicate = no
+			is_ai = no
+		}
+		habitable_structure = no
+		NOR = { 
+			is_hive_world = yes
+			is_machine_world = yes
+			is_city_world = yes
+			is_planet_class = pc_ringworld_habitable
+			is_habitat = yes
+		}		
+	}
+
+	destroy_trigger = {
+		exists = branch_office_owner
+		branch_office_owner = {
+			NOT = {
+				is_hive_empire = yes
+				is_criminal_syndicate = no
+			}
+		}
+	}
+	
+	planet_modifier = {
+		job_mining_drone_add = 1
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}	
+		produces = {
+			minerals = 10
+		}	
+		upkeep = {
+			energy = 1.5
+		}
+	}
+	
+	ai_weight = {
+		factor = 0
+	}
+}
+
+building_drone_farms = {
+	base_buildtime = 360
+	
+	owner_type = corporate
+	category = resource
+	
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = { 
+			is_hive_empire = yes
+			is_criminal_syndicate = no
+		}
+		NOR = { 
+			is_hive_world = yes
+			is_machine_world = yes
+			is_city_world = yes
+		}	
+	}
+
+	destroy_trigger = {
+		exists = branch_office_owner
+		branch_office_owner = {
+			NOT = {
+				is_hive_empire = yes
+				is_criminal_syndicate = no
+			}
+		}
+	}
+
+	planet_modifier = {
+		job_agri_drone_add = 1
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}	
+		produces = {
+			food = 15
+		}	
+		upkeep = {
+			energy = 1.5
+		}
+	}
+	
+	ai_weight = {
+		weight = 200
+	}
+}
+
+building_drone_generators = {
+	base_buildtime = 360
+	
+	owner_type = corporate
+	category = resource
+	
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = { 
+			is_hive_empire = yes
+			is_criminal_syndicate = no
+			is_ai = no
+		}
+		NOR = {
+			is_city_world = yes
+		}	
+	}
+
+	destroy_trigger = {
+		exists = branch_office_owner
+		branch_office_owner = {
+			NOT = {
+				is_hive_empire = yes
+				is_criminal_syndicate = no
+			}
+		}
+	}
+	
+	planet_modifier = {
+		job_technician_drone_add = 1
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}	
+		produces = {
+			energy = 10
+		}	
+	}
+	
+	ai_weight = {
+		factor = 0
+	}
+}
+
+building_drone_shipyards = {
+	base_buildtime = 360
+	icon = building_foundry_1
+	
+	owner_type = corporate
+	category = manufacturing
+	
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = { 
+			is_hive_empire = yes
+			is_criminal_syndicate = no
+		}
+	}
+
+	destroy_trigger = {
+		exists = branch_office_owner
+		branch_office_owner = {
+			NOT = {
+				is_hive_empire = yes
+				is_criminal_syndicate = no
+			}
+		}
+	}
+	
+	planet_modifier = {
+		job_alloy_drone_add = 1
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 500
+		}	
+		produces = {
+			alloys = 3
+		}		
+		upkeep = {
+			energy = 1.5
+		}		
+	}
+	
+	ai_weight = {
+		weight = 0
+	}#Check resource income for a need
+}
+
+building_drone_labs = {
+	base_buildtime = 480
+	base_cap_amount = 1
+	icon = building_research_lab_1
+	
+	owner_type = corporate
+	category = research
+	
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = { 
+			is_hive_empire = yes
+			is_criminal_syndicate = no
+		}
+	}
+
+	allow = {
+		branch_office_owner = { 
+			has_research_agreement = prev.owner
+		}
+	}
+
+	destroy_trigger = {
+		exists = branch_office_owner
+		branch_office_owner = {
+			NOT = { is_hive_empire = yes }
+		}
+	}
+
+	planet_modifier = {
+		job_brain_drone_add = 1
+		job_researcher_add = 1
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 800
+		}	
+		produces = {
+			physics_research = 6
+			engineering_research = 6
+			society_research = 6
+		}	
+		upkeep = {
+			energy = 2
+		}
+	}
+	
+	ai_weight = {
+		weight = 300
+	}
+}
+
+building_drone_service_facilities = {
+	base_buildtime = 480
+	base_cap_amount = 1
+	icon = building_commercial_zone
+	
+	owner_type = corporate
+	category = amenity
+	
+	potential = {
+		has_branch_office = yes
+		branch_office_owner = {
+			not = { is_hive_empire = yes }
+			is_criminal_syndicate = no
+		}
+	}
+
+	destroy_trigger = {
+		exists = branch_office_owner
+		branch_office_owner = {
+			NOT = {
+				is_hive_empire = yes
+				is_criminal_syndicate = no
+			}
+		}
+	}
+	
+	planet_modifier = {
+		job_service_drone_add = 2
+	}
+
+	resources = {
+		category = planet_branch_office_buildings
+		cost = {
+			minerals = 800
+		}	
+		produces = {
+			unity = 4
+			energy = 4
+		}	
+	}
+	
+	ai_weight = {
+		weight = 1
+	}
+}
+
+# building_intake_center = {
+# 	base_buildtime = 600
+# 	base_cap_amount = 1
+# 	icon = building_syndicate_outreach_office
+	
+# 	owner_type = corporate
+	
+# 	potential = {
+# 		has_branch_office = yes	
+# 		branch_office_owner = { 
+# 			has_valid_civic = civic_hive_assimilator
+# 			NOT = { is_ai = yes }
+# 		}
+# 	}
+
+# 	destroy_trigger = {
+# 		exists = branch_office_owner
+# 		branch_office_owner = {
+# 			NOT = { has_valid_civic = civic_hive_assimilator }
+# 		}
+# 	}
+	
+# 	allow = {
+# 		num_pops >= 50
+# 	}	
+	
+# 	country_modifier = {
+# 		planet_immigration_pull_mult = 0.25
+# 	}
+	
+# 	planet_modifier = {
+# 		planet_jobs_society_research_produces_mult = 0.25
+# 	}
+
+# 	resources = {
+# 		category = planet_branch_office_buildings
+# 		cost = {
+# 			minerals = 1000
+# 			exotic_gases = 50
+# 		}	
+# 		upkeep = {
+# 			energy = 5
+# 			exotic_gases = 1
+# 		}		
+# 	}
+	
+# 	ai_weight = {
+# 		weight = 0
+# 	}
+# }
+
+

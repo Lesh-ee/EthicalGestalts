@@ -1,0 +1,44 @@
+############################
+#
+# Refugee Events
+#
+# Written by Martin Anward
+#
+############################
+
+namespace = refugees
+
+# Pop is made refugee (triggered)
+pop_event = {
+	id = refugees.4
+	title = OK
+	desc = OK
+
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { is_valid_refugee_pop = yes }
+			save_event_target_as = refugee_pop #Must be saved for refugee_pop_effect to work
+			refugee_pop_effect = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_trait = trait_hive_mind
+					has_trait = trait_machine_unit
+				}
+				owner = {
+					any_relation = {
+						is_gestalt = yes
+						is_same_species = root
+						NOT = { is_at_war_with = prev }
+					}
+				}
+			}
+			eg_displaced_drone_effect = yes
+		}
+		else = { kill_pop = yes }
+	}
+}

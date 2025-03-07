@@ -1,0 +1,209 @@
+#icon_frame = 1 # green frame
+#icon_frame = 2 # yellow frame
+#icon_frame = 3 # red frame
+
+##########################################################################
+# Faction Modifiers
+##########################################################################
+
+modifier_suppressed_arm = {
+}
+
+modifier_promoted_arm = {
+}
+
+##########################################################################
+# MI ethics anti-modifiers
+##########################################################################
+
+# machine_fanatic_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -1
+# }
+# machine_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -0.5
+# }
+# machine_fanatic_egalitarian_neutralize = {
+# 	planet_jobs_specialist_produces_mult = 0.1
+# }
+# machine_egalitarian_neutralize = {
+# 	planet_jobs_specialist_produces_mult = -0.05
+# }
+
+# machine_fanatic_xenophobe_neutralize = {
+# 	country_starbase_influence_cost_mult = 0.4
+# }
+# machine_xenophobe_neutralize = {
+# 	country_starbase_influence_cost_mult = 0.2
+# }
+# machine_fanatic_xenophile_neutralize = {
+# 	envoys_add = -2
+# }
+# machine_xenophile_neutralize = {
+# 	envoys_add = -1
+# }
+# machine_fanatic_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -1
+# }
+# machine_fanatic_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -1
+# }
+# machine_fanatic_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -1
+# }
+# machine_fanatic_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -1
+# }
+# machine_fanatic_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -1
+# }
+# machine_fanatic_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -1
+# }
+# machine_fanatic_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -1
+# }
+# machine_fanatic_authoritarian_neutralize = {
+# 	country_ethic_influence_produces_add = -1
+# }
+
+##########################################################################
+# Gestalt job modifiers
+##########################################################################
+
+# singlemind_farms_hive = {
+# 	job_farmer_add = 2
+# 	job_agri_drone_add = -3
+# }
+
+# singlemind_mines_hive = {
+# 	job_miner_add = 2
+# 	job_mining_drone_add = -3
+# }
+
+# singlemind_generators_hive = {
+# 	job_technician_add = 2
+# 	job_technician_drone_add = -3
+# }
+
+# singlemind_mines_srw_hive = {
+# 	job_scrap_miner_add = 2
+# 	job_mining_drone_add = -3
+# }
+
+# singlemind_farms_machine = {
+# 	job_farmer_add = 2
+# 	job_agri_drone_add = -2
+# }
+
+# singlemind_mines_machine = {
+# 	job_miner_add = 2
+# 	job_mining_drone_add = -2
+# }
+
+# singlemind_generators_machine = {
+# 	job_technician_add = 2
+# 	job_technician_drone_add = -2
+# }
+
+# singlemind_mines_srw_machine = {
+# 	job_scrap_miner_add = 2
+# 	job_mining_drone_add = -2
+# }
+
+# singlemind_industry_hive = {
+# 	job_foundry_add = 1
+# 	job_artisan_add = 1
+# 	job_alloy_drone_add = -2
+# }
+
+# singlemind_industry_machine = {
+# 	job_foundry_add = 1
+# 	job_artisan_add = 1
+# 	job_fabricator_add = -2
+# }
+
+# singlemind_industry_catalytic_hive = {
+# 	job_catalytic_technician_add = 1
+# 	job_artisan_add = 1
+# 	job_catalytic_drone_add = -2
+# }
+
+# singlemind_industry_catalytic_machine = {
+# 	job_catalytic_technician_add = 1
+# 	job_artisan_add = 1
+# 	job_catalytic_drone_add = -2
+# }
+
+# singlemind_foundries_hive = {
+# 	job_foundry_add = 6
+# 	job_alloy_drone_add = -6
+# }
+
+# singlemind_foundries_machine = {
+# 	job_foundry_add = 6
+# 	job_fabricator_add = -6
+# }
+
+# singlemind_foundries_catalytic_hive = {
+# 	job_catalytic_technician_add = 6
+# 	job_catalytic_drone_add = -6
+# }
+
+# singlemind_foundries_catalytic_machine = {
+# 	job_catalytic_technician_add = 6
+# 	job_catalytic_drone_add = -6
+# }
+
+# singlemind_factories_hive = {
+# 	job_artisan_add = 6
+# 	job_artisan_drone_add = -6
+# }
+
+# singlemind_factories_machine = {
+# 	job_artisan_add = 6
+# 	job_artisan_drone_add = -6
+# }
+
+# singlemind_mines_hab_hive = {
+# 	job_miner_add = 3
+# 	job_mining_drone_add = -4
+# }
+
+# singlemind_generators_hab_hive = {
+# 	job_technician_add = 3
+# 	job_technician_drone_add = -4
+# }
+
+# singlemind_mines_hab_machine = {
+# 	job_miner_add = 3
+# 	job_mining_drone_add = -3
+# }
+
+# singlemind_generators_hab_machine = {
+# 	job_technician_add = 3
+# 	job_technician_drone_add = -3
+# }
+
+# singlemind_industry_rw_hive = {
+# 	job_foundry_add = 5
+# 	job_artisan_add = 5
+# 	job_alloy_drone_add = -10
+# }
+
+# singlemind_industry_rw_machine = {
+# 	job_foundry_add = 5
+# 	job_artisan_add = 5
+# 	job_fabricator_add = -10
+# }
+
+# singlemind_industry_rw_catalytic_hive = {
+# 	job_catalytic_technician_add = 1
+# 	job_artisan_add = 1
+# 	job_catalytic_drone_add = -2
+# }
+
+# singlemind_industry_rw_catalytic_machine = {
+# 	job_catalytic_technician_add = 1
+# 	job_artisan_add = 1
+# 	job_catalytic_drone_add = -2
+# }

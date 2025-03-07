@@ -1,0 +1,166 @@
+#	Example:
+#
+#	example_effect = {
+#		add_resource = { energy = -100 }
+#	}
+#
+#
+#	In a script file:
+#
+#	effect = {
+#		example_effect = yes
+#	}
+#
+
+
+set_origin_effect = {
+	country_event = { id = game_start.8 }
+	give_starting_resources_effect = yes
+	# Necrophages
+	if = {
+		limit = {
+			has_trait = trait_necrophage
+		}
+		set_origin = origin_necrophage
+	}
+	# Subterranean
+	else_if = {
+		limit = {
+			has_trait = trait_cave_dweller
+		}
+		set_origin = origin_subterranean
+	}
+	# Void Dwellers
+	else_if = {
+		limit = {
+			has_trait = trait_void_dweller_1
+		}
+		set_origin = origin_void_dwellers
+	}
+	# Calamitous Birth
+	else_if = {
+		limit = {
+			from = { is_calamitous_birth_empire = yes } # undercoat: moved to scripted trigger
+			has_trait = trait_lithoid
+		}
+		set_origin = origin_lithoid
+	}
+	# Liberated
+	else_if = {
+		limit = {
+			has_country_flag = released_empire
+		}
+		set_origin = origin_liberated
+	}
+	else = {
+		set_origin = origin_default
+	}
+
+	# Fix hive/machine
+	if = {
+		limit = {
+			is_machine_empire = yes
+			NOT = { has_trait = trait_machine_unit }
+		}
+		change_government = random
+	}
+	else_if = {
+		limit = {
+			is_hive_empire = yes
+			NOT = { has_trait = trait_hive_mind }
+		}
+		change_government = random
+	}
+	else_if = {
+		limit = {
+			is_machine_empire = no
+			has_trait = trait_machine_unit
+		}
+		change_government = {
+			authority = auth_machine_intelligence
+			cooldown = no
+			remove_invalid_civics = yes
+		}
+	}
+	else_if = {
+		limit = {
+			is_hive_empire = no
+			has_trait = trait_hive_mind
+		}
+		change_government = {
+			authority = auth_hive_mind
+			cooldown = no
+			remove_invalid_civics = yes
+		}
+	}
+	country_event = { id = game_start.70 }
+	country_event = { id = game_start.72 }
+}
+
+
+impose_ideology_effect = {
+	if = {
+		limit = {
+			is_ai = yes
+			has_legendary_leader_origin_active = yes # undercoat: moved to scripted trigger
+		}
+		random_owned_leader = {
+			limit = { is_ruler = yes }
+			kill_leader = { show_notification = yes }
+		}
+		set_origin = origin_legendary_leader_death
+	}
+	copy_ethos_and_authority = root
+	if = {
+		limit = {
+			has_civic = civic_galactic_sovereign
+		}
+		force_remove_civic = civic_galactic_sovereign
+	}
+	if = {
+		limit = {
+			has_civic = civic_galactic_sovereign_megacorp
+		}
+		force_remove_civic = civic_galactic_sovereign_megacorp
+	}
+	if = {
+		limit = {
+			has_civic = civic_psionic_sovereign
+		}
+		force_remove_civic = civic_psionic_sovereign
+	}
+	if = {
+		limit = {
+			root = { is_megacorp = yes } # undercoat: moved to scripted trigger
+			is_megacorp = yes # undercoat: moved to scripted trigger
+		}
+		set_merchant_government_effect = yes
+	}
+	else_if = {
+		limit = { is_gestalt = yes }
+		change_government = {
+			authority = random
+			cooldown = no
+			remove_invalid_civics = yes
+		}
+	}
+	if = {
+		limit = {
+			root = { is_shared_burden_empire = yes } # undercoat: moved to scripted trigger
+		}
+		force_remove_civic = 1
+		force_add_civic = civic_shared_burden
+	}
+	if = {
+		limit = {
+			root = { has_crusader_spirit = yes } # undercoat: moved to scripted trigger
+		}
+		force_remove_civic = 1
+		force_add_civic = civic_crusader_spirit
+	}
+	add_modifier = { modifier = recently_liberated days = 7200 }
+	add_opinion_modifier = { modifier = opinion_liberated_us who = root }
+	root = {
+		add_opinion_modifier = { modifier = opinion_we_liberated who = from }
+	}
+}

@@ -1,0 +1,936 @@
+namespace = distar
+
+#################################
+#
+# Anomaly Events
+# by Dee Majek
+#
+#################################
+
+# root = ship scope
+# from = planet scope
+
+
+# Ruined Ringworld Clones
+ship_event = {
+	id = distar.70
+	title = "distar.70.name"
+	desc = "distar.70.desc"
+	picture = GFX_evt_clones
+	show_sound = event_laboratory_sound
+	location = from
+
+	is_triggered_only = yes
+
+	immediate = {
+		from = { set_deposit = d_physics_3 }
+	}
+
+	option = {
+		name = "distar.70.a"
+		# trigger = {
+		# 	owner = {
+		# 		#any_owned_planet = { free_housing > 1	}
+		# 		NOR = { #Disallow for non-DS Hiveminds and non-Civic'd MIs
+		# 			AND = {
+		# 				is_machine_empire = yes
+		# 				NOR = {
+		# 					has_civic = civic_machine_terminator
+		# 					is_machine_assimilator = yes
+		# 					has_civic = civic_machine_servitor
+		# 				}
+		# 			}
+		# 			AND = {
+		# 				is_hive_empire = yes
+		# 				NOT = {
+		# 					has_civic = civic_hive_devouring_swarm
+		# 				}
+		# 			}
+		# 		}
+		# 	}
+		# }
+		from = {
+			enable_special_project = {
+				name = "CRYO_CLONES_PROJECT"
+				location = this
+				owner = root.owner
+			}
+		}
+		hidden_effect = {
+			owner = { pop_lcluster_event = yes }
+		}
+	}
+
+	option = {
+		name = "distar.70.b"
+		from = {
+			add_modifier = { modifier = clones_in_cryo days = -1 }
+			add_deposit = d_society_4
+		}
+		hidden_effect = {
+			owner = { pop_lcluster_event = yes }
+		}
+	}
+
+	option = {
+		name = "distar.70.exter"
+		custom_tooltip = "distar.70.exter.tooltip"
+		exclusive_trigger = {
+			owner = { has_civic = civic_machine_terminator }
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier3influencereward
+				min = @tier3influencemin
+				max = @tier3influencemax
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier1unityreward
+				min = @tier1unitymin
+				max = @tier1unitymax
+			}
+			hidden_effect = { pop_lcluster_event = yes }
+		}
+	}
+	option = {
+		name = "distar.70.fp"
+		custom_tooltip = "distar.70.fp.tooltip"
+		exclusive_trigger = {
+			owner = { has_civic = civic_fanatic_purifiers }
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = influence
+				value = @tier3influencereward
+				min = @tier3influencemin
+				max = @tier3influencemax
+			}
+			add_monthly_resource_mult = {
+				resource = unity
+				value = @tier1unityreward
+				min = @tier1unitymin
+				max = @tier1unitymax
+			}
+			hidden_effect = { pop_lcluster_event = yes }
+		}
+	}
+	option = { #In the event of no free tiles (ignoring Terminators and Swarm)
+		name = "distar.70.no_room"
+		trigger = {
+			owner = {
+				NOR = {
+					#any_owned_planet = { free_housing > 1	}
+					has_civic = civic_hive_devouring_swarm
+					has_civic = civic_machine_terminator
+				}
+			}
+		}
+		from = {
+			add_modifier = { modifier = clones_in_cryo days = -1 }
+			add_deposit = d_society_4
+		}
+		hidden_effect = {
+			owner = { pop_lcluster_event = yes }
+		}
+	}
+}
+
+ship_event = {
+	id = distar.71
+	title = "distar.71.name"
+	desc = "distar.71.desc"
+	picture = GFX_evt_clones
+	show_sound = event_laboratory_sound
+	location = fromfrom
+
+	is_triggered_only = yes
+
+	immediate = {
+		IF = {
+			LIMIT = {
+				NOR = {
+					exists = event_target:cryonic_clones
+					owner = { species_portrait = mam8 }
+				}
+			}
+			create_species = {
+				name = "NAME_Cryonic_Clone"
+				plural = "NAME_Cryonic_Clones"
+				class = "MAM"
+				portrait = mam8
+				namelist = "MAM2"
+				traits = {
+					trait = "trait_presapient_proles"
+					trait = "trait_strong"
+					trait = "trait_nerve_stapled"
+					trait = "trait_pc_nuked_preference"
+				}
+				effect = {
+					save_global_event_target_as = cryonic_clones
+				}
+			}
+		}
+		ELSE_IF = {
+			LIMIT = {
+				NOT = {
+					exists = event_target:cryonic_clones
+				}
+				owner = { species_portrait = mam8 }
+			}
+			create_species = {
+				name = "NAME_Cryonic_Clone"
+				plural = "NAME_Cryonic_Clones"
+				class = "REP"
+				portrait = rep15
+				namelist = "REP2"
+				traits = {
+					trait = "trait_presapient_proles"
+					trait = "trait_strong"
+					trait = "trait_nerve_stapled"
+					trait = "trait_pc_nuked_preference"
+				}
+				effect = {
+					save_global_event_target_as = cryonic_clones
+				}
+			}
+		}
+		owner = {
+			random_owned_planet = {
+				weights = {
+					base = 1
+					modifier = {
+						add = 5
+						free_housing > 0
+					}
+					modifier = {
+						add = 10
+						free_housing > 1
+					}
+				}
+				save_event_target_as = pop_planet
+			}
+		}
+	}
+
+	option = { #Default, if you have free tiles
+		name = "distar.71.pop.default"
+		custom_tooltip = "distar.71.pop.tooltip"
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+					has_policy_flag = slavery_allowed
+				}
+				#any_owned_planet = {
+				#	free_housing > 1
+				#}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				random_owned_planet = {
+					weights = {
+						base = 1
+						modifier = {
+							add = 5
+							free_housing > 0
+						}
+						modifier = {
+							add = 10
+							free_housing > 1
+						}
+					}
+					while = {
+						count = 2
+						create_pop = {
+							species = event_target:cryonic_clones
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "distar.71.no_room"
+		trigger = {
+			owner = {
+				NOT = {
+					any_owned_planet = { free_housing > 1	} #You can say no room, but we all know you could have made space!
+				}
+			}
+		}
+		create_fleet = {
+			name = "NAME_Cryonic_Clones_Colonizer"
+			effect = {
+				set_owner = root.owner
+				create_ship = {
+					name = "NAME_Cryonic_Clones_Colonizer"
+					random_existing_design = colonizer
+					colonizer_species = event_target:cryonic_clones
+					prefix = no
+					upgradable = no
+				}
+				set_location = {
+					target = root
+					distance = 5
+					angle = random
+				}
+			}
+			settings = {
+				can_change_composition = no
+				can_change_leader = no
+				uses_naval_capacity = no
+				spawn_debris = no
+			}
+		}
+		hidden_effect = {
+			owner = { set_country_flag = got_cryonic_clone_colonizer }
+		}
+	}
+
+	option = { #Phile and free tiles
+		name = "distar.71.pop.phile"
+		custom_tooltip = "distar.71.pop.tooltip"
+		trigger = {
+			owner = {
+				OR = {
+					has_ethic = "ethic_xenophile"
+					has_ethic = "ethic_fanatic_xenophile"
+				}
+				is_servitor_empire = no
+				#any_owned_planet = {
+				#	free_housing > 1
+				#}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				random_owned_planet = {
+					weights = {
+						base = 1
+						modifier = {
+							add = 5
+							free_housing > 0
+						}
+						modifier = {
+							add = 10
+							free_housing > 1
+						}
+					}
+					while = {
+						count = 2
+						create_pop = {
+							species = event_target:cryonic_clones
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = { #Slaver and free tiles
+		name = "distar.71.pop.slave"
+		custom_tooltip = "distar.71.pop.tooltip"
+		trigger = {
+			owner = {
+				has_policy_flag = slavery_allowed
+				#any_owned_planet = {
+				#	free_housing > 1
+				#}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				random_owned_planet = {
+					weights = {
+						base = 1
+						modifier = {
+							add = 5
+							free_housing > 0
+						}
+						modifier = {
+							add = 10
+							free_housing > 1
+						}
+					}
+					while = {
+						count = 2
+						create_pop = {
+							species = event_target:cryonic_clones
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = { #Devouring Swarm with or without free tiles
+		name = "distar.71.pop.swarm"
+		exclusive_trigger = {
+			owner = { has_civic = civic_hive_devouring_swarm }
+		}
+		owner = {
+			#IF = {
+			#	LIMIT = {
+			#		any_owned_planet = {
+			#			free_housing > 1
+			#		}
+			#	}
+			#	custom_tooltip = "distar.71.pop.tooltip"
+			#	hidden_effect = {
+			#		random_owned_planet = {
+			#			limit = { free_housing > 1 }
+			#			while = {
+			#				count = 2
+			#				create_pop = {
+			#					species = event_target:cryonic_clones
+			#				}
+			#		}
+			#	}
+			#	}
+			#}
+			#ELSE = {
+				custom_tooltip = "distar.71.swarm.alt.tooltip"
+				add_monthly_resource_mult = {
+					resource = food
+					value = @tier4materialreward
+					min = @tier4materialmin
+					max = @tier4materialmax
+				}
+				add_monthly_resource_mult = {
+					resource = unity
+					value = @tier1unityreward
+					min = @tier1unitymin
+					max = @tier1unitymax
+				}
+			#}
+		}
+	}
+
+	option = { #Servitor and free tiles
+		name = "distar.71.pop.servi"
+		custom_tooltip = "distar.71.pop.tooltip"
+		trigger = {
+			owner = {
+				is_xenophile = yes
+				is_servitor_empire = yes # undercoat: moved to scripted trigger
+				#any_owned_planet = {
+				#	free_housing > 1
+				#}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				random_owned_planet = {
+					weights = {
+						base = 1
+						modifier = {
+							add = 5
+							free_housing > 0
+						}
+						modifier = {
+							add = 10
+							free_housing > 1
+						}
+					}
+					while = {
+						count = 2
+						create_pop = {
+							species = event_target:cryonic_clones
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = { #Assimilator and free tiles
+		name = "distar.71.pop.assim"
+		custom_tooltip = "distar.71.pop.tooltip"
+		trigger = {
+			owner = {
+				OR = {
+					is_machine_assimilator = yes
+					has_valid_civic = civic_hive_assimilator
+				}
+				#any_owned_planet = { free_housing > 1	}
+			}
+		}
+		hidden_effect = {
+			owner = {
+				random_owned_planet = {
+					weights = {
+						base = 1
+						modifier = {
+							add = 5
+							free_housing > 0
+						}
+						modifier = {
+							add = 10
+							free_housing > 1
+						}
+					}
+					while = {
+						count = 2
+						create_pop = {
+							species = event_target:cryonic_clones
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+planet_event = { #On colonizing the repaired Megastructure section
+	id = distar.72
+	title = "distar.72.name"
+	desc = "distar.72.desc"
+	picture = GFX_evt_clones
+	show_sound = event_laboratory_sound
+	location = root
+
+	is_triggered_only = yes
+
+	trigger = {
+		solar_system = { #If we did not thaw out the clones earlier
+			star = { has_modifier = clones_in_cryo }
+		}
+		is_unshattered_ring_habitable_segment = yes # undercoat: moved to scripted trigger
+	}
+
+	immediate = {
+		solar_system = {
+			star = {
+				clear_deposits = yes
+				remove_modifier = clones_in_cryo
+			}
+		}
+		IF = {
+			LIMIT = {
+				NOR = {
+					exists = event_target:cryonic_clones
+					owner = { species_portrait = mam8 }
+				}
+			}
+			create_species = {
+				name = "NAME_Cryonic_Clone"
+				plural = "NAME_Cryonic_Clones"
+				class = "MAM"
+				portrait = mam8
+				namelist = "MAM2"
+				traits = {
+					trait = "trait_presapient_proles"
+					trait = "trait_strong"
+					trait = "trait_nerve_stapled"
+					trait = "trait_pc_nuked_preference"
+				}
+				effect = {
+					save_global_event_target_as = cryonic_clones
+				}
+			}
+		}
+		ELSE_IF = {
+			LIMIT = {
+				NOT = {
+					exists = event_target:cryonic_clones
+				}
+				owner = { species_portrait = mam8 }
+			}
+			create_species = {
+				name = "NAME_Cryonic_Clone"
+				plural = "NAME_Cryonic_Clones"
+				class = "REP"
+				portrait = rep15
+				namelist = "REP2"
+				traits = {
+					trait = "trait_presapient_proles"
+					trait = "trait_strong"
+					trait = "trait_nerve_stapled"
+					trait = "trait_pc_nuked_preference"
+				}
+				effect = {
+					save_global_event_target_as = cryonic_clones
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "distar.72.a"
+		trigger = {
+			owner = {
+				NOR = {
+					has_civic = civic_machine_terminator
+					has_civic = civic_fanatic_purifiers
+				}
+			}
+		}
+		add_deposit = d_cryonic_clones
+	}
+
+	option = {
+		name = "distar.72.b"
+		trigger = {
+			owner = {
+				NOR = {
+					AND = {
+						is_xenophile = yes
+						is_gestalt = yes
+					}
+					has_civic = civic_hive_devouring_swarm
+					has_civic = civic_machine_terminator
+					has_civic = civic_fanatic_purifiers
+				}
+			}
+		}
+		hidden_effect = {
+			while = {
+				count = 2
+				create_pop = {
+					species = event_target:cryonic_clones
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "distar.71.pop.assim"
+		trigger = {
+			owner = { is_machine_assimilator = yes } # undercoat: moved to scripted trigger
+		}
+		hidden_effect = {
+			while = {
+				count = 2
+				create_pop = {
+					species = event_target:cryonic_clones
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "distar.72.b.servi"
+		trigger = {
+			AND = {
+				is_xenophile = yes
+				is_gestalt = yes
+			}
+		}
+		hidden_effect = {
+			while = {
+				count = 2
+				create_pop = {
+					species = event_target:cryonic_clones
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "distar.71.pop.swarm"
+		trigger = {
+			owner = { has_civic = civic_hive_devouring_swarm }
+		}
+		hidden_effect = {
+			while = {
+				count = 2
+				create_pop = {
+					species = event_target:cryonic_clones
+				}
+			}
+		}
+	}
+
+	option = {
+		name = "distar.72.c"
+		trigger = {
+			owner = {
+				NOR = {
+					has_ethic = ethic_fanatic_xenophile
+					has_ethic = ethic_fanatic_egalitarian
+				}
+			}
+		}
+	}
+}
+
+
+
+# Ketlings
+country_event = { #Alert that the Ketling default empire has been created
+	id = distar.237
+	title = "distar.237.name"
+	desc = "distar.237.desc"
+	picture = GFX_evt_news_room
+	show_sound = event_cityscape
+	location = event_target:sensor_ratling_system
+
+	is_triggered_only = yes
+
+	trigger = {
+		any_system = {
+			exists = owner
+			owner = {
+				is_same_value =	event_target:ratling_country
+			}
+			root = {
+				intel_level = {
+					level > none
+					system = prev
+				}
+			}
+		}
+	}
+
+	immediate = {
+		#Get a target system we have sensors into
+		IF = {
+			limit = { #Done this way bc intel_level isn't accepting a chained dotscope target...
+				event_target:ratling_country.capital_scope.solar_system = {
+					root = {
+						intel_level = {
+							level > none
+							system = prev
+						}
+					}
+				}
+			}
+			event_target:ratling_country.capital_scope.solar_system = {
+				save_event_target_as = sensor_ratling_system
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				any_system = {
+					exists = owner
+					owner = {
+						is_same_value =	event_target:ratling_country
+					}
+					root = {
+						intel_level = {
+							level > none
+							system = prev
+						}
+					}
+				}
+			}
+			random_system = {
+				limit = {
+					exists = owner
+					owner = {
+						is_same_value =	event_target:ratling_country
+					}
+					root = {
+						intel_level = {
+							level > none
+							system = prev
+						}
+					}
+				}
+				save_event_target_as = sensor_ratling_system
+			}
+		}
+		ELSE = { #Nothing
+		}
+	}
+
+	option = {
+		name = INTERESTING
+	}
+
+	option = {
+		name = "distar.234.phobe"
+		exclusive_trigger = {
+			OR = {
+				has_ethic = ethic_xenophobe
+				has_ethic = ethic_fanatic_xenophobe
+				has_civic = civic_machine_terminator
+			}
+		}
+		hidden_effect = {
+			#Auto-establish comms if we researched Ketlings
+			IF = {
+				LIMIT = {
+					has_country_flag = researched_ketlings
+				}
+				establish_communications = event_target:ratling_country
+				establish_contact = { who = root location = event_target:sensor_ratling_system }
+			}
+		}
+	}
+
+	option = {
+		name = MARVELOUS
+		exclusive_trigger = {
+			OR = {
+				has_ethic = ethic_xenophile
+				has_ethic = ethic_fanatic_xenophile
+			}
+		}
+		hidden_effect = {
+			#Auto-establish comms if we researched Ketlings
+			IF = {
+				LIMIT = {
+					has_country_flag = researched_ketlings
+				}
+				establish_communications = event_target:ratling_country
+				establish_contact = { who = root location = event_target:sensor_ratling_system }
+			}
+		}
+	}
+
+	option = {
+		name = TASTY
+		exclusive_trigger = {
+			has_civic = civic_hive_devouring_swarm
+		}
+		hidden_effect = {
+			#Auto-establish comms if we researched Ketlings
+			IF = {
+				LIMIT = {
+					has_country_flag = researched_ketlings
+				}
+				establish_communications = event_target:ratling_country
+				establish_contact = { who = root location = event_target:sensor_ratling_system }
+			}
+		}
+	}
+}
+
+# Fungus
+ship_event = {
+	id = distar.261
+	title = "distar.261.name"
+	desc = "distar.261.desc"
+	picture = GFX_evt_animal_wildlife
+	show_sound = event_alien_nature
+	location = from
+
+	is_triggered_only = yes
+
+	option = {
+		name = "distar.234.phobe"
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+
+	option = {
+		name = INTERESTING
+		exclusive_trigger = {
+			owner = {
+				OR = {
+					has_ethic = ethic_fanatic_authoritarian
+					has_civic = civic_slaver_guilds
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+
+	option = {
+		name = TASTY
+		exclusive_trigger = {
+			owner = {
+				has_civic = civic_hive_devouring_swarm
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+
+	option = {
+		name = "distar.261.a.servi"
+		exclusive_trigger = {
+			owner = {
+				has_civic = civic_machine_servitor
+				is_xenophile = yes
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+
+	option = {
+		name = "distar.261.a.assim"
+		exclusive_trigger = {
+			owner = {
+				OR = {
+					is_machine_assimilator = yes
+					has_civic = civic_hive_assimilator
+				}
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier3researchreward
+				min = @tier3researchmin
+				max = @tier3researchmax
+			}
+		}
+	}
+
+	option = {
+		name = "distar.261.a.exter"
+		exclusive_trigger = {
+			owner = {
+				has_civic = civic_machine_terminator
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+
+	option = {
+		name = SCUM
+		exclusive_trigger = {
+			owner = {
+				has_civic = civic_fanatic_purifiers
+			}
+		}
+		owner = {
+			add_monthly_resource_mult = {
+				resource = society_research
+				value = @tier2researchreward
+				min = @tier2researchmin
+				max = @tier2researchmax
+			}
+		}
+	}
+}

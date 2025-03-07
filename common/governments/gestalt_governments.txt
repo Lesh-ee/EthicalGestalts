@@ -1,0 +1,98 @@
+#gov_example = {
+#	possible = {}							# Determines if a government name can be chosen. AND trigger, scope: country; valid triggers: has_ethic, has_authority, has_valid_civic; everything else is undefined behavior!
+#	weight = {								# scriptable value, scope: country; the (possible) government type with the biggest weight is assigned to the country
+#		base = 100
+#	}
+#
+#	ruler_title = RT_KING					# translation tag for male ruler's title
+#	ruler_title_female = RT_QUEEN			# translation tag for female ruler's title
+#	heir_title = HT_CROWN_PRINCE			# translation tag for male heir's title
+#	heir_title_female = HT_CROWN_PRINCESS	# translation tag for female heir's title
+#	use_regnal_names = yes / no				# default: no
+#	dynastic_last_names = yes / no			# default: no
+#	should_force_rename = yes / no			# default: no - if set to yes, empires changing to or from this government will be renamed even if authority type does not change
+#	
+#	election_candidates = {					# scriptable value to weight election candidates for oligarchic elections, scope: leader
+#		modifier = {
+#			add = 100
+#			leader_class = ruler
+#		}
+#	}
+#}
+
+# Hive Mind
+gov_overmind = {
+	ruler_title = RT_OVERMIND
+	ruler_title_female = RT_HIVE_MIND_FEMALE
+	
+	should_force_rename = yes
+
+	possible = {
+		has_authority = auth_hive_mind
+		is_authoritarian = yes
+		NOT = { has_valid_civic = civic_hive_devouring_swarm }
+	}
+
+	weight = {
+		base = 100000
+		modifier = {
+			factor = 2
+			has_ethic = ethic_fanatic_authoritarian
+		}
+	}
+}
+
+gov_collective_consciousness = {
+	ruler_title = RT_COLLECTIVE_CONSCIOUSNESS
+	ruler_title_female = RT_COLLECTIVE_CONSCIOUSNESS_FEMALE
+	
+	should_force_rename = yes
+
+	possible = {
+		has_authority = auth_hive_mind
+		is_egalitarian = yes
+		NOT = { has_valid_civic = civic_hive_devouring_swarm }
+	}
+
+	weight = {
+		base = 100000
+		modifier = {
+			factor = 2
+			has_ethic = ethic_fanatic_egalitarian
+		}
+	}
+}
+
+# Assimilator
+gov_machine_dominator = {
+	ruler_title = RT_DOMINATOR
+	
+	should_force_rename = yes
+
+	possible = {
+		has_authority = auth_machine_intelligence
+		has_civic = civic_machine_assimilator
+		is_authoritarian = yes
+	}
+
+	weight = {
+		base = 4000
+	}
+}
+
+gov_machine_integrator = {
+	ruler_title = RT_INTEGRATOR
+	
+	should_force_rename = yes
+
+	possible = {
+		has_authority = auth_machine_intelligence
+		has_civic = civic_machine_assimilator
+		is_egalitarian = yes
+	}
+
+	weight = {
+		base = 4000
+	}
+}
+

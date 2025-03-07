@@ -1,0 +1,2 @@
+@hive_max_ethic_points = 3
+@hive_max_ethic_points_plus = 4

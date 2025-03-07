@@ -1,0 +1,198 @@
+############################
+#
+# Aquatics Events
+#
+# Written by Pierre du Plessis
+#
+############################
+
+namespace = aquatics
+
+## Hydrocentric Ascension Perk
+
+## Here Be Dragons Origin
+
+#Gotta start with the important things... killing the dragon :(
+
+# This = owner of fleet 1 (combatant)
+# From = owner of fleet 2 (destroyed)
+# FromFrom = fleet 1
+# FromFromFrom = fleet 2
+country_event = {
+	id = aquatics.105
+	title = aquatics.105.name
+	desc = {
+		text = aquatics.105.desc.origin_normal
+		trigger = {
+			from = { has_country_flag = here_be_the_dragon@root }
+			is_gestalt = no # undercoat: moved to scripted trigger
+			is_materialist = no
+		}
+	}
+	desc = {
+		text = aquatics.105.desc.origin_materialist
+		trigger = {
+			from = { has_country_flag = here_be_the_dragon@root }
+			is_gestalt = no
+			is_materialist = yes
+		}
+	}
+	desc = {
+		text = aquatics.105.desc.origin_hive_normal
+		trigger = {
+			from = { has_country_flag = here_be_the_dragon@root }
+			is_hive_empire = yes
+			is_materialist = no
+		}
+	}
+	desc = {
+		text = aquatics.105.desc.origin_hive
+		trigger = {
+			from = { has_country_flag = here_be_the_dragon@root }
+			is_hive_empire = yes
+			is_materialist = yes
+		}
+	}
+	desc = {
+		text = aquatics.105.desc.origin_machine
+		trigger = {
+			from = { has_country_flag = here_be_the_dragon@root }
+			is_machine_empire = yes
+		}
+	}
+	desc = {
+		text = aquatics.105.desc.others
+		trigger = {
+			NOT = { from = { has_country_flag = here_be_the_dragon@root } }
+		}
+	}
+
+	picture = GFX_evt_here_be_dragons
+	location = fromfrom
+	show_sound = event_mystic_reveal
+
+	is_triggered_only = yes
+
+	trigger = {
+		from = {
+			is_country_type = origin_dragon
+			has_country_flag = here_be_the_dragon
+		}
+		NOT = {
+			has_country_flag = space_dragon_about_to_land
+		}
+	}
+
+	immediate = {
+		fromfrom.solar_system = {
+			save_event_target_as = dragon_system
+			random_system_planet = {
+				limit = {
+					is_colony = yes
+				}
+				weights = {
+					base = 1
+					modifier = {
+						factor = 1000
+						is_habitat = no # undercoat: moved to scripted trigger
+					}
+				}
+				save_event_target_as = dragon_planet
+			}
+		}
+		if = {
+			limit = {
+				NOT = { from = { has_country_flag = here_be_the_dragon@root } }
+			}
+			random_country = {
+				limit = { from = { has_country_flag = here_be_the_dragon@prev } }
+				country_event = { id = aquatics.110 }
+			}
+		}
+		random_country = {
+			limit = { has_country_flag = dragon_dummy_for@from }
+			destroy_country = yes
+		}
+	}
+
+	option = {
+		name = aquatics.105.A
+		trigger = { from = { has_country_flag = here_be_the_dragon@root } }
+		grant_dragon_armor_effect = yes
+		if = {
+			limit = { can_harvest_dna = yes }
+			set_country_flag = harvested_dragon_dna
+			custom_tooltip = aquatics.105.A.tooltip
+		}
+		add_modifier = {
+			modifier = slew_origin_dragon
+		}
+	}
+
+	option = {
+		name = aquatics.105.A
+		trigger = { NOT = { from = { has_country_flag = here_be_the_dragon@root } } }
+		grant_dragon_armor_effect = yes
+		if = {
+			limit = { can_harvest_dna = yes }
+			set_country_flag = harvested_dragon_dna
+			custom_tooltip = aquatics.105.A.tooltip
+		}
+		custom_tooltip = aquatics.105.A.tooltip
+	}
+
+	option = {
+		name = galactic_features.385.reanimated
+		trigger = {
+			is_reanimator = yes
+			from = { has_country_flag = here_be_the_dragon@root }
+		}
+		add_modifier = {
+			modifier = slew_origin_dragon
+		}
+		enable_special_project = {
+			name = "REANIMATE_ORIGIN_DRAGON"
+			location = event_target:dragon_system.star
+			owner = root
+		}
+	}
+
+	option = {
+		name = galactic_features.385.reanimated
+		trigger = {
+			is_reanimator = yes
+			NOT = { from = { has_country_flag = here_be_the_dragon@root } }
+		}
+		enable_special_project = {
+			name = "REANIMATE_ORIGIN_DRAGON"
+			location = event_target:dragon_system.star
+			owner = root
+		}
+	}
+
+	after = {
+		if = {
+			limit = { exists = fromfrom.leader }
+			fromfrom.leader = {
+				if = {
+					limit = {
+						leader_class = commander
+					}
+					add_trait = leader_trait_dragonslayer
+				}
+			}
+		}
+		if = {
+			limit = { num_owned_planets > 0 }
+			generate_parade_city = yes
+			start_situation = {
+				type = leviathan_celebration_opportunity
+				target = event_target:parade_city
+				effect = {
+					set_situation_flag = celebration_hrozgar
+					set_situation_flag = standard_unity_reward
+				}
+			}
+		}
+	}
+}

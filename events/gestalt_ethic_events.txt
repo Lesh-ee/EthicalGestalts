@@ -1,0 +1,304 @@
+namespace = gestalt_ethics
+
+# set mod flag
+event = {
+	id = gestalt_ethics.10
+	hide_window = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = using_mod_ethical_gestalts
+	}
+}
+
+# set secretly-evil AIs
+country_event = {
+	id = gestalt_ethics.11
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { has_civic = civic_machine_dynamic_objectives }
+
+	immediate = {
+		random_list = {
+			50 = { set_country_flag = will_treacherous_turn }
+			50 = { }
+		}
+	}
+}
+
+# give leaders the Gestalt Consciousness ethic
+country_event = {
+	id = gestalt_ethics.12
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { is_gestalt = yes }
+
+	immediate = {
+		every_owned_leader = {
+			change_background_ethic = ethic_gestalt_consciousness
+		}
+	}
+}
+
+# catch countries created by other mods
+country_event = {
+	id = gestalt_ethics.15
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { has_ethic = ethic_gestalt_consciousness }
+
+	immediate = {
+		while = {
+			count = 3
+			random_list = {
+				5 = {
+					shift_ethic = ethic_fanatic_authoritarian
+					modifier = {
+						factor = 0
+						OR = {
+							has_civic = civic_hive_divided_attention
+							has_civic = civic_hive_pooled_knowledge
+							has_civic = civic_hive_natural_neural_network
+						}
+					}
+				}
+				5 = {
+					shift_ethic = ethic_authoritarian
+					modifier = {
+						factor = 0
+						OR = {
+							has_civic = civic_hive_divided_attention
+							has_civic = civic_hive_pooled_knowledge
+							has_civic = civic_hive_natural_neural_network
+						}
+					}
+				}
+				5 = {
+					shift_ethic = ethic_fanatic_egalitarian
+					modifier = {
+						factor = 0
+						OR = {
+							has_civic = civic_hive_one_mind
+							has_civic = civic_hive_subsumed_will
+						}
+					}
+				}
+				5 = {
+					shift_ethic = ethic_egalitarian
+					modifier = {
+						factor = 0
+						OR = {
+							has_civic = civic_hive_one_mind
+							has_civic = civic_hive_subsumed_will
+						}
+					}
+				}
+				5 = {
+					shift_ethic = ethic_fanatic_xenophobe
+					modifier = {
+						factor = 0
+						OR = {
+							is_machine_assimilator = yes
+							has_valid_civic = civic_hive_assimilator
+							has_valid_civic = civic_hive_empath
+							has_valid_civic = civic_machine_exploration_protocol
+						}
+					}
+				}
+				5 = {
+					shift_ethic = ethic_xenophobe
+					modifier = {
+						factor = 0
+						OR = {
+							is_machine_assimilator = yes
+							has_valid_civic = civic_hive_empath
+							has_valid_civic = civic_machine_exploration_protocol
+						}
+					}
+				}
+				5 = {
+					shift_ethic = ethic_fanatic_xenophile
+					modifier = {
+						factor = 0
+						is_homicidal = yes
+					}
+				}
+				5 = {
+					shift_ethic = ethic_xenophile
+					modifier = {
+						factor = 0
+						is_homicidal = yes
+					}
+				}
+				5 = { shift_ethic = ethic_fanatic_militarist }
+				5 = { shift_ethic = ethic_militarist }
+				5 = {
+					shift_ethic = ethic_fanatic_pacifist
+					modifier = {
+						factor = 0
+						OR = {
+							is_machine_assimilator = yes
+							is_homicidal = yes
+						}
+					}
+				}
+				5 = {
+					shift_ethic = ethic_pacifist
+					modifier = {
+						factor = 0
+						OR = {
+							is_machine_assimilator = yes
+							is_homicidal = yes
+						}
+					}
+				}
+				5 = {
+					shift_ethic = ethic_fanatic_spiritualist
+					modifier = {
+						factor = 0
+						is_machine_empire = yes
+					}
+				}
+				5 = {
+					shift_ethic = ethic_spiritualist
+					modifier = {
+						factor = 0
+						is_machine_empire = yes
+					}
+				}
+				5 = {
+					shift_ethic = ethic_fanatic_materialist
+					modifier = {
+						factor = 0
+						OR = {
+							has_civic = civic_hive_ascensionists
+							has_civic = civic_machine_ascensionists
+						}
+					}
+				}
+				5 = {
+					shift_ethic = ethic_materialist
+					modifier = {
+						factor = 0
+						OR = {
+							has_civic = civic_hive_ascensionists
+							has_civic = civic_machine_ascensionists
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+# event = {
+# 	id = gestalt_ethics.20
+# 	hide_window = yes
+# 	is_triggered_only = yes
+# 	immediate = {
+# 		every_playable_country = {
+# 			limit = {
+# 				OR = {
+# 					is_hive_empire = yes
+# 					has_valid_civic = civic_machine_dynamic_objectives
+# 				}
+# 				any_owned_species = {
+# 					has_citizenship_type = {
+# 						type = citizenship_assimilation
+# 						country = prev
+# 					}
+# 				}
+# 			}
+# 			every_owned_pop = {
+# 				limit = { is_being_assimilated = yes }
+# 				switch = {
+# 					trigger = has_ethic
+# 					ethic_authoritarian = {
+# 						owner = {
+# 							set_timed_country_flag = {
+# 								flag = authoritarian_pops_assimilating
+# 								days = 360
+# 							}
+# 						}
+# 					}
+# 					ethic_egalitarian = {
+# 						owner = {
+# 							set_timed_country_flag = {
+# 								flag = egalitarian_pops_assimilating
+# 								days = 360
+# 							}
+# 						}
+# 					}
+# 					ethic_xenophobe = {
+# 						owner = {
+# 							set_timed_country_flag = {
+# 								flag = xenophobe_pops_assimilating
+# 								days = 360
+# 							}
+# 						}
+# 					}
+# 					ethic_xenophile = {
+# 						owner = {
+# 							set_timed_country_flag = {
+# 								flag = xenophile_pops_assimilating
+# 								days = 360
+# 							}
+# 						}
+# 					}
+# 					ethic_militarist = {
+# 						owner = {
+# 							set_timed_country_flag = {
+# 								flag = militarist_pops_assimilating
+# 								days = 360
+# 							}
+# 						}
+# 					}
+# 					ethic_pacifist = {
+# 						owner = {
+# 							set_timed_country_flag = {
+# 								flag = pacifist_pops_assimilating
+# 								days = 360
+# 							}
+# 						}
+# 					}
+# 					ethic_spiritualist = {
+# 						owner = {
+# 							set_timed_country_flag = {
+# 								flag = spiritualist_pops_assimilating
+# 								days = 360
+# 							}
+# 						}
+# 					}
+# 					ethic_materialist = {
+# 						owner = {
+# 							set_timed_country_flag = {
+# 								flag = materialist_pops_assimilating
+# 								days = 360
+# 							}
+# 						}
+# 					}
+# 				}
+# 			}
+# 		}
+# 	}
+# }
+
+# setup for hive ethic shifts
+country_event = {
+	id = gestalt_ethics.21
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			is_hive_empire = yes
+			has_valid_civic = civic_machine_dynamic_objectives
+		}
+		is_country_type = default
+	}
+
+	immediate = {
+		set_all_hive_ethic_attractions = yes	
+	}
+}

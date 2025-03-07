@@ -1,0 +1,341 @@
+## Possible Deposit Variables ##
+# resources, resource and amount
+# potential trigger (planet scope)
+# blocked_modifier - applied to planet
+# constant_modifier - applied to planet always
+# station = station class in orbit to gather
+# blocker_swap_types = {}
+# all_blocker_swap_types = yes/no
+# use_weights_for_blocker_swap_types = yes/no
+# terraforming_swap_types = { }
+# should_swap_deposit_on_terraforming = yes/no
+# all_terraforming_swap_types = yes/no
+# use_weights_for_terraforming_swap_types = yes/no
+
+
+###############
+#### ENERGY ###
+###############
+
+d_singlemind_farms = {
+	is_for_colonizable = yes
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/farmers_add
+		FARMER_AMOUNT = -2
+		ANGLER_AMOUNT = -1
+		HIVE_BONUS = -1
+		desc = 0
+		trigger = " "
+		mult_line = " "
+	}
+	planet_modifier = {
+		job_farmer_add = 2
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_machine_empire = yes }
+		}
+		planet_housing_add = -1
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_mines = {
+	is_for_colonizable = yes
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/miners_add
+		AMOUNT = -2
+		HIVE_BONUS = -1
+		desc = 0
+		trigger = " "
+		mult_line = " "
+	}
+	planet_modifier = {
+		job_miner_add = 2
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_machine_empire = yes }
+		}
+		planet_housing_add = -1
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_generators = {
+	is_for_colonizable = yes
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/technicians_add
+		AMOUNT = -2
+		HIVE_BONUS = -1
+		desc = 0
+		trigger = " "
+		mult_line = " "
+	}
+	planet_modifier = {
+		job_technician_add = 2
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_machine_empire = yes }
+		}
+		planet_housing_add = -1
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_industry = {
+	is_for_colonizable = yes
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/industrial_add
+		FOUNDRY_AMOUNT_VAL = value:negative_value|VALUE|value:stu_industrial_district_foundry_jobs|
+		FACTORY_AMOUNT_VAL = value:negative_value|VALUE|value:stu_industrial_district_factory_jobs|
+		desc = 0
+		trigger = " "
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_catalytic_empire = no }
+		}
+		job_foundry_add = 1
+		mult = value:eg_singlemend_industrial_district_foundry_jobs
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_catalytic_empire = yes }
+		}
+		job_catalytic_technician_add = 1
+		mult = value:eg_singlemend_industrial_district_foundry_jobs
+	}
+	triggered_planet_modifier = {
+		job_artisan_add = 1
+		mult = value:eg_singlemend_industrial_district_factory_jobs
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_foundries = {
+	is_for_colonizable = yes
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/foundry_add
+		AMOUNT = -6
+		desc = 0
+		trigger = " "
+		mult_line = " "
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_catalytic_empire = no }
+		}
+		job_foundry_add = 6
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_catalytic_empire = no }
+		}
+		job_catalytic_technician_add = 6
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_factories = {
+	is_for_colonizable = yes
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/factory_add
+		AMOUNT = -6
+		desc = 0
+		trigger = " "
+		mult_line = " "
+	}
+	planet_modifier = {
+		job_artisan_add = 6
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_industry_hab = {
+	is_for_colonizable = yes
+	icon = d_singlemind_industry
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/industrial_add
+		FOUNDRY_AMOUNT_VAL = value:negative_value|VALUE|value:stu_habitat_industrial_district_foundry_jobs|
+		FACTORY_AMOUNT_VAL = value:negative_value|VALUE|value:stu_habitat_industrial_district_factory_jobs|
+		desc = 0
+		trigger = " "
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_catalytic_empire = no }
+		}
+		job_foundry_add = 1
+		mult = value:eg_singlemend_habitat_industrial_district_foundry_jobs
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_catalytic_empire = yes }
+		}
+		job_catalytic_technician_add = 1
+		mult = value:eg_singlemend_habitat_industrial_district_foundry_jobs
+	}
+	triggered_planet_modifier = {
+		job_artisan_add = 1
+		mult = value:eg_singlemend_habitat_industrial_district_factory_jobs
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_mines_hab = {
+	is_for_colonizable = yes
+	icon = d_singlemind_mines
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/miners_add
+		AMOUNT = -1
+		HIVE_BONUS = -1
+		desc = 0
+		trigger = " "
+		mult_line = " mult = owner.value:hab_void_dweller_jobs "
+	}
+	triggered_planet_modifier = {
+		job_miner_add = 1
+		mult = owner.value:hab_void_dweller_jobs
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_generators_hab = {
+	is_for_colonizable = yes
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/technicians_add
+		AMOUNT = -1
+		HIVE_BONUS = -1
+		desc = 0
+		trigger = " "
+		mult_line = " mult = owner.value:hab_void_dweller_jobs "
+	}
+	triggered_planet_modifier = {
+		job_technician_add = 1
+		mult = owner.value:hab_void_dweller_jobs
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_farms_rw = {
+	is_for_colonizable = yes
+	icon = d_singlemind_farms
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/farmers_add
+		FARMER_AMOUNT = -10
+		ANGLER_AMOUNT = -5
+		HIVE_BONUS = -5
+		desc = 0
+		trigger = " "
+		mult_line = " "
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_hive_empire = yes }
+		}
+		planet_housing_add = -5
+	}
+	planet_modifier = {
+		job_farmer_add = 10
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}
+
+d_singlemind_industry_rw = {
+	is_for_colonizable = yes
+	icon = d_singlemind_industry
+
+	category = deposit_cat_singlemind_enclave
+
+	inline_script = {
+		script = jobs/triggered/industrial_add
+		FOUNDRY_AMOUNT_VAL = value:negative_value|VALUE|value:stu_ringworld_industrial_district_foundry_jobs|
+		FACTORY_AMOUNT_VAL = value:negative_value|VALUE|value:stu_ringworld_industrial_district_factory_jobs|
+		desc = 0
+		trigger = " "
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_catalytic_empire = no }
+		}
+		job_foundry_add = 1
+		mult = value:eg_singlemend_ringworld_industrial_district_foundry_jobs
+	}
+	triggered_planet_modifier = {
+		potential = {
+			owner = { is_catalytic_empire = yes }
+		}
+		job_catalytic_technician_add = 1
+		mult = value:eg_singlemend_ringworld_industrial_district_foundry_jobs
+	}
+	triggered_planet_modifier = {
+		job_artisan_add = 1
+		mult = value:eg_singlemend_ringworld_industrial_district_factory_jobs
+	}
+
+	drop_weight = {
+		weight = 0
+	}
+}

@@ -1,0 +1,7 @@
+# drones should take drone jobs rather than other jobs when able
+@spawner_drone_job_weight = 50000
+@synapse_drone_job_weight = 5000
+@warrior_drone_job_weight = 500
+@complex_drone_job_weight = 50
+@simple_drone_job_weight = 5
+

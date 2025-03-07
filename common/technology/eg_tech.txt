@@ -1,0 +1,298 @@
+reprogram_machine_tech = {
+	icon = "tech_sapient_ai"
+	area = physics
+	tier = 4
+	cost = @tier4cost1
+	category = { computing }
+	prerequisites = { "tech_sapient_ai" }
+	weight = @tier4weight1
+	is_rare = yes
+
+	prereqfor_desc = {
+		custom = {
+			title = "TECH_ALLOWS_REPROGRAMMING_WARGOAL_TITLE"
+			desc = "TECH_ALLOWS_REPROGRAMMING_WARGOAL_DESC"
+		}
+	}
+	
+	potential = {
+		NOT = { is_machine_empire = yes }
+		any_relation = { is_machine_empire = yes }
+	}
+	
+	weight_modifier = {
+		factor = 0.5
+		modifier = {
+			factor = 0.20
+			NOR = {
+				has_trait_in_council = { TRAIT = leader_trait_expertise_computing }
+				has_trait_in_council = { TRAIT = leader_trait_curator }
+				has_trait_in_council = { TRAIT = leader_trait_spark_of_genius }
+				has_trait_in_council = { TRAIT = leader_trait_spark_of_genius_2 }
+			}
+		}
+		inline_script = {
+			script = technologies/rare_technologies_weight_modifiers
+			TECHNOLOGY = reprogram_machine_tech
+		}
+	}
+
+	ai_weight = {
+		factor = 1.25
+		modifier = {
+			factor = 0
+			OR = {
+				is_authoritarian = no
+				NOR = {
+					has_ai_personality_behaviour = robot_exploiter
+					has_ai_personality_behaviour = robot_liberator
+				}
+			}
+		}
+	}
+}
+
+tech_singlemind_governance = {
+	
+	area = society
+	tier = 1
+	cost = @tier1cost1
+	category = { statecraft }
+	weight = @tier1weight2
+
+	prereqfor_desc = {
+		custom = {
+			title = "TECH_ALLOWS_SINGLEMIND_GOVERNANCE_TITLE"
+			desc = "TECH_ALLOWS_SINGLEMIND_GOVERNANCE_DESC"
+		}
+	}
+	
+	potential = {
+		is_gestalt = yes
+		NOR = {
+			has_civic = civic_machine_terminator
+			has_civic = civic_hive_devouring_swarm
+		}
+		OR = {
+			any_relation = { is_gestalt = no }
+			any_owned_species = {
+				NOR = {
+					has_trait = trait_hive_mind
+					has_trait = trait_machine_unit
+				}
+			}
+			has_civic = civic_machine_assimilator
+			has_civic = civic_machine_servitor
+			has_civic = civic_hive_assimilator
+			has_civic = civic_hive_guest
+		}
+	}
+	
+	weight_modifier = {	
+	}
+	
+	ai_weight = {
+		modifier = {
+			factor = 0
+			has_valid_ai_personality = yes
+			NOR = {
+				is_xenophile = yes
+				has_ai_personality_behaviour = conqueror
+				has_ai_personality_behaviour = subjugator
+				has_ai_personality_behaviour = uplifter
+				has_ai_personality_behaviour = infiltrator
+				has_ai_personality_behaviour = dominator
+			}
+		}
+		modifier = {
+			factor = 0
+			has_valid_ai_personality = yes
+			has_ai_personality_behaviour = slaver
+			is_xenophile = no
+		}
+	}
+}
+
+# Spores
+tech_pk_spores = {
+	icon = "tech_pk_nanobots"
+	area = society
+	cost = @tier5cost3
+	tier = 5
+	is_rare = yes
+	is_reverse_engineerable = no
+	category = { biology }
+	prerequisites = { "tech_colossus" }
+	ai_update_type = military
+	weight = @tier5weight3
+	
+	potential = {
+		host_has_dlc = "Apocalypse"
+		has_country_flag = colossus_project
+		has_valid_civic = civic_hive_assimilator
+	}
+	
+	weight_modifier = {
+		factor = 0.50
+		modifier = {
+			factor = 0.20
+			NOR = {
+				has_trait_in_council = { TRAIT = leader_trait_maniacal }
+				has_trait_in_council = { TRAIT = leader_trait_maniacal_2 }
+				has_trait_in_council = { TRAIT = leader_trait_maniacal_3 }
+				has_trait_in_council = { TRAIT = leader_trait_curator }
+				has_trait_in_council = { TRAIT = leader_trait_expertise_biology }
+			}
+		}
+		inline_script = {
+			script = technologies/rare_technologies_weight_modifiers
+			TECHNOLOGY = tech_pk_spores
+		}
+		modifier = {
+			factor = 2
+			has_relic = r_pox_sample
+		}
+	}
+	
+	ai_weight = {
+		factor = 0.25
+		modifier = {
+			factor = 1.5
+			is_gestalt = yes
+			has_valid_civic = civic_hive_assimilator
+		}
+	}
+}
+
+
+# tech_cybernetic_assimilation = {
+# 	icon = tech_neural_implants
+# 	cost = @tier3cost2
+# 	area = society
+# 	tier = 3
+# 	category = { statecraft }
+# 	prerequisites = { "tech_neural_implants" }
+# 	weight = 0 # @tier3weight1
+# 	is_rare = yes
+
+# 	# allows assimilation of organic pops
+
+# 	potential = {
+# 		is_machine_empire = yes
+# 		NOR = {
+# 			has_valid_civic = civic_machine_assimilator
+# 			has_valid_civic = civic_machine_terminator
+# 			has_valid_civic = civic_machine_servitor
+# 		}
+# 	}
+
+# 	weight_modifier = {
+# 		factor = 0.50
+# 		modifier = {
+# 			factor = @ap_technological_ascendancy_rare_tech
+# 			has_ascension_perk = ap_technological_ascendancy
+# 		}
+# 		modifier = {
+# 			factor = @federation_perk_factor
+# 			has_federation = yes
+# 			federation = {
+# 				has_federation_perk = rare_tech_boost
+# 				any_member = { has_technology = tech_pk_cracker }
+# 			}
+# 		}	
+# 		modifier = {
+# 			factor = 0.20
+# 			NOR = {
+# 				research_leader = {
+# 					area = engineering
+# 					has_trait = "leader_trait_maniacal"
+# 				}
+# 				research_leader = {
+# 					area = engineering
+# 					has_trait = "leader_trait_curator"
+# 				}
+# 				research_leader = {
+# 					area = engineering
+# 					has_trait = "leader_trait_expertise_statecraft"
+# 				}
+# 			}			
+# 		}	
+# 	}
+
+# 	ai_weight = {
+# 		factor = 1.25
+# 		modifier = {
+# 			factor = 0
+# 			is_authoritarian = no
+# 		}
+# 		modifier = {
+# 			factor = 1.25
+# 			research_leader = {
+# 				area = society
+# 				has_trait = "leader_trait_expertise_statecraft"
+# 			}
+# 		}
+# 	}
+# }
+
+
+# tech_xeno_ethic_schemas = {
+# 	cost = @tier2cost2
+# 	area = society
+# 	tier = 2
+# 	category = { statecraft }
+# 	prerequisites = { "tech_society_2" }
+# 	weight = @tier2weight2
+
+# 	potential = {
+# 		is_machine_empire = yes
+# 		has_encountered_other_species = yes
+# 	}
+
+# 	modifier = {
+# 		country_edict_cap_add = 1
+# 	}
+
+# 	weight_modifier = {
+# 		modifier = {
+# 			factor = 2
+# 			is_xenophile = yes
+# 		}
+# 		modifier = {
+# 			factor = 2
+# 			OR = {
+# 				has_federation = yes
+# 				is_galactic_community_member = yes
+# 			}
+# 		}
+# 		modifier = {
+# 			factor = 0.25
+# 			is_xenophobe = yes
+# 		}
+# 		modifier = {
+# 			factor = 1.25
+# 			research_leader = {
+# 				area = society
+# 				has_trait = "leader_trait_expertise_statecraft"
+# 			}
+# 		}
+# 	}
+
+# 	ai_weight = {
+# 		modifier = {
+# 			factor = 1.25
+# 			has_ethic = ethic_xenophile
+# 		}
+# 		modifier = {
+# 			factor = 2
+# 			has_ethic = ethic_fanatic_xenophile
+# 		}
+# 		modifier = {
+# 			factor = 1.25
+# 			research_leader = {
+# 				area = society
+# 				has_trait = "leader_trait_expertise_biology"
+# 			}
+# 		}
+# 	}
+# }

@@ -1,0 +1,635 @@
+#	Example:
+# 
+#	example_trigger = {
+#		is_country_type = default
+#		num_communications > 0
+#	}
+#
+#
+#	In a script file:
+#
+#	trigger = {
+#		example_trigger = yes
+#	}
+#
+
+leader_has_ethic = {
+	OR = {
+		has_ethic = ethic_$ethic$
+		AND = {
+			has_ethic = ethic_gestalt_consciousness
+			exists = owner
+			owner = { is_$ethic$ = yes }
+		}
+		AND = {
+			has_ethic = ethic_gestalt_consciousness
+			exists = from
+			from = {
+				is_scope_type = country
+				is_$ethic$ = yes
+			}
+		}
+	}
+}
+
+can_reprogram_target = {
+	if = {
+		limit = {
+			$target$ = {
+				is_machine_empire = yes
+			}	
+		}
+		OR = {
+			is_machine_empire = yes
+			has_technology = reprogram_machine_tech
+		}
+	}
+	# else_if = {
+	# 	limit = {
+	# 		$target$ = {
+	# 			is_hive_empire = yes
+	# 			is_egalitarian = no
+	# 		}
+	# 	}
+	# 	has_technology = reprogram_hive_tech
+	# }
+	else = {
+		always = no
+	}
+}
+
+country_singlemind_building_check = {
+	exists = owner
+	owner = {
+		OR = {
+			is_gestalt = no
+			has_valid_civic = civic_machine_servitor
+			AND = {
+				any_owned_pop_species = {
+					NOR = {
+						has_trait = trait_hive_mind
+						has_trait = trait_machine_unit
+						AND = {
+							has_trait = trait_cybernetic
+							prev = { has_valid_civic = civic_machine_assimilator }
+						}
+					}
+				}
+			}
+		}
+	}		
+}
+
+planet_singlemind_workers_check = {
+	if = {
+		limit = { exists = owner owner = { is_gestalt = yes } }
+		any_owned_species = {
+			NOR = {
+				has_trait = trait_hive_mind
+				has_trait = trait_machine_unit
+				AND = {
+					has_trait = trait_cybernetic
+					prev.owner = { has_valid_civic = civic_machine_assimilator }
+				}
+				has_citizenship_type = {
+					type = citizenship_purge
+					country = prev.owner
+				}
+				has_citizenship_type = {
+					type = citizenship_assimilation
+					country = prev.owner
+				}
+			}
+		}	
+	}
+}
+planet_singlemind_specialists_check = {
+	if = {
+		limit = { exists = owner owner = { is_gestalt = yes } }
+		any_owned_species = {
+			NOR = {
+				has_trait = trait_hive_mind
+				has_trait = trait_machine_unit
+				AND = {
+					has_trait = trait_cybernetic
+					prev.owner = { has_valid_civic = civic_machine_assimilator }
+				}
+				has_citizenship_type = {
+					type = citizenship_purge
+					country = prev.owner
+				}
+				has_citizenship_type = {
+					type = citizenship_assimilation
+					country = prev.owner
+				}
+				has_trait = trait_syncretic_proles
+				has_trait = trait_nerve_stapled
+			}
+			OR = {
+				NOT = {
+					has_citizenship_type = {
+						type = citizenship_slavery
+						country = prev.owner
+					}	
+				}
+				has_slavery_type = {
+					type = slavery_indentured
+					country = prev.owner
+				}	
+			}
+		}	
+	}
+}
+
+planet_singlemind_building_check = {
+	if = {
+		limit = { exists = owner owner = { is_gestalt = yes is_ai = yes } }
+		any_owned_pop = {
+			is_singlemind_nontrophy = yes
+		}	
+	}
+	else_if = {
+		limit = { exists = owner owner = { is_gestalt = yes is_ai = no } }
+		any_owned_pop = {
+			is_singlemind = yes
+		}	
+	}
+}
+
+is_singlemind = {
+	OR = {
+		is_pop_category = worker
+		is_pop_category = specialist
+		is_pop_category = bio_trophy
+		is_pop_category = slave
+	}
+}
+
+is_singlemind_nontrophy = {
+	OR = {
+		is_pop_category = worker
+		is_pop_category = specialist
+		is_pop_category = slave
+	}
+	NOR = {
+		has_job = organic_battery
+		has_job = livestock
+	}
+}
+
+is_drone = {
+	OR = {
+		is_pop_category = simple_drone
+		is_pop_category = complex_drone
+	}
+}
+
+artisan_singlemind_job_check_trigger = {
+	custom_tooltip = SPECIALIST_JOB_TRIGGER
+	hidden_trigger = {
+		exists = owner
+		is_being_purged = no
+		is_being_assimilated = no
+		NOT = { has_trait = trait_syncretic_proles }
+		NOT = { has_trait = trait_nerve_stapled }
+		OR = {
+			NOT = { has_trait = trait_mechanical }
+			owner = { is_machine_empire = yes }
+		}
+		NOT = { has_citizenship_type = { type = citizenship_organic_trophy } }
+	}
+}
+
+can_govern_singleminds = {
+	OR = {
+		is_gestalt = no
+		has_technology = tech_singlemind_governance
+	}
+}
+
+has_arm_with_ethic = {
+	any_pop_faction = {
+		is_pop_faction_type = gestalt_arm
+		parameter:gestalt_mind = {
+			has_ethic = ethic_$ethic$
+		}
+	}
+}
+
+has_unsuppressed_arm_with_ethic = {
+	any_pop_faction = {
+		is_pop_faction_type = gestalt_arm
+		NOT = { has_pop_faction_flag = suppressed_arm }
+		parameter:gestalt_mind = {
+			has_ethic = ethic_$ethic$
+		}
+	}
+}
+
+has_promoted_arm_with_ethic = {
+	any_relation = {
+		reverse_has_relation_flag = { who = prev flag = promoted_arm }
+		has_ethic = ethic_$ethic$
+	}
+}
+
+can_destroy_planet_with_PLANET_KILLER_SPORES = {
+	custom_tooltip = {
+		fail_text = is_not_a_habitable_planet_or_megastructure
+		is_a_habitable_planet_megastructure = yes
+	}
+	custom_tooltip = {
+		fail_text = is_shielded
+		NOR = {
+			is_planet_class = pc_shielded
+			is_planet_class = pc_ringworld_shielded
+			is_planet_class = pc_habitat_shielded
+		}
+	}
+	custom_tooltip = {
+		fail_text = is_not_hostile_or_primitive
+		OR = {
+			planet_is_hostile = yes
+			AND = {
+				exists = owner
+				owner = {
+					is_country_type = primitive
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = owner
+			owner = { is_country_type = primitive }
+		}
+		custom_tooltip = {
+			fail_text = primitives_not_in_borders
+			exists = space_owner
+			space_owner = { is_same_value = from.owner }
+		}
+	}
+	custom_tooltip = {
+		fail_text = cannot_assimilate_synth_empire
+		exists = owner
+		owner = { is_synthetic_empire = no }
+	}
+}
+
+doesnt_have_ethical_gestalts = {
+	always = no
+}
+
+is_same_or_creator_species = {
+	OR = {
+		is_same_species = $target$
+		AND = {
+			is_scope_type = species
+			has_species_flag = creator_species@$target$
+		}
+		AND = {
+			NOT = { is_scope_type = species }
+			species = { has_species_flag = creator_species@$target$ }
+		}
+	}
+}
+
+allow_gestalt_ethic_shift = {
+	hidden_trigger = {
+		NOT = { has_ethic = ethic_fanatic_$ethic$ }
+	}
+	custom_tooltip = {
+		fail_text = not_enough_gestalt_ethic_attraction
+		OR = {
+			has_valid_civic = civic_hive_unprincipled
+			has_valid_civic = civic_machine_dynamic_objectives
+			check_variable = {
+				which = hive_$ethic$_attraction
+				value > 2
+			}
+		}
+	}
+	custom_tooltip = {
+		fail_text = already_shifting_ethic
+		OR = {
+			has_valid_civic = civic_hive_unprincipled
+			has_valid_civic = civic_machine_dynamic_objectives
+			has_edict = shift_to_$ethic$
+			NOR = {
+				has_edict = shift_to_pacifist
+				has_edict = shift_to_militarist
+				has_edict = shift_to_xenophile
+				has_edict = shift_to_xenophobe
+				has_edict = shift_to_egalitarian
+				has_edict = shift_to_authoritarian
+				has_edict = shift_to_spiritualist
+				has_edict = shift_to_materialist
+			}
+		}
+	}
+}
+
+has_eg_unrestricted_cbs = {
+	OR = {
+		AND = {
+			$target$ = { is_robot_empire = yes }
+			has_policy_flag = ai_servitude
+		}
+		AND = {
+			$target$ = { is_gestalt = yes }
+			OR = {
+				AND = {
+					is_xenophile = yes
+					$target$ = { is_xenophile = no }
+				}
+				AND = {
+					is_xenophobe = yes
+					$target$ = { is_xenophobe = no }
+				}
+				AND = {
+					is_authoritarian = yes
+					$target$ = { is_authoritarian = no }
+				}
+				AND = {
+					is_egalitarian = yes
+					$target$ = { is_egalitarian = no }
+				}
+				AND = {
+					is_spiritualist = yes
+					$target$ = { is_spiritualist = no }
+				}
+				AND = {
+					is_materialist = yes
+					$target$ = { is_materialist = no }
+				}
+				AND = {
+					is_militarist = yes
+					$target$ = { is_militarist = no }
+				}
+				AND = {
+					is_pacifist = yes
+					$target$ = { is_pacifist = no }
+				}
+			}
+			# Restrictions on which GCs the AI considerss worth making ideologically-motivated claims against
+			[[check_ai_limits]
+			OR = {
+				is_ai = no
+				# They're unworthy of autonomy, weaken them until we can subjugate them
+				has_ai_personality_behaviour = subjugator
+				# They have subjects we need to "free"!
+				AND = {
+					$target$ = {
+						any_owned_species = {
+							NOR = {
+								has_trait = trait_hive_mind
+								has_trait = trait_machine_unit
+							}
+							is_sapient = yes
+							can_think = yes
+						}
+					}
+					# avoid totally wiping out a species
+					NAND = {
+						prev = {
+							exists = owner.capital_star
+							is_same_value = owner.capital_star
+						}
+						NOR = {
+							has_ai_personality_behaviour = purger
+							has_tradition = tr_genetics_resequencing
+						}
+					}
+				}
+				# They have drones we need to "free"!
+				AND = {
+					has_tradition = tr_genetics_creation
+					$target$ = { is_hive_empire = yes }
+					is_hive_empire = no
+					OR = {
+						is_xenophile = no
+						has_ethic = ethic_fanatic_egalitarian
+					}
+				}
+			}
+			]
+		}
+	}
+}
+
+eg_policy_claim_restrictions = {
+	exists = owner
+	root = {
+		has_eg_unrestricted_cbs = {
+			target = prev.owner
+		}
+	}
+}
+
+eg_hive_assimilator_claim_restrictions = {
+	root = { has_valid_civic = civic_hive_assimilator } # Ethical Gestalts
+}
+
+eg_drone_pop_growth_restrictions = {
+	# Ethical Gestalts - Guest Hive pops can have residence citizenship, but can't grow without a branch office
+	OR = {
+		NOT = { has_trait = trait_hive_mind }
+		has_citizenship_type = { type = citizenship_full country = root.owner }
+		AND = {
+			exists = root.branch_office_owner
+			has_citizenship_type = { type = citizenship_full country = root.branch_office_owner }
+			root.branch_office_owner = {
+				NOT = {
+					has_relation_flag = { who = root.owner flag = no_pop_growth_treaty }
+				}
+			}
+		}
+	}
+	# Ethical Gestalts - hives don't need to allow population controls to halt their drones' growth
+	NAND = {
+		OR = {
+			has_trait = trait_hive_mind
+			has_citizenship_type = { country = root.owner type = citizenship_full_machine }
+		}
+		root = {
+			has_modifier = planet_population_control_gestalt
+		}
+	}
+}
+
+eg_permit_drone_purge = {
+	# Ethical Gestalts - hives can't purge non-drone pops unless they allow purges
+	OR = {
+		AND = {
+			owner = { is_hive_empire = yes }
+			has_trait = trait_hive_mind				
+		}
+		has_citizenship_type = { type = citizenship_full_machine country = owner }
+	}
+}
+
+eg_ai_resettlement_restriction = {
+	hidden_trigger = {	# Ethical Gestalts - not sure if ai will know not to move pos to planets where they'll immediately start declining otherwise
+		OR = {
+			owner = { is_ai = no }
+			NOT = { has_trait = trait_hive_mind }
+			owner = { is_hive_empire = yes }
+		}
+	}
+}
+
+eg_gestalt_resettlement_restriction = {
+	OR = {
+		AND = {
+			has_trait = trait_hive_mind
+			owner = { is_hive_empire = yes }
+		}
+		has_citizenship_type = { type = citizenship_full_machine }
+	}
+}
+
+eg_gestalt_pop_control_growth_restrictions = {
+	owner = {
+		NOT = { has_policy_flag = population_controls_not_allowed }
+	}
+}
+
+eg_allow_force_grow_drones = {
+	# Ethical Gestalts - gestalts can always force-grow their drones
+	AND = {
+		owner = {
+			OR = {
+				is_hive_empire = yes
+				is_machine_assimilator = yes
+			}
+		}
+		NOT = { has_modifier = planet_population_control_gestalt }
+	}
+}
+
+eg_force_decline_lonely_hive_pops = {
+	custom_tooltip = {
+		success_text = lonely_hive_mind_pops_kill_themselves_citizenship
+		exists = this
+		has_trait = trait_hive_mind
+		exists = from
+		NOR = {
+			AND = {
+				exists = from.owner
+				has_citizenship_type = { type = citizenship_full country = from.owner }
+			}
+			AND = {
+				exists = from.branch_office_owner
+				has_citizenship_type = { type = citizenship_full country = from.branch_office_owner }
+			}
+			NOT = { exists = from.owner }
+		}
+	
+	}
+}
+
+eg_allow_branch_offices = {
+	OR = {
+		has_valid_civic = civic_hive_guest
+		has_policy_flag = infiltration_allowed
+	}
+}
+
+eg_allow_branch_offices_in_country = {
+	OR = {
+		has_valid_civic = civic_hive_guest
+		has_valid_civic = civic_machine_servitor
+	}
+}
+
+eg_no_branch_offices_on_own_country_rule = {
+	hidden_trigger = {
+		exists = owner
+		owner = {
+			NOT = { is_same_value = root }
+		}
+	}
+}
+
+# moved from planet-scope to country-scope rule
+eg_megacorp_planet_branch_office_restrictions = {
+	custom_tooltip = {
+		fail_text = BRANCH_OFFICE_NOT_ON_MEGACORP_PLANET
+		exists = owner
+		owner = {
+			NOR = {
+				is_megacorp = yes
+				has_civic = civic_galactic_sovereign_megacorp
+			}
+		}
+	}	
+}
+
+eg_branch_office_planet_restrictions = {
+	if = {
+		limit = {
+			root = {
+				has_valid_civic = civic_hive_guest
+				NOT = { has_policy_flag = infiltration_allowed }
+			}
+		}
+		custom_tooltip = {
+			fail_text = BRANCH_OFFICE_NOT_MIGRATION_TREATY
+			exists = owner
+			root = { has_migration_access = prev.owner }
+		}
+	}
+}
+
+eg_allow_infiltration = {
+	has_policy_flag = infiltration_allowed # Ethical Gestalts
+}
+
+eg_auto_migration_restrictions = {
+	IF = {
+		limit = { has_trait = trait_hive_mind }
+		hidden_trigger = {
+			OR = {
+				NOT = { has_trait = trait_hive_mind }
+				owner = { is_hive_empire = yes }
+			}
+		}
+	}
+}
+
+eg_drone_job_criteria = {
+	OR = {
+		AND = {
+			owner = { is_hive_empire = yes }
+			has_citizenship_type = { type = citizenship_full country = owner }
+		}
+		AND = {
+			owner = { is_machine_empire = yes }
+			has_citizenship_type = { type = citizenship_full_machine country = owner }
+		}
+		AND = {
+			planet = {
+				exists = branch_office_owner
+				branch_office_owner = {
+					is_hive_empire = yes
+					root.species = {
+						has_citizenship_type = {
+							type = citizenship_full
+							country = prev
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+eg_worker_job_criteria = {
+	NAND = {
+		owner = { is_gestalt = yes }
+		OR = {
+			has_trait = trait_hive_mind
+			has_trait = trait_machine_unit
+		}
+	}
+}

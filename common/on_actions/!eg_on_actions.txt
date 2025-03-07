@@ -1,0 +1,7 @@
+# a new leader is created
+# scope: country, from: leader
+on_leader_spawned = {
+	events = {
+		gestalt_ethics.200
+	}
+}

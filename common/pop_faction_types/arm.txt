@@ -1,0 +1,767 @@
+##############################
+# Gestalt Arm Faction
+##############################
+
+gestalt_arm = {
+	election_header = "GFX_faction_header_yellow"
+	guiding_ethic = ethic_gestalt_consciousness
+	use_guiding_ethic_as_pop_filter = no
+	
+	unique = no
+	support_multiplier = 1
+	
+	resources = {
+		category = pop_factions
+		produces = {
+			trigger = {
+				from = { is_gestalt = no }
+			}
+			unity = @faction_base_unity
+		}		
+	}
+
+	is_potential = {
+		is_faction_allowed = yes
+		any_owned_planet = {
+			exists = branch_office_owner
+			branch_office_owner = { is_hive_empire = yes }
+		}
+	}
+	
+	parameters = {
+		empire = {
+			type = country
+			valid_objects = {
+				is_same_value = root
+			}
+		}
+		gestalt_mind = {
+			type = country
+			valid_objects = {
+				is_hive_empire = yes
+				root = {
+					any_owned_planet = {
+						has_branch_office = prevprev
+					}
+				}
+			}
+		}
+	}
+
+	valid = {
+		not = {
+			has_pop_faction_flag = duplicate_faction
+		}
+	}
+	
+	can_join_pre_triggers = {
+		is_enslaved = no
+		is_being_purged = no
+	}
+
+	can_join_faction = {
+		has_trait = trait_hive_mind
+		planet = {
+			has_branch_office = yes
+			branch_office_owner = { is_same_value = from.parameter:gestalt_mind }
+		}
+		species = {
+			has_citizenship_type = {
+				type = citizenship_full
+				country = from.parameter:gestalt_mind
+			}
+		}
+	}
+	
+	attraction = {
+		base = 150
+	}
+	
+	leader = {
+		base = 0
+	}
+
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -50
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value <= -160 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value <= -160 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -45
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -160 }
+				opinion = { who = prev.owner value <= -140 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -160 }
+				opinion = { who = prev.owner value <= -140 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -40
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -140 }
+				opinion = { who = prev.owner value <= -120 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -140 }
+				opinion = { who = prev.owner value <= -120 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -35
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -120 }
+				opinion = { who = prev.owner value <= -100 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -120 }
+				opinion = { who = prev.owner value <= -100 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -30
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -100 }
+				opinion = { who = prev.owner value <= -80 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -100 }
+				opinion = { who = prev.owner value <= -80 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -25
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -80 }
+				opinion = { who = prev.owner value <= -60 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -80 }
+				opinion = { who = prev.owner value <= -60 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -20
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -60 }
+				opinion = { who = prev.owner value <= -40 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -60 }
+				opinion = { who = prev.owner value <= -40 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -15
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -40 }
+				opinion = { who = prev.owner value <= -20 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -40 }
+				opinion = { who = prev.owner value <= -20 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -10
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -20 }
+				opinion = { who = prev.owner value <= 0 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > -20 }
+				opinion = { who = prev.owner value <= 0 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = -5
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 0 }
+				opinion = { who = prev.owner value <= 20 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 0 }
+				opinion = { who = prev.owner value <= 20 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 0
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 20 }
+				opinion = { who = prev.owner value <= 40 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 20 }
+				opinion = { who = prev.owner value <= 40 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 5
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 40 }
+				opinion = { who = prev.owner value <= 60 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 40 }
+				opinion = { who = prev.owner value <= 60 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 10
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 60 }
+				opinion = { who = prev.owner value <= 80 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 60 }
+				opinion = { who = prev.owner value <= 80 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 15
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 80 }
+				opinion = { who = prev.owner value <= 100 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 80 }
+				opinion = { who = prev.owner value <= 100 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 20
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 100 }
+				opinion = { who = prev.owner value <= 120 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 100 }
+				opinion = { who = prev.owner value <= 120 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 25
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 120 }
+				opinion = { who = prev.owner value <= 140 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 120 }
+				opinion = { who = prev.owner value <= 140 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 30
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 140 }
+				opinion = { who = prev.owner value <= 160 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 140 }
+				opinion = { who = prev.owner value <= 160 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 35
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 160 }
+				opinion = { who = prev.owner value <= 180 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 160 }
+				opinion = { who = prev.owner value <= 180 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 40
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 180 }
+				opinion = { who = prev.owner value <= 200 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 180 }
+				opinion = { who = prev.owner value <= 200 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 45
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 200 }
+				opinion = { who = prev.owner value <= 220 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 200 }
+				opinion = { who = prev.owner value <= 220 }
+			}
+		}
+	}
+	demand = {
+		title = "ARM_OPINION"
+		unfulfilled_title = "ARM_OPINION"
+		desc = "ARM_OPINION_DESC"
+
+		fulfilled_effect = 50
+		unfulfilled_effect = 0
+		
+		potential = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 220 }
+			}
+		}
+		
+		trigger = {
+			exists = owner
+			exists = parameter:gestalt_mind
+			parameter:gestalt_mind = {
+				opinion = { who = prev.owner value > 220 }
+			}
+		}
+	}
+
+	on_create = {
+		if = {
+			limit = {
+				owner = {
+					count_pop_faction = {
+						limit = {
+							is_pop_faction_type = gestalt_arm
+							check_pop_faction_parameter = { which = gestalt_mind value = prevprev.parameter:gestalt_mind }	
+						}
+						count > 1
+					}
+				}
+			}
+			set_pop_faction_flag = duplicate_faction
+		}
+	}
+
+	actions = {
+		promote_faction = {
+			title = "PROMOTE_FACTION"
+			description = "PROMOTE_FACTION_DESC"
+			
+			potential = {
+				NOR = {
+					has_pop_faction_flag = suppressed_arm
+					has_pop_faction_flag = promoted_arm
+				}
+			}
+
+			effect = {
+				set_pop_faction_flag = promoted_arm
+				parameter:empire = {
+					set_relation_flag = { who = prev.parameter:gestalt_mind flag = promoted_arm }
+					add_modifier = { modifier = modifier_promoted_arm days = -1 }
+				}
+			}
+			
+			ai_weight = {
+				base = 0
+			}
+		}
+		cancel_promote_faction = {
+			title = "CANCEL_PROMOTE_FACTION"
+			description = "CANCEL_PROMOTE_FACTION_DESC"
+			
+			potential = {
+				has_pop_faction_flag = promoted_arm
+			}
+
+			effect = {
+				remove_pop_faction_flag = promoted_arm
+				parameter:empire = {
+					remove_modifier = modifier_promoted_arm
+					remove_relation_flag = { who = prev.parameter:gestalt_mind flag = promoted_arm }
+				}
+			}
+			
+			ai_weight = {
+				base = 0
+			}
+		}
+		suppress_faction = {
+			title = "SUPPRESS_FACTION"
+			description = "SUPPRESS_FACTION_DESC"
+			
+			potential = {
+				NOR = {
+					has_pop_faction_flag = suppressed_arm
+					has_pop_faction_flag = promoted_arm
+				}
+			}
+
+			effect = {
+				set_pop_faction_flag = suppressed_arm
+				parameter:gestalt_mind = {
+					add_opinion_modifier = { modifier = opinion_suppressed_our_arm who = prev.owner }
+				}
+				parameter:empire = {
+					add_modifier = { modifier = modifier_suppressed_arm days = -1 }
+				}
+			}
+			
+			ai_weight = {
+				base = 0
+			}
+		}
+		cancel_suppress_faction = {
+			title = "CANCEL_SUPPRESS_FACTION"
+			description = "CANCEL_SUPPRESS_FACTION_DESC"
+			
+			potential = {
+				has_pop_faction_flag = suppressed_arm
+			}
+
+			effect = {
+				remove_pop_faction_flag = suppressed_arm
+				parameter:gestalt_mind = {
+					remove_opinion_modifier = { modifier = opinion_suppressed_our_arm who = prev.owner }
+				}
+				parameter:empire = {
+					remove_modifier = modifier_suppressed_arm
+				}
+			}
+			
+			ai_weight = {
+				base = 0
+			}
+		}
+	}
+
+	on_destroy = {
+		every_relation = {
+			limit = {
+				is_hive_empire = yes
+				root = {
+					count_pop_faction = {
+						count = 0
+						limit = {
+							is_pop_faction_type = gestalt_arm
+							parameter:gestalt_mind = {
+								is_same_value = prevprevprev
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = { reverse_has_relation_flag = { who = prev flag = promoted_arm } }
+				prev = {
+					remove_relation_flag = { who = prev flag = promoted_arm }
+					remove_modifier = modifier_promoted_arm
+				}
+			}
+			else_if = {
+				limit = { has_opinion_modifier = { who = prev modifier = opinion_suppressed_our_arm } }
+				remove_opinion_modifier = { who = prev modifier = opinion_suppressed_our_arm }
+				prev = { remove_modifier = modifier_suppressed_arm }
+			}
+		}
+	}
+}

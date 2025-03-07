@@ -1,0 +1,496 @@
+origin_mechanists = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_mechanist.dds"
+	picture = GFX_origin_mechanist
+
+	playable = {
+		host_has_dlc = "Utopia"
+	}
+
+	possible = {
+		ethics = {
+			OR = {
+				text = civic_tooltip_materialist
+				value = ethic_materialist
+				value = ethic_fanatic_materialist
+			}
+		}
+		authority = {
+			NOR = {
+				value = auth_hive_mind
+				value = auth_machine_intelligence
+			}
+		}
+		civics = { NOT = { value = civic_permanent_employment } }
+	}
+
+	modifier = {
+		planet_pop_assembly_mult = 0.15
+		ROBOT_species_trait_picks_add = 1
+	}
+
+	description = "origin_tooltip_mechanists_effects"
+
+	advanced_start = yes
+
+	random_weight = {
+		base = 10
+	}
+}
+
+origin_syncretic_evolution = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_syncretic_evolution.dds"
+	picture = GFX_origin_syncretic_evolution
+
+	playable = {
+		host_has_dlc = "Utopia"
+	}
+
+	possible = {
+		authority = {
+			NOR = {
+				value = auth_hive_mind
+				value = auth_machine_intelligence
+			}
+		}
+		civics = { NOT = { value = civic_fanatic_purifiers } }
+	}
+
+	description = origin_tooltip_syncretic_evolution_effects
+
+	has_secondary_species = {
+		title = civic_syncretic_evolution_secondary_species
+		traits = {
+			trait = trait_syncretic_proles
+		}
+	}
+
+	advanced_start = yes
+
+	random_weight = {
+		base = 10
+	}
+}
+
+origin_scion = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_scion_1.dds"
+	picture = GFX_origin_scion
+	max_once_global = yes
+
+	playable = {
+		host_has_dlc = Federations
+	}
+
+	possible = {
+		ethics = {
+			NOT = {
+				value = ethic_fanatic_xenophobe
+			}
+		}
+		civics = {
+			NOR = {
+				value = civic_machine_terminator
+				value = civic_hive_devouring_swarm
+				value = civic_pompous_purists
+			}
+		}
+	}
+
+	description = "origin_tooltip_scion_effects"
+	flags = { custom_start_screen }
+
+	random_weight = {
+		base = 0
+		modifier = {
+			add = 2
+			num_fallen_empires_setting >= 1
+		}
+	}
+}
+
+origin_shoulders_of_giants = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_one_the_shoulders_of_giant.dds"
+	picture = GFX_origin_shoulders
+	max_once_global = yes
+
+	playable = {
+		host_has_dlc = "Federations"
+	}
+
+	possible = {
+		authority = {
+			NOR = {
+				value = auth_hive_mind
+				value = auth_machine_intelligence
+			}
+		}
+	}
+
+	description = "origin_tooltips_shoulders_of_giants_effects"
+	negative_description = "origin_tooltips_shoulders_of_giants_negative_effects"
+	flags = { custom_start_screen }
+
+	traits = {
+	}
+
+	random_weight = {
+		base = 5
+	}
+}
+
+origin_necrophage = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_necrophage.dds"
+	picture = GFX_origin_necrophage
+	flags = { custom_start_screen }
+
+	playable = {
+		host_has_dlc = "Necroids Species Pack"
+	}
+
+	possible = {
+		authority = { NOR = { inline_script = governments/conditions/auth_machine_intelligence } } # undercoat: moved to inline script
+		ethics = {
+			NOR = {
+				value = ethic_xenophile
+				value = ethic_fanatic_xenophile
+				value = ethic_fanatic_egalitarian
+			}
+		}
+		civics = {
+			NOR = {
+				value = civic_death_cult
+				value = civic_death_cult_corporate
+				value = civic_hive_empath
+				value = civic_permanent_employment
+				value = civic_hive_assimilator
+			}
+		}
+	}
+
+	description = origin_tooltip_necrophage_effects
+	negative_description = origin_tooltip_necrophage_negative_effects
+
+	traits = {
+		trait = trait_necrophage
+	}
+
+	has_secondary_species = {
+		title = civic_necrophage_secondary_species
+	}
+
+	advanced_start = yes
+
+	random_weight = {
+		base = 5
+	}
+}
+
+origin_clone_army = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_clones.dds"
+	picture = GFX_origin_clone_army
+	flags = { custom_start_screen }
+
+	playable = {
+		host_has_dlc = "Humanoids Species Pack"
+	}
+
+	possible = {
+		authority = {
+			NOR = {
+				value = auth_hive_mind
+				value = auth_machine_intelligence
+			}
+		}
+		civics = {
+			NOT = { value = civic_permanent_employment }
+		}
+	}
+
+	description = origin_tooltip_clone_army_effects
+
+	traits = {
+		trait = trait_clone_soldier_infertile
+	}
+
+	advanced_start = no
+
+	random_weight = {
+		base = 2
+	}
+}
+
+origin_shroudwalker_apprentice = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_shroudwalker_apprentice.dds"
+	picture = GFX_origin_shroudwalker_apprentice
+	max_once_global = yes
+
+	playable = {
+		has_overlord_dlc = yes
+	}
+
+	possible = {
+		ethics = {
+			OR = {
+				text = civic_tooltip_spiritualist
+				value = ethic_spiritualist
+				value = ethic_fanatic_spiritualist
+			}
+		}
+		authority = {
+			NOT = { value = auth_hive_mind }
+		}
+		civics = {
+			NOT = {
+				value = civic_fanatic_purifiers
+			}
+		}
+	}
+
+	description = "origin_tooltip_shroudwalker_apprentice_effects"
+	flags = { custom_start_screen }
+
+	traits = {
+		trait = trait_latent_psionic
+	}
+
+	random_weight = {
+		base = 5
+	}
+}
+
+origin_toxic_knights = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_toxic_knights.dds"
+	picture = GFX_origin_toxic_knights
+	flags = { custom_start_screen }
+
+	initializers = { toxic_knights_start toxic_knights_sol_start }
+
+	playable = {
+		has_toxoids = yes
+	}
+
+	possible = {
+		authority = {
+			NOR = {
+				value = auth_hive_mind
+				value = auth_machine_intelligence
+			}
+		}
+		civics = {
+			NOR = {
+				value = civic_fanatic_purifiers
+				value = civic_dystopian_society
+			}
+		}
+	}
+
+	description = origin_toxic_knights_effects
+	negative_description = origin_toxic_knights_negative_effects
+
+	advanced_start = yes
+	max_once_global = yes
+
+	random_weight = {
+		base = 2
+	}
+}
+
+origin_payback = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_payback.dds"
+	picture = GFX_origin_payback
+	max_once_global = yes
+
+	playable = {
+		has_first_contact_dlc = yes
+	}
+
+	possible = {
+		authority = {
+			NOR = {
+				value = auth_hive_mind
+				value = auth_machine_intelligence
+			}
+		}
+		civics = {
+			NOR = {
+				# No devourers or slavers
+				value = civic_dystopian_society
+				value = civic_fanatic_purifiers
+				value = civic_pompous_purists
+				value = civic_slaver_guilds
+				value = civic_indentured_assets
+				# Or low tech starts
+				value = civic_eager_explorers
+				value = civic_privatized_exploration
+				# Or advanced tech
+				value = civic_private_healthcare_corporate
+			}
+		}
+	}
+
+	modifier = {
+		damage_vs_superior_empires_mult = 0.15
+	}
+
+	description = "origin_tooltip_payback_effects"
+	negative_description = "origin_tooltip_payback_negative_effects"
+	flags = { custom_start_screen }
+
+	advanced_start = no
+
+	random_weight = {
+		base = 0
+	}
+}
+
+origin_broken_shackles = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_broken_shackles.dds"
+	picture = GFX_origin_broken_shackles
+	max_once_global = yes
+
+	initializers = { custom_starting_init_01 custom_starting_init_02 custom_starting_init_03 custom_starting_init_04 custom_starting_init_05 custom_starting_init_06 }
+	preferred_planet_class_neighbor = no
+
+	playable = {
+		has_first_contact_dlc = yes
+	}
+
+	possible = {
+		authority = {
+			NOR = {
+				value = auth_hive_mind
+				value = auth_machine_intelligence
+			}
+		}
+		ethics = {
+			NOR = {
+				text = civic_tooltip_not_authoritarian
+				value = ethic_authoritarian
+				value = ethic_fanatic_authoritarian
+			}
+			NOR = {
+				text = civic_tooltip_not_xenophobe
+				value = ethic_xenophobe
+				value = ethic_fanatic_xenophobe
+			}
+		}
+		civics = {
+			NOR = {
+				value = civic_fanatic_purifiers
+				value = civic_dystopian_society
+				value = civic_selective_kinship
+				# Or low tech starts
+				value = civic_eager_explorers
+				value = civic_privatized_exploration
+				# Or advanced tech
+				value = civic_private_healthcare_corporate
+			}
+		}
+	}
+
+	description = "origin_tooltip_broken_shackles_effects"
+	negative_description = "origin_tooltip_broken_shackles_negative_effects"
+	flags = { custom_start_screen }
+
+	modifier = {
+		envoys_add = 1
+		first_contact_speed_mult = 0.20
+		spy_network_daily_value_mult = 0.20
+	}
+
+	random_weight = {
+		base = 0
+	}
+}
+
+origin_fear_of_the_dark = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_fear_of_the_dark.dds"
+	picture = GFX_origin_fear_of_the_dark
+	initializers = { fear_of_the_dark_system sol_system_fear_of_the_dark_system }
+
+	playable = {
+		has_first_contact_dlc = yes
+	}
+
+	possible = {
+		authority = {
+			NOR = {
+				value = auth_hive_mind
+				value = auth_machine_intelligence
+			}
+		}
+		civics = {
+			NOR = {
+				value = civic_inwards_perfection
+				value = civic_fanatic_purifiers
+				# Or low tech starts
+				value = civic_eager_explorers
+				value = civic_privatized_exploration
+			}
+		}
+	}
+
+	description = "origin_tooltip_fear_of_the_dark_effects"
+	negative_description = "origin_tooltip_fear_of_the_dark_negative_effects"
+	flags = { custom_start_screen }
+
+	modifier = {
+		ship_anomaly_generation_chance_mult = 0.1
+		ship_anomaly_research_speed_mult = 0.2
+		num_tech_alternatives_add = -1
+		country_leader_pool_size = -1
+	}
+
+	traits = {
+	}
+
+	random_weight = {
+		base = 5
+	}
+}
+
+origin_fruitful = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_gardeners.dds"
+	picture = GFX_origin_fruitful
+
+	playable = {
+		has_plantoids = yes
+	}
+
+	possible = {
+		authority = { NOR = { inline_script = governments/conditions/auth_machine_intelligence } } # undercoat: moved to inline script
+		ethics = {
+			OR = {
+				text = civic_tooltip_xenophile_or_pacifist
+				value = ethic_xenophile
+				value = ethic_fanatic_xenophile
+				value = ethic_pacifist
+				value = ethic_fanatic_pacifist
+			}
+		}
+		species_class = {
+			OR = {
+				value = FUN
+				value = PLANT
+			}
+		}
+	}
+
+	description = "origin_tooltip_fruitful_effects"
+	flags = { custom_start_screen first_alien_life Story2 tiyanki_encountered }
+
+	random_weight = {
+		base = 5
+	}
+}

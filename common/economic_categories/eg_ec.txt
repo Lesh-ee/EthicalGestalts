@@ -1,0 +1,10 @@
+
+edicts_ethic_shift = {
+	parent = edicts
+
+	generate_mult_modifiers = {
+		cost
+	}
+
+}
+

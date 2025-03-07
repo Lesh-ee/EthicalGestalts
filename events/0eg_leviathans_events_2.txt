@@ -1,0 +1,106 @@
+#################################
+#
+# Leviathan & Enclave Events
+# by Maximilian Olbers, Niclas Karlsson,
+# Rufus Tronde & Henrik Thyrwall
+#
+#################################
+
+namespace = leviathans
+
+#Succeeded in researching the Technosphere
+country_event = {
+	id = leviathans.1051
+	title = leviathans.1050.name
+	desc = leviathans.1051.desc
+	picture = GFX_evt_technosphere
+	show_sound = event_mystic_reveal
+	location = event_target:technosphere_ship
+	trackable = yes
+
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:technosphere_ship
+		NOT = { has_country_flag = worm_events_available }
+	}
+
+	immediate = {
+		set_country_flag = technosphere_studied
+		event_target:guardian_technosphere_country = {
+			random_controlled_ship = {
+				limit = {
+					is_ship_size = sphere
+				}
+				save_event_target_as = technosphere_location
+			}
+		}
+	}
+
+	option = {
+		name = leviathans.1051.a
+		hidden_effect = {
+			country_event = { id = leviathans.1055 }
+		}
+	}
+	option = {
+		name = leviathans.1051.c #praise it as your god
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_spiritualist
+				has_ethic = ethic_spiritualist
+			}
+		}
+		add_modifier = {
+			modifier = technosphere_praising
+			days = -1
+		}
+	}
+	option = {
+		name = leviathans.1051.b #hack it
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_materialist
+				has_ethic = ethic_materialist
+			}
+			is_gestalt = no
+		}
+		enable_special_project = {
+			name = TECHNOSPHERE_HACKING
+			location = event_target:technosphere_ship
+			owner = root
+		}
+	}
+	option = {
+		name = leviathans.1051.d #sabotage it
+		#custom_tooltip = leviathans.1051.d.tooltip
+		trigger = {
+			OR = {
+				has_ethic = ethic_fanatic_militarist
+				has_ethic = ethic_militarist
+			}
+		}
+		hidden_effect = {
+			set_country_flag = technosphere_sabotaged
+		}
+		event_target:technosphere_ship = {
+			enable_special_project = {
+				name = TECHNOSPHERE_DESTRUCTION
+				location = this
+				owner = root
+			}
+		}
+	}
+	option = {
+		name = leviathans.1051.e #hack it - Gestalt Consciousness
+		trigger = {
+			is_gestalt = yes # undercoat: moved to scripted trigger
+		}
+		enable_special_project = {
+			name = TECHNOSPHERE_HACKING
+			location = event_target:technosphere_ship
+			owner = root
+		}
+	}
+}
+

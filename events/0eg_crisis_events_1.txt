@@ -1,0 +1,292 @@
+############################
+#
+# Crisis Events
+#
+# Written by Henrik Thyrwall
+#
+############################
+
+namespace = crisis
+
+### PRETHORYN SCOURGE
+
+# Vanguard Arrives
+country_event = {
+	id = crisis.18
+	title = "crisis.18.name"
+	desc = "crisis.18.desc"
+	picture = GFX_evt_physics_research
+	show_sound = event_alien_nature
+	location = event_target:prethoryn_invasion_system
+
+	is_triggered_only = yes
+
+	immediate = {
+		random_rim_system = {
+			limit = { has_star_flag = swarm_invasion_target_1 }
+			save_event_target_as = prethoryn_invasion_system
+		}
+		if = {
+			limit = {
+				any_planet_within_border = {
+					has_planet_flag = fotd_seperatist_planet@root
+					owner = {
+						has_country_flag = fotd_seperatist_country@root
+					}
+				}
+			}
+			country_event = { id = origin.6125 days = 5 random = 2 }
+		}
+	}
+
+	option = {
+		name = crisis.18.a
+		trigger = {
+			has_spiritualist_government = yes
+			NOR = {
+				has_ethic = "ethic_fanatic_egalitarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+		# Risa fix: support alternate government types.
+	}
+	option = {
+		name = crisis.18.b
+		trigger = {
+			has_militarist_government = yes
+			NOR = {
+				has_ethic = "ethic_fanatic_egalitarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = {
+		name = crisis.18.c
+		trigger = {
+			OR = {
+				has_materialist_government = yes
+				has_government = gov_machine_research
+				has_government = gov_machine_assimilator
+			}
+			NOR = {
+				has_ethic = "ethic_fanatic_egalitarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = {
+		name = crisis.18.d
+		trigger = {
+			has_pacifist_government = yes
+			NOR = {
+				has_ethic = "ethic_fanatic_egalitarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = {
+		name = crisis.18.e
+		trigger = {
+			OR = {
+				has_government = gov_megacorporation
+				has_government = gov_trade_league
+				is_megacorp = yes
+			}
+			NOR = {
+				has_ethic = "ethic_fanatic_egalitarian"
+				has_ethic = "ethic_fanatic_authoritarian"
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = {
+		name = crisis.18.f
+		trigger = {
+			# Risa fix: support alternate government types.
+			NOR = {
+				has_spiritualist_government = yes
+				has_militarist_government = yes
+				has_materialist_government = yes
+				has_pacifist_government = yes
+				has_government = gov_megacorporation
+				has_government = gov_trade_league
+				has_government = gov_machine_research
+				has_government = gov_machine_assimilator
+				is_megacorp = yes
+				has_ethic = "ethic_fanatic_egalitarian"
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+				AND = {
+					has_ethic = "ethic_fanatic_authoritarian"
+					NOR = {
+						is_gestalt = yes
+						any_relation = { is_hive_empire = yes }
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = crisis.18.g
+		trigger = {
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+	option = {
+		name = crisis.18.h
+		trigger = {
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+	}
+	option = {
+		name = crisis.18.i
+		trigger = {
+			has_ethic = "ethic_fanatic_authoritarian"
+			NOR = {
+				is_gestalt = yes
+				any_relation = { is_hive_empire = yes }
+			}
+		}
+	}
+	option = {
+		name = crisis.18.j
+		trigger = {
+			has_ethic = "ethic_fanatic_egalitarian"
+		}
+	}
+	# Risa fix: support alternate government types.
+	after = {
+		end_event_chain = "coming_storm_chain"
+		begin_event_chain = {
+			event_chain = "prethoryn_scourge_chain"
+			target = ROOT
+		}
+	}
+}
+
+# Prethoryn Defeated
+country_event = {
+	id = crisis.211
+	title = "crisis.211.name"
+	desc = "crisis.211.desc"
+	picture = GFX_evt_crisis_defeated
+	show_sound = event_celebration
+
+	is_triggered_only = yes
+
+	option = { # Spiritualist Response
+		name = crisis.211.a
+		trigger = {
+			has_spiritualist_government = yes
+			NOR = {
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = { # Militarist Response
+		name = crisis.211.b
+		trigger = {
+			has_militarist_government = yes
+			NOR = {
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = { # Materialist Response
+		name = crisis.211.c
+		trigger = {
+			OR = {
+				has_materialist_government = yes
+				has_government = gov_machine_research
+				has_government = gov_machine_assimilator
+			}
+			NOR = {
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = { # Pacifist Response
+		name = crisis.211.d
+		trigger = {
+			has_pacifist_government = yes
+			NOR = {
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = { # Corporate Response
+		name = crisis.211.e
+		trigger = {
+			OR = {
+				has_government = gov_megacorporation
+				has_government = gov_trade_league
+				is_megacorp = yes
+			}
+			NOR = {
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = { # Default Response
+		name = crisis.211.f
+		trigger = {
+			NOR = {
+				has_spiritualist_government = yes
+				has_militarist_government = yes
+				has_materialist_government = yes
+				has_pacifist_government = yes
+				has_government = gov_megacorporation
+				has_government = gov_trade_league
+				has_government = gov_machine_research
+				has_government = gov_machine_assimilator
+				is_megacorp = yes
+				has_ethic = "ethic_fanatic_xenophile"
+				has_ethic = "ethic_fanatic_xenophobe"
+			}
+		}
+	}
+	option = { # Xenophobe Response
+		name = crisis.211.g
+		trigger = {
+			has_ethic = "ethic_fanatic_xenophobe"
+		}
+	}
+	option = { # Xenophile Response
+		name = crisis.211.h
+		trigger = {
+			has_ethic = "ethic_fanatic_xenophile"
+		}
+	}
+	# Risa fix: Support other government types.
+	after = {
+		add_modifier = {
+			modifier = "prethoryn_defeated"
+			days = 3600
+		}
+		add_monthly_resource_mult = {
+			resource = unity
+			value = @tier5unityreward
+		}
+		end_event_chain = "prethoryn_scourge_chain"
+		if = {
+			limit = {
+				is_fear_of_the_dark_empire = yes
+			}
+			country_event = { id = origin.6136 }
+		}
+	}
+}

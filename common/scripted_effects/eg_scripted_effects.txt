@@ -1,0 +1,883 @@
+create_gestalt_councilors = {
+	country_create_gestalt_councilor = {
+		CLASS = official
+		COUNCIL_POS = councilor_gestalt_growth
+		DESC = councilor_gestalt_growth_desc
+	}
+	country_create_gestalt_councilor = {
+		CLASS = scientist
+		COUNCIL_POS = councilor_gestalt_cognitive
+		DESC = councilor_gestalt_cognitive_desc
+	}
+	country_create_gestalt_councilor = {
+		CLASS = commander
+		COUNCIL_POS = councilor_gestalt_legion
+		DESC = councilor_gestalt_legion_desc
+	}
+	country_create_gestalt_councilor = {
+		CLASS = official
+		COUNCIL_POS = councilor_gestalt_regulatory
+		DESC = councilor_gestalt_regulatory_desc
+	}
+}
+
+set_hive_ethic_attraction = {
+	set_variable = {
+		which = hive_$ethic$_attraction
+		value = value:hive_$ethic$_attraction
+	}
+}
+
+sycophantic_ethic_adjust = {
+	prev = {
+		multiply_variable = {
+			which = hive_$ethic1$_attraction
+			value = unprincipled_sycophantry_factor|ethic|$ethic1$|opposite|$ethic2$|target|prev|
+		}
+		multiply_variable = {
+			which = hive_$ethic2$_attraction
+			value = unprincipled_sycophantry_factor|ethic|$ethic2$|opposite|$ethic1$|target|prev|
+		}
+	}
+}
+
+set_all_hive_ethic_attractions = {
+
+	set_hive_ethic_attraction = { ethic = authoritarian }
+	set_hive_ethic_attraction = { ethic = egalitarian }
+	set_hive_ethic_attraction = { ethic = xenophobe }
+	set_hive_ethic_attraction = { ethic = xenophile }
+	set_hive_ethic_attraction = { ethic = militarist }
+	set_hive_ethic_attraction = { ethic = pacifist }
+	set_hive_ethic_attraction = { ethic = spiritualist }
+	set_hive_ethic_attraction = { ethic = materialist }
+
+	# unprincipled hives and some dynamic objective empires suck up to more powerful countries and turn selfish and aggressive when they're much more powerful than everyone else.
+	if = {
+		limit = {
+			OR = {
+				has_valid_civic = civic_hive_unprincipled
+				has_country_flag = will_treacherous_turn
+			}
+			is_ai = yes
+			is_homicidal = no
+		}
+		every_relation = {
+			limit = {
+				NOR = {
+					is_unfriendly = yes
+					has_valid_civic = civic_inwards_perfection
+				}
+			}
+			sycophantic_ethic_adjust = { ethic1 = authoritarian ethic2 = egalitarian }
+			sycophantic_ethic_adjust = { ethic1 = xenophobe ethic2 = xenophile }
+			sycophantic_ethic_adjust = { ethic1 = militarist ethic2 = pacifist }
+			sycophantic_ethic_adjust = { ethic1 = spiritualist ethic2 = materialist }
+		}
+		if = {
+			limit = {
+				perc_communications_with_playable = 1
+				NOT = {
+					any_relation = {
+						NAND = {
+							prev = {
+								has_intel = {
+									who = prev
+									intel = relative_power
+								}
+							}
+							relative_power = {
+								who = pow
+								category = all
+								value < inferior
+							}
+						}
+					}
+				}
+			}
+			multiply_variable = {
+				which = hive_xenophobe_attraction
+				value = 10
+			}
+			multiply_variable = {
+				which = hive_xenophile_attraction
+				value = 0.25
+			}
+		}
+		else_if = {
+			limit = {
+				perc_communications_with_playable = 1
+				NOT = {
+					any_relation = {
+						NAND = {
+							prev = {
+								has_intel = {
+									who = prev
+									intel = relative_power
+								}
+							}
+							relative_power = {
+								who = pow
+								category = all
+								value < equivalent
+							}
+						}
+					}
+				}
+			}
+			multiply_variable = {
+				which = hive_xenophobe_attraction
+				value = 9
+			}
+			multiply_variable = {
+				which = hive_xenophile_attraction
+				value = 0.5
+			}
+		}
+		if = {
+			limit = {
+				perc_communications_with_playable = 1
+				NOT = {
+					any_relation = {
+						NAND = {
+							prev = {
+								has_intel = {
+									who = prev
+									intel = relative_fleet
+								}
+							}
+							relative_power = {
+								who = pow
+								category = fleet
+								value < inferior
+							}
+						}
+					}
+				}
+			}
+			multiply_variable = {
+				which = hive_militarist_attraction
+				value = 10
+			}
+			multiply_variable = {
+				which = hive_pacifist_attraction
+				value = 0.5
+			}
+			set_country_flag = treacherous_turn
+		}
+		else_if = {
+			limit = {
+				perc_communications_with_playable = 1
+				NOT = {
+					any_relation = {
+						NAND = {
+							prev = {
+								has_intel = {
+									who = prev
+									intel = relative_fleet
+								}
+							}
+							relative_power = {
+								who = pow
+								category = fleet
+								value < equivalent
+							}
+						}
+					}
+				}
+			}
+			multiply_variable = {
+				which = hive_militarist_attraction
+				value = 3
+			}
+			multiply_variable = {
+				which = hive_pacifist_attraction
+				value = 0.75
+			}
+		}
+	}
+
+	set_variable = {
+		which = lowest_governing_ethic_attraction
+		value = value:lowest_governing_ethic_attraction
+	}
+}
+
+# lowest_ethic_check = {
+# 	if = {
+# 		limit = {
+# 			is_$ethic$ = yes
+# 			OR = {
+# 				has_country_flag = null_lowest_ethic
+# 				check_variable = {
+# 					which = hive_$ethic$_attraction
+# 					value < lowest_governing_ethic_attraction
+# 				}
+# 			}
+# 		}
+# 		remove_country_flag = second_lowest_attraction_authoritarian
+# 		remove_country_flag = second_lowest_attraction_egalitarian
+# 		remove_country_flag = second_lowest_attraction_xenophobe
+# 		remove_country_flag = second_lowest_attraction_xenophile
+# 		remove_country_flag = second_lowest_attraction_militarist
+# 		remove_country_flag = second_lowest_attraction_pacifist
+# 		remove_country_flag = second_lowest_attraction_spiritualist
+# 		remove_country_flag = second_lowest_attraction_materialist
+# 		remove_country_flag = null_second_lowest_ethic
+# 		switch = {
+# 			trigger = has_country_flag
+# 			lowest_attraction_authoritarian = {
+# 				remove_country_flag = lowest_attraction_authoritarian
+# 				set_country_flag = second_lowest_attraction_authoritarian
+# 			}
+# 			lowest_attraction_egalitarian = {
+# 				remove_country_flag = lowest_attraction_egalitarian
+# 				set_country_flag = second_lowest_attraction_egalitarian
+# 			}
+# 			lowest_attraction_xenophobe = {
+# 				remove_country_flag = lowest_attraction_xenophobe
+# 				set_country_flag = second_lowest_attraction_xenophobe
+# 			}
+# 			lowest_attraction_xenophile = {
+# 				remove_country_flag = lowest_attraction_xenophile
+# 				set_country_flag = second_lowest_attraction_xenophile
+# 			}
+# 			lowest_attraction_militarist = {
+# 				remove_country_flag = lowest_attraction_militarist
+# 				set_country_flag = second_lowest_attraction_militarist
+# 			}
+# 			lowest_attraction_pacifist = {
+# 				remove_country_flag = lowest_attraction_pacifist
+# 				set_country_flag = second_lowest_attraction_pacifist
+# 			}
+# 			lowest_attraction_materialist = {
+# 				remove_country_flag = lowest_attraction_materialist
+# 				set_country_flag = second_lowest_attraction_materialist
+# 			}
+# 			lowest_attraction_spiritualist = {
+# 				remove_country_flag = lowest_attraction_spiritualist
+# 				set_country_flag = second_lowest_attraction_spiritualist
+# 			}
+# 			default = {
+# 				remove_country_flag = null_lowest_ethic
+# 				set_country_flag = null_second_lowest_ethic
+# 			}
+# 		}
+# 		set_country_flag = lowest_attraction_$ethic$
+# 		set_variable = {
+# 			which = second_lowest_governing_ethic_attraction
+# 			value = lowest_governing_ethic_attraction
+# 		}
+# 		set_variable = {
+# 			which = lowest_governing_ethic_attraction
+# 			value = hive_$ethic$_attraction
+# 		}
+# 	}
+# 	else_if = {
+# 		limit = {
+# 			is_$ethic$ = yes
+# 			OR = {
+# 				has_country_flag = null_second_lowest_ethic
+# 				check_variable = {
+# 					which = hive_$ethic$_attraction
+# 					value < second_lowest_governing_ethic_attraction
+# 				}
+# 			}
+# 		}
+# 		remove_country_flag = second_lowest_attraction_authoritarian
+# 		remove_country_flag = second_lowest_attraction_egalitarian
+# 		remove_country_flag = second_lowest_attraction_xenophobe
+# 		remove_country_flag = second_lowest_attraction_xenophile
+# 		remove_country_flag = second_lowest_attraction_militarist
+# 		remove_country_flag = second_lowest_attraction_pacifist
+# 		remove_country_flag = second_lowest_attraction_spiritualist
+# 		remove_country_flag = second_lowest_attraction_materialist
+# 		remove_country_flag = null_second_lowest_ethic
+# 		set_country_flag = second_lowest_attraction_$ethic$
+# 		set_variable = {
+# 			which = second_lowest_governing_ethic_attraction
+# 			value = hive_$ethic$_attraction
+# 		}
+# 	}
+# }
+
+find_lowest_governing_ethic_attraction = {
+	set_variable = {
+		which = lowest_governing_ethic_attraction
+		value = value:lowest_governing_ethic_attraction
+	}
+}
+
+highest_ethic_check = {
+	if = {
+		limit = {
+			NOR = {
+				has_ethic = ethic_fanatic_$ethic$
+				is_$opposite$ = yes
+			}
+			OR = {
+				has_country_flag = null_highest_ethic
+				check_variable = {
+					which = hive_$ethic$_attraction
+					value > highest_governing_ethic_attraction
+				}
+			}
+		}
+		remove_country_flag = second_highest_attraction_authoritarian
+		remove_country_flag = second_highest_attraction_egalitarian
+		remove_country_flag = second_highest_attraction_xenophobe
+		remove_country_flag = second_highest_attraction_xenophile
+		remove_country_flag = second_highest_attraction_militarist
+		remove_country_flag = second_highest_attraction_pacifist
+		remove_country_flag = second_highest_attraction_spiritualist
+		remove_country_flag = second_highest_attraction_materialist
+		remove_country_flag = null_second_highest_ethic
+		switch = {
+			trigger = has_country_flag
+			highest_attraction_authoritarian = {
+				remove_country_flag = highest_attraction_authoritarian
+				set_country_flag = second_highest_attraction_authoritarian
+			}
+			highest_attraction_egalitarian = {
+				remove_country_flag = highest_attraction_egalitarian
+				set_country_flag = second_highest_attraction_egalitarian
+			}
+			highest_attraction_xenophobe = {
+				remove_country_flag = highest_attraction_xenophobe
+				set_country_flag = second_highest_attraction_xenophobe
+			}
+			highest_attraction_xenophile = {
+				remove_country_flag = highest_attraction_xenophile
+				set_country_flag = second_highest_attraction_xenophile
+			}
+			highest_attraction_militarist = {
+				remove_country_flag = highest_attraction_militarist
+				set_country_flag = second_highest_attraction_militarist
+			}
+			highest_attraction_pacifist = {
+				remove_country_flag = highest_attraction_pacifist
+				set_country_flag = second_highest_attraction_pacifist
+			}
+			highest_attraction_materialist = {
+				remove_country_flag = highest_attraction_materialist
+				set_country_flag = second_highest_attraction_materialist
+			}
+			highest_attraction_spiritualist = {
+				remove_country_flag = highest_attraction_spiritualist
+				set_country_flag = second_highest_attraction_spiritualist
+			}
+			default = {
+				remove_country_flag = null_highest_ethic
+				set_country_flag = null_second_highest_ethic
+			}
+		}
+		set_country_flag = highest_attraction_$ethic$
+		set_variable = {
+			which = second_highest_governing_ethic_attraction
+			value = highest_governing_ethic_attraction
+		}
+		set_variable = {
+			which = highest_governing_ethic_attraction
+			value = hive_$ethic$_attraction
+		}
+	}
+	else_if = {
+		limit = {
+			is_$ethic$ = yes
+			OR = {
+				has_country_flag = null_second_highest_ethic
+				check_variable = {
+					which = hive_$ethic$_attraction
+					value < second_highest_governing_ethic_attraction
+				}
+			}
+		}
+		remove_country_flag = second_highest_attraction_authoritarian
+		remove_country_flag = second_highest_attraction_egalitarian
+		remove_country_flag = second_highest_attraction_xenophobe
+		remove_country_flag = second_highest_attraction_xenophile
+		remove_country_flag = second_highest_attraction_militarist
+		remove_country_flag = second_highest_attraction_pacifist
+		remove_country_flag = second_highest_attraction_spiritualist
+		remove_country_flag = second_highest_attraction_materialist
+		remove_country_flag = null_second_highest_ethic
+		set_country_flag = second_highest_attraction_$ethic$
+		set_variable = {
+			which = second_highest_governing_ethic_attraction
+			value = hive_$ethic$_attraction
+		}
+	}
+}
+
+find_highest_governing_ethic_attraction = {
+	remove_country_flag = highest_attraction_authoritarian
+	remove_country_flag = highest_attraction_egalitarian
+	remove_country_flag = highest_attraction_xenophobe
+	remove_country_flag = highest_attraction_xenophile
+	remove_country_flag = highest_attraction_militarist
+	remove_country_flag = highest_attraction_pacifist
+	remove_country_flag = highest_attraction_spiritualist
+	remove_country_flag = highest_attraction_materialist
+	set_country_flag = null_highest_ethic
+	highest_ethic_check = { ethic = authoritarian opposite = egalitarian }
+	highest_ethic_check = { ethic = egalitarian opposite = authoritarian }
+	highest_ethic_check = { ethic = xenophobe opposite = xenophile }
+	highest_ethic_check = { ethic = xenophile opposite = xenophobe }
+	highest_ethic_check = { ethic = militarist opposite = pacifist }
+	highest_ethic_check = { ethic = pacifist opposite = militarist }
+	highest_ethic_check = { ethic = spiritualist opposite = materialist }
+	highest_ethic_check = { ethic = materialist opposite = spiritualist }
+	change_variable = { which = highest_governing_ethic_attraction value = 2 }
+	change_variable = { which = second_highest_governing_ethic_attraction value = 2 }
+}
+
+create_machine_species_mod = {
+	species = { save_event_target_as = changing_species }
+	modify_species = {
+		species = this
+		remove_trait = trait_mechanical
+		add_trait = trait_machine_unit
+	}
+	last_created_species = {
+		set_citizenship_type = {
+			type = citizenship_full_machine
+			country = root
+		}
+	}
+	root = {
+		every_owned_pop = {
+			limit = { is_exact_same_species = event_target:changing_species }
+			change_species = last_created_species
+			clear_ethos = yes
+			remove_culture_shock = yes
+		}
+		every_owned_leader = {
+			limit = { is_exact_same_species = event_target:changing_species }
+			change_species = last_created_species
+		}
+		every_pool_leader = {
+			limit = { is_exact_same_species = event_target:changing_species }
+			change_species = last_created_species
+		}
+		every_owned_army = {
+			limit = {
+				exists = species
+				is_exact_same_species = event_target:changing_species
+			}
+			if = {
+				limit = { army_type = robotic_army }
+				modify_army = {
+					species = last_created_species
+					type = machine_assault_1
+				}
+			}
+			else_if = {
+				limit = { army_type = robotic_defense_army }
+				modify_army = {
+					species = last_created_species
+					type = machine_defense
+				}
+			}
+			else = {
+				change_species = last_created_species
+			}
+		}
+		every_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				is_exact_same_species = event_target:changing_species
+			}
+			change_species = last_created_species
+		}
+	}
+}
+
+create_hive_species_mod = {
+	species = { save_event_target_as = changing_species }
+	modify_species = {
+		species = this
+		add_trait = trait_hive_mind
+	}
+	root = {
+		every_owned_pop = {
+			limit = { is_exact_same_species = event_target:changing_species }
+			change_species = last_created_species
+			clear_ethos = yes
+			remove_culture_shock = yes
+			remove_self_modified = yes
+		}
+		every_owned_leader = {
+			limit = { is_exact_same_species = event_target:changing_species }
+			change_species = last_created_species
+		}
+		every_pool_leader = {
+			limit = { is_exact_same_species = event_target:changing_species }
+			change_species = last_created_species
+		}
+		every_owned_army = {
+			limit = {
+				exists = species
+				is_exact_same_species = event_target:changing_species
+			}
+			change_species = last_created_species
+		}
+		every_owned_ship = {
+			limit = {
+				is_ship_class = shipclass_colonizer
+				is_exact_same_species = event_target:changing_species
+			}
+			change_species = last_created_species
+		}
+	}
+}
+
+maximally_assign_singlemind_distict = {
+	set_variable = {
+		which = $deposit_type$
+		value = 0
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = pops_to_employ
+				value > 0
+			}
+			num_districts = {
+				type = $district_type$
+				value > $deposit_type$
+			}
+		}
+		add_deposit = d_$deposit_type$
+		change_variable = {
+			which = $deposit_type$
+			value = 1
+		}
+		subtract_variable = {
+			which = pops_to_employ
+			value = $jobs$
+		}
+	}
+}
+
+cap_deposits = {
+	while = {
+		limit = {
+			num_districts = {
+				type = $district_type$
+				value < $deposit_type$
+			}	
+		}
+		remove_deposit = d_$deposit_type$
+		change_variable = {
+			which = $deposit_type$
+			value = -1
+		}
+	}
+}
+
+convert_ecu_enclaves = {
+	set_variable = {
+		which = singlemind_foundries
+		value = 0
+	}
+	set_variable = {
+		which = singlemind_factories
+		value = 0
+	}
+	while = {
+		limit = {
+			has_deposit = d_singlemind_industry
+		}
+		remove_deposit = d_singlemind_industry
+		remove_deposit = d_singlemind_industry
+		remove_deposit = d_singlemind_industry
+		IF = {
+			limit = {
+				num_districts = {
+					type = district_arcology_civilian_industry
+					value > singlemind_factories
+				}
+			}
+			add_deposit = d_singlemind_factories
+			change_variable = {
+				which = singlemind_factories
+				value = 1
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				num_districts = {
+					type = district_arcology_arms_industry
+					value > singlemind_foundries
+				}
+			}
+			add_deposit = d_singlemind_foundries
+			change_variable = {
+				which = singlemind_foundries
+				value = 1
+			}
+		}
+	}
+	clear_variable = singlemind_industry
+}
+
+convert_sr_enclaves = {
+	set_variable = {
+		which = singlemind_industry_rw
+		value = 0
+	}
+	set_variable = {
+		which = singlemind_farms_rw
+		value = 0
+	}
+	while = {
+		limit = {
+			has_deposit = d_singlemind_industry
+		}
+		remove_deposit = d_singlemind_industry
+		remove_deposit = d_singlemind_industry
+		remove_deposit = d_singlemind_industry
+		remove_deposit = d_singlemind_industry
+		remove_deposit = d_singlemind_industry
+		IF = {
+			limit = {
+				num_districts = {
+					type = district_rw_industrial
+					value > singlemind_industry_rw
+				}
+			}
+			add_deposit = d_singlemind_industry_rw
+			change_variable = {
+				which = singlemind_industry_rw
+				value = 1
+			}
+		}
+	}
+	while = {
+		limit = {
+			has_deposit = d_singlemind_farms
+		}
+		remove_deposit = d_singlemind_farms
+		remove_deposit = d_singlemind_farms
+		remove_deposit = d_singlemind_farms
+		remove_deposit = d_singlemind_farms
+		remove_deposit = d_singlemind_farms
+		IF = {
+			limit = {
+				num_districts = {
+					type = district_rw_farming
+					value > singlemind_farms_rw
+				}
+			}
+			add_deposit = d_singlemind_farms_rw
+			change_variable = {
+				which = singlemind_farms_rw
+				value = 1
+			}
+		}
+	}
+	clear_variable = singlemind_industry
+	clear_variable = singlemind_farms
+}
+
+
+# assign_singlemind_district = {
+# 	change_variable = {
+# 		which = $type$
+# 		value = 1
+# 	}
+# 	IF = {
+# 		limit = {
+# 			owner = { is_hive_empire = yes }
+# 		}
+# 		remove_modifier = $type$_hive
+# 		add_modifier = {
+# 			modifier = $type$_hive
+# 			multiplier = $type$
+# 			clear_on_owner_change = yes
+# 		}
+# 	}
+# 	ELSE_IF = {
+# 		limit = {
+# 			owner = { is_machine_empire = yes }
+# 		}
+# 		remove_modifier = $type$_machine
+# 		add_modifier = {
+# 			modifier = $type$_machine
+# 			multiplier = $type$
+# 			clear_on_owner_change = yes
+# 		}
+# 	}
+# }
+
+# unassign_singlemind_district = {
+# 	subtract_variable = {
+# 		which = $type$
+# 		value = 1
+# 	}
+# 	IF = {
+# 		limit = {
+# 			owner = { is_hive_empire = yes }
+# 		}
+# 		remove_modifier = $type$_hive
+# 		if = {
+# 			limit = {
+# 				check_variable = {
+# 					which = $type$
+# 					value > 0
+# 				}
+# 			}
+# 			add_modifier = {
+# 				modifier = $type$_hive
+# 				multiplier = $type$
+# 				clear_on_owner_change = yes
+# 			}
+# 		}
+# 	}
+# 	ELSE_IF = {
+# 		limit = {
+# 			owner = { is_machine_empire = yes }
+# 		}
+# 		remove_modifier = $type$_machine
+# 		if = {
+# 			limit = {
+# 				check_variable = {
+# 					which = $type$
+# 					value > 0
+# 				}
+# 			}
+# 			add_modifier = {
+# 				modifier = $type$_machine
+# 				multiplier = $type$
+# 				clear_on_owner_change = yes
+# 			}
+# 		}
+# 	}
+# }
+
+eg_reprogramming_effect = {
+	hidden_effect = {
+		if = {
+			limit = { is_authoritarian = yes }
+			from = {
+				set_country_flag = force_authoritarian
+			}
+		}
+		if = {
+			limit = { is_egalitarian = yes }
+			from = {
+				set_country_flag = force_egalitarian
+			}
+		}
+		if = {
+			limit = { is_xenophobe = yes }
+			from = {
+				set_country_flag = force_xenophobe
+			}
+		}
+		if = {
+			limit = { is_xenophile = yes }
+			from = {
+				set_country_flag = force_xenophile
+			}
+		}
+		if = {
+			limit = { is_militarist = yes }
+			from = {
+				set_country_flag = force_militarist
+			}
+		}
+		if = {
+			limit = { is_pacifist = yes }
+			from = {
+				set_country_flag = force_pacifist
+			}
+		}
+		if = {
+			limit = { is_materialist = yes }
+			from = {
+				set_country_flag = force_materialist
+			}
+		}
+	}
+	from = {
+		shift_ethic = ethic_$ethic$
+	}
+	hidden_effect = {
+		from = {
+			remove_country_flag = force_authoritarian
+			remove_country_flag = force_egalitarian
+			remove_country_flag = force_xenophobe
+			remove_country_flag = force_xenophile
+			remove_country_flag = force_militarist
+			remove_country_flag = force_pacifist
+			remove_country_flag = force_materialist
+			add_threat = {
+				who = root
+				amount = 0.5
+			}				
+			if = {
+				limit = {
+					NOT = {
+						any_federation_ally = {
+							is_$ethic$ = yes
+						}
+					}
+					NOT = {
+						any_federation_ally = {
+							NOT = {
+								opposing_ethics_divergence = {
+									who = prev
+									steps > 0
+								}
+							}
+						}
+					}
+				}
+				leave_alliance = { override_requirements = yes }
+			}
+			if = {
+				limit = { has_country_flag = will_treacherous_turn }
+				remove_country_flag = will_treacherous_turn
+			}
+		}
+	}
+}
+
+eg_displaced_drone_effect = {
+	remove_modifier = "pop_recently_conquered"
+	remove_pop_flag = event_purge
+	owner = {
+		if = {
+			limit = {
+				exists = overlord
+				overlord = {
+					is_gestalt = yes
+					is_same_species = root
+					NOT = { is_at_war_with = prev }
+				}
+			}
+			overlord = { save_event_target_as = destination_country }
+		}
+		else = {
+			random_relation = {
+				limit = {
+					is_gestalt = yes
+					is_same_species = root
+					NOT = { is_at_war_with = prev }
+				}
+				save_event_target_as = destination_country
+			}
+		}
+	}
+	if = {
+		limit = { exists = event_target:destination_country.capital_scope }
+		resettle_pop = {
+			pop = root
+			planet = event_target:destination_country.capital_scope
+		}
+	}
+	else = {
+		kill_pop = yes
+	}
+}
