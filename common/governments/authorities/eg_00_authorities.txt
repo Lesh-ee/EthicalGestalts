@@ -1,0 +1,195 @@
+#auth_example = {
+#	potential = {}									# requirements list, see ../readme_requirements.txt
+#	possible = {}									# requirements list, see ../readme_requirements.txt
+#	random_weight = { value = 1 }					# random weight, no scope (DLC check etc only); default: 1
+#
+#	traits = { trait = tait1 trait = tait2 }		# force listed traits on the founder species (only verified for empire designs, no eefect after game start)
+#
+#	has_heir = yes / no								# default: no; you can either have a hereditary system (has_heir = yes), or an election system (has_heir = no)
+#	election_type = oligarchic / democratic	/ none	# default: none; oligarchic generate candidates only from leaders in the country
+#	election_term_years = 40						# default: 0
+#	election_term_variance = 10						# default: 0; actual election term = election_term_years +/- election_term_variance
+#	re_election_allowed = yes / no					# default: no
+#	can_have_emergency_elections = yes / no			# default: no
+#	emergency_election_cost = 42.5					# default: 0; influence cost for starting an emergency election
+#	max_election_candidates = 5						# default: -1; -1 == no limit
+#	can_reform = yes / no							# default = yes, whether you can reform into/out of this government type
+#
+#	has_agendas = yes / no							# default: no
+#	uses_mandates = yes / no						# default: no
+#
+#	tags = { <key> <key2> }							# add these translation tags to the description
+#}
+
+auth_hive_mind = {
+	has_heir = no
+	election_type = none
+	has_factions = no
+	can_reform = no
+	localization_postfix = hive_mind
+
+	valid_for_released_vassal = yes
+
+	ruler_council_position = councilor_ruler_hive_mind
+
+	playable = { has_utopia = yes }
+	possible = {
+		species_archetype = { value = BIOLOGICAL }
+	}
+	random_weight = {
+		base = 1
+		modifier = {
+			factor = 1.5
+			NOT = { host_has_dlc = "Synthetic Dawn Story Pack" }
+		}
+		modifier = {
+			factor = 0.75
+			host_has_dlc = "Synthetic Dawn Story Pack"
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				has_global_flag = game_started
+				has_global_flag = prevent_gestalts_randomization
+			}
+			NOT = { has_global_flag = eg_allow_gestalt_randomization }
+		}
+	}
+
+	traits = {
+		trait = trait_hive_mind
+	}
+
+	country_modifier = {
+		empire_size_penalty_mult = -0.25
+		country_war_exhaustion_mult = -0.2
+		country_base_influence_produces_add = 1
+		intel_encryption_add = 2
+		pop_factions_produces_mult = -1.0
+	}
+
+	tags = {
+		AUTH_HIVE_MIND_AI_RESTRICTIONS
+		AUTH_HIVE_MIND_FOREIGN_POP_SURVIVAL
+		AUTH_HIVE_MIND_GENEMODDING
+		AUTH_HIVE_MIND_ASCENSION_RESTRICTIONS
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_TUTORIAL
+		ETHIC_GESTALT_CONSCIOUSNESS_AUTHORITY
+		ETHIC_GESTALT_CONSCIOUSNESS_IMMORTAL_RULER
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_FACTIONS
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_CONSUMER_GOODS
+		ETHIC_GESTALT_CONSCIOUSNESS_DOMESTIC_POP_SURVIVAL
+		ETHIC_ALLOW_NO_RETREAT
+	}
+}
+
+auth_machine_intelligence = {
+	machine_empire = yes
+	has_heir = no
+	election_type = none
+	has_factions = no
+	can_reform = no
+	localization_postfix = machine_intelligence
+
+	valid_for_released_vassal = no
+
+	ruler_council_position = councilor_ruler_machine_intelligence
+
+	playable = {
+		OR = {
+			has_synthetic_dawn = yes
+			has_machine_age_dlc = yes
+		}
+	}
+	potential = {
+		country_type = {
+			NOT = {
+				value = primitive
+			}
+		}
+	}
+	possible = {
+		ethics = {
+			NOR = {
+				value = ethic_spiritualist
+				value = ethic_fanatic_spiritualist
+			}
+		}
+		OR {
+			species_archetype = { NOT = { value = BIOLOGICAL } }
+			base_species_class = { value = CYBERNETIC }
+		}
+	}
+	random_weight = {
+		base = 1
+		modifier = {
+			factor = 1.5
+			NOT = { host_has_dlc = "Synthetic Dawn Story Pack" }
+		}
+		modifier = {
+			factor = 0.75
+			host_has_dlc = "Synthetic Dawn Story Pack"
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				has_global_flag = game_started
+				has_global_flag = prevent_gestalts_randomization
+			}
+			NOT = { has_global_flag = eg_allow_gestalt_randomization }
+		}
+	}
+
+	traits = {
+		trait = trait_machine_unit
+	}
+
+	country_modifier = {
+		colony_start_num_pops_add = 1
+		planet_pop_assembly_add = 1
+		station_gatherers_produces_mult = 0.1
+		empire_size_colonies_mult = 0.5
+		pop_growth_speed_reduction = 0.5
+		country_war_exhaustion_mult = -0.2
+		country_base_influence_produces_add = 1
+		intel_encryption_add = 2
+		pop_factions_produces_mult = -1.0
+	}
+
+	tags = {
+		AUTH_MACHINE_INTELLIGENCE_IMMORTAL_LEADERS
+		AUTH_MACHINE_NATIVE_POPS
+		AUTH_MACHINE_FOREIGN_POP_SURVIVAL
+		AUTH_MACHINE_TECH_ADDITIONS
+		AUTH_MACHINE_TECH_RESTRICTIONS
+		AUTH_MACHINE_ASCENSION_RESTRICTIONS
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_TUTORIAL
+		ETHIC_GESTALT_CONSCIOUSNESS_AUTHORITY
+		ETHIC_GESTALT_CONSCIOUSNESS_IMMORTAL_RULER
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_FACTIONS
+		ETHIC_GESTALT_CONSCIOUSNESS_NO_CONSUMER_GOODS
+		ETHIC_GESTALT_CONSCIOUSNESS_DOMESTIC_POP_SURVIVAL
+		ETHIC_ALLOW_NO_RETREAT
+	}
+}
+
+auth_ancient_machine_intelligence = {
+	has_heir = no
+	election_type = none
+	can_reform = no
+
+	valid_for_released_vassal = no
+
+	ruler_council_position = councilor_ruler_machine_intelligence
+
+	country_modifier = {
+		country_war_exhaustion_mult = -0.2
+		country_base_influence_produces_add = 1
+		intel_encryption_add = 2
+		pop_factions_produces_mult = -1.0
+	}
+
+	icon = "gfx/interface/icons/governments/authorities/auth_hive_mind.dds"
+
+	potential = { country_type = { value = ai_empire } }
+}
