@@ -111,6 +111,11 @@
  civic_tooltip_hive_assimilator_effects: "Start the game with §Y12§! £pop£ pops of a second, less intelligent species.\nAlien pops will be automatically assimilated into the hive mind over time; assimilation citizenship will accelerate the process but is not necessary for it.\nAssimilating a £pop£ Pop generates a small amount of £unity£ §YUnity§! and £society£ §YSociety Research§!\nHas the §Y'Assimilation'§! casus belli on all other empires\nDecreased §YOpinion§! for most other empires.\nAble to establish branch offices in other empires which will slowly assimilate local pops."
  civic_tooltip_machine_dynamic_objectives_effects: "Able to change governing ethics via edict"
  civic_tooltip_xenophile_or_pacifist: "Is some degree of §YXenophile§! or §YPacifist§!"
+ civic_tooltip_militarist_or_xenophobe: "Is some degree of §YMilitarist§! or §YXenophobe§!"
+ civic_tooltip_not_militarist_or_xenophobe: "Is not §YMilitarist§! or §YXenophobe§!"
+ civic_tooltip_militarist_or_xenophile: "Is some degree of §YMilitarist§! or §YXenophle§!"
+ civic_tooltip_not_pacifist_or_xenophobe: "Is not §YPacifist§! or §YXenophobe§!"
+ civic_tooltip_pacifist_or_xenophobe: "Is some degree of §YPacifist§! or §YXenophobe§!"
 
  civic_hive_assimilator_secondary_species: "Assimilated Presapients"
 
