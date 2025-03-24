@@ -85,15 +85,21 @@ origin_scion = {
 
 	possible = {
 		ethics = {
-			NOT = {
+			NOR = {
+				value = ethic_gestalt_consciousness
+				#value = ethic_xenophobe
 				value = ethic_fanatic_xenophobe
 			}
 		}
 		civics = {
-			NOR = {
-				value = civic_machine_terminator
-				value = civic_hive_devouring_swarm
+			NOT = {
 				value = civic_pompous_purists
+			}
+			NOR = {
+				text = civic_tooltip_not_genocidal
+				value = civic_fanatic_purifiers
+				value = civic_hive_devouring_swarm
+				value = civic_machine_terminator
 			}
 		}
 	}
@@ -246,10 +252,13 @@ origin_shroudwalker_apprentice = {
 			NOT = { value = auth_hive_mind }
 		}
 		civics = {
-			NOT = {
+			NOR = {
 				value = civic_fanatic_purifiers
+				value = civic_natural_design
+				value = civic_augmentation_bazaars
 			}
 		}
+		species_archetype = { NOT = { value = MACHINE } }
 	}
 
 	description = "origin_tooltip_shroudwalker_apprentice_effects"
@@ -327,11 +336,16 @@ origin_payback = {
 				value = civic_pompous_purists
 				value = civic_slaver_guilds
 				value = civic_indentured_assets
-				# Or low tech starts
-				value = civic_eager_explorers
-				value = civic_privatized_exploration
 				# Or advanced tech
 				value = civic_private_healthcare_corporate
+			}
+			NOR = {
+				# Or low tech starts
+				text = civic_tooltip_not_eager_explorers
+				value = civic_eager_explorers
+				value = civic_privatized_exploration
+				value = civic_hive_stargazers
+				value = civic_machine_exploration_protocol
 			}
 		}
 	}
@@ -489,6 +503,125 @@ origin_fruitful = {
 
 	description = "origin_tooltip_fruitful_effects"
 	flags = { custom_start_screen first_alien_life Story2 tiyanki_encountered }
+
+	random_weight = {
+		base = 5
+	}
+}
+
+origin_cybernetic_creed = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_cybernetic_creed.dds"
+	picture = GFX_origin_cybernetic_creed
+	flags = { custom_start_screen }
+
+	playable = {
+		has_machine_age_dlc = yes
+	}
+
+	possible = {
+		authority = {
+			NOT = {
+				value = auth_hive_mind
+			}
+		}
+		ethics = {
+			OR = {
+				text = civic_tooltip_spiritualist
+				value = ethic_spiritualist
+				value = ethic_fanatic_spiritualist
+			}
+			NOR = {
+				text = civic_tooltip_not_egalitarian
+				value = ethic_egalitarian
+				value = ethic_fanatic_egalitarian
+			}
+		}
+		civics = {
+			NOR = {
+				text = civic_tooltip_not_death_cult
+				value = civic_death_cult
+				value = civic_death_cult_corporate
+			}
+			NOR = {
+				value = civic_permanent_employment
+				value = civic_natural_design
+			}
+		}
+		species_archetype = { NOT = { value = MACHINE } }
+	}
+
+	description = origin_tooltip_cybernetic_creed_effects
+
+	advanced_start = yes
+	max_once_global = yes
+	blocks_random_machine_empire_generation	= yes
+
+	random_weight = {
+		base = 5
+	}
+}
+
+origin_synthetic_fertility = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origin_synthetic_fertility.dds"
+	picture = GFX_origin_synthetic_fertility
+	flags = { custom_start_screen }
+
+	playable = {
+		has_machine_age_dlc = yes
+	}
+
+	possible = {
+		authority = {
+			NOT = {
+				value = auth_hive_mind
+			}
+		}
+		ethics = {
+			NOR = {
+				text = civic_tooltip_not_spiritualist
+				value = ethic_spiritualist
+				value = ethic_fanatic_spiritualist
+			}
+		}
+		civics = {
+			NOR = {
+				value = civic_permanent_employment
+				value = civic_reanimated_armies
+				value = civic_natural_design
+				value = civic_augmentation_bazaars
+			}
+			NOR = {
+				text = civic_tooltip_not_mutagenic
+				value = civic_toxic_baths
+				value = civic_toxic_baths_individual_machine
+				value = civic_corporate_toxic_baths
+				value = civic_corporate_toxic_baths_individual_machine
+				value = civic_hive_toxic_baths
+				value = civic_machine_toxic_baths
+			}
+			NOR = {
+				# Or low tech starts
+				text = civic_tooltip_not_eager_explorers
+				value = civic_eager_explorers
+				value = civic_privatized_exploration
+				value = civic_hive_stargazers
+				value = civic_machine_exploration_protocol
+			}
+		}
+		species_archetype = { NOT = { value = MACHINE } }
+	}
+
+	traits = {
+		trait = trait_pathogenic_genes
+	}
+
+	description = origin_tooltip_synthetic_fertility_effects
+	negative_description = origin_tooltip_synthetic_fertility_negative_effects
+	advanced_start = no
+	max_once_global = yes
+	blocks_random_machine_empire_generation	= yes
 
 	random_weight = {
 		base = 5
